@@ -34,10 +34,10 @@ public class Drive extends SubsystemBase {
         double frontRightSpeed = Math.sqrt ((b * b) + (d * d));
         double frontLeftSpeed = Math.sqrt ((b * b) + (c * c));
 
-        double backRightAngle = Math.atan2 (a, d) / Math.pi;
-        double backLeftAngle = Math.atan2 (a, c) / Math.pi;
-        double frontRightAngle = Math.atan2 (b, d) / Math.pi;
-        double frontLeftAngle = Math.atan2 (b, c) / Math.pi;
+        double backRightAngle = Math.atan2 (a, d) / Math.PI;
+        double backLeftAngle = Math.atan2 (a, c) / Math.PI;
+        double frontRightAngle = Math.atan2 (b, d) / Math.PI;
+        double frontLeftAngle = Math.atan2 (b, c) / Math.PI;
     }
 
 }
