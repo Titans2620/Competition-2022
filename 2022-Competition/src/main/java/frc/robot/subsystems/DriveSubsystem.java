@@ -4,47 +4,55 @@
 
 package frc.robot.subsystems;
 
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
+import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj.ADXRS450_Gyro;
+import edu.wpi.first.wpilibj.interfaces.Gyro;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 
 public class DriveSubsystem extends SubsystemBase {
   /** Creates a new ExampleSubsystem. */
 
   private final SwerveModule m_frontLeft = new SwerveModule(
-      DriveConstants.kFrontLeftDriveMotorPort,
-      DriveConstants.kFrontLeftTurningMotorPort,
-      DriveConstants.kFrontLeftDriveEncoderPorts,
-      DriveConstants.kFrontLeftTurningEncoderPorts,
-      DriveConstants.kFrontLeftDriveEncoderReversed,
-      DriveConstants.kFrontLeftTurningEncoderReversed);
+      Constants.kFrontLeftDriveMotorPort,
+      Constants.kFrontLeftTurningMotorPort,
+      Constants.kFrontLeftDriveEncoderPorts,
+      Constants.kFrontLeftTurningEncoderPorts,
+      Constants.kFrontLeftDriveEncoderReversed,
+      Constants.kFrontLeftTurningEncoderReversed);
 
     private final SwerveModule m_rearLeft = new SwerveModule(
-      DriveConstants.kRearLeftDriveMotorPort,
-      DriveConstants.kRearLeftTurningMotorPort,
-      DriveConstants.kRearLeftDriveEncoderPorts,
-      DriveConstants.kRearLeftTurningEncoderPorts,
-      DriveConstants.kRearLeftDriveEncoderReversed,
-      DriveConstants.kRearLeftTurningEncoderReversed);
+      Constants.kRearLeftDriveMotorPort,
+      Constants.kRearLeftTurningMotorPort,
+      Constants.kRearLeftDriveEncoderPorts,
+      Constants.kRearLeftTurningEncoderPorts,
+      Constants.kRearLeftDriveEncoderReversed,
+      Constants.kRearLeftTurningEncoderReversed);
 
   private final SwerveModule m_frontRight = new SwerveModule(
-      DriveConstants.kFrontRightDriveMotorPort,
-      DriveConstants.kFrontRightTurningMotorPort,
-      DriveConstants.kFrontRightDriveEncoderPorts,
-      DriveConstants.kFrontRightTurningEncoderPorts,
-      DriveConstants.kFrontRightDriveEncoderReversed,
-      DriveConstants.kFrontRightTurningEncoderReversed);
+      Constants.kFrontRightDriveMotorPort,
+      Constants.kFrontRightTurningMotorPort,
+      Constants.kFrontRightDriveEncoderPorts,
+      Constants.kFrontRightTurningEncoderPorts,
+      Constants.kFrontRightDriveEncoderReversed,
+      Constants.kFrontRightTurningEncoderReversed);
 
     private final SwerveModule m_rearRight = new SwerveModule(
-      DriveConstants.kRearRightDriveMotorPort,
-      DriveConstants.kRearRightTurningMotorPort,
-      DriveConstants.kRearRightDriveEncoderPorts,
-      DriveConstants.kRearRightTurningEncoderPorts,
-      DriveConstants.kRearRightDriveEncoderReversed,
-      DriveConstants.kRearRightTurningEncoderReversed);
+      Constants.kRearRightDriveMotorPort,
+      Constants.kRearRightTurningMotorPort,
+      Constants.kRearRightDriveEncoderPorts,
+      Constants.kRearRightTurningEncoderPorts,
+      Constants.kRearRightDriveEncoderReversed,
+      Constants.kRearRightTurningEncoderReversed);
 
     private final Gyro m_gyro = new ADXRS450_Gyro();
-    SwerveDriveOdometry m_odometry = new SwerveDriveOdometry(DriveConstants.kDriveKinematics, m_gyro.getRotation2d());
+    SwerveDriveOdometry m_odometry = new SwerveDriveOdometry(Constants.kDriveKinematics, m_gyro.getRotation2d());
 
-    public Drive() {}
+    public DriveSubsystem() {}
 
     @Override
     public void periodic() {
@@ -62,12 +70,12 @@ public class DriveSubsystem extends SubsystemBase {
 
   
   public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelative) {
-    var swerveModuleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(
+    var swerveModuleStates = Constants.kDriveKinematics.toSwerveModuleStates(
             //Nick -> This is called a Ternary Operator. Basically it takes the first statement and if true it will run the second statement. Else it will run the third statement.
             //First Statement ? Second Statement : Third Statement
 
             fieldRelative ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot, m_gyro.getRotation2d()) : new ChassisSpeeds(xSpeed, ySpeed, rot));
-        SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, DriveConstants.kMaxSpeedMetersPerSecond);
+        SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, Constants.kMaxSpeedMetersPerSecond);
         m_frontLeft.setDesiredState(swerveModuleStates[0]);
         m_frontRight.setDesiredState(swerveModuleStates[1]);
         m_rearLeft.setDesiredState(swerveModuleStates[2]);
@@ -80,7 +88,7 @@ public class DriveSubsystem extends SubsystemBase {
    * @param desiredStates The desired SwerveModule states.
    */
   public void setModuleStates(SwerveModuleState[] desiredStates) {
-    SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates, DriveConstants.kMaxSpeedMetersPerSecond);
+    SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates, Constants.kMaxSpeedMetersPerSecond);
 
       m_frontLeft.setDesiredState(desiredStates[0]);
       m_frontRight.setDesiredState(desiredStates[1]);
@@ -116,7 +124,6 @@ public class DriveSubsystem extends SubsystemBase {
    * @return The turn rate of the robot, in degrees per second
    */
   public double getTurnRate() {
-      return m_gyro.getRate() * (DriveConstants.kGyroReversed ? -1.0 : 1.0);
+      return m_gyro.getRate() * (Constants.kGyroReversed ? -1.0 : 1.0);
   }
-}
 }
