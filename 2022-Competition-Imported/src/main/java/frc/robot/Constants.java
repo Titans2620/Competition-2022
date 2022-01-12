@@ -4,6 +4,9 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
  * constants. This class should not be used for any other purpose. All constants should be declared
@@ -51,4 +54,33 @@ public final class Constants {
     public static final boolean kRearRightDriveEncoderReversed = true;
 
     public static final double kTrackWidth = 0.5;
+    // Distance between centers of right and left wheels on robot
+    public static final double kWheelBase = 0.7;
+
+    public static final SwerveDriveKinematics kDriveKinematics = new SwerveDriveKinematics(
+            new Translation2d(kWheelBase / 2, kTrackWidth / 2),
+            new Translation2d(kWheelBase / 2, -kTrackWidth / 2),
+            new Translation2d(-kWheelBase / 2, kTrackWidth / 2),
+            new Translation2d(-kWheelBase / 2, -kTrackWidth / 2));
+
+    public static final boolean kGyroReversed = false;
+
+    public static final double kMaxSpeedMetersPerSecond = 3;
+
+    public static final double kMaxModuleAngularSpeedRadiansPerSecond = 2 * Math.PI;
+    public static final double kMaxModuleAngularAccelerationRadiansPerSecondSquared = 2 * Math.PI;
+
+    public static final int kEncoderCPR = 1024;
+    public static final double kWheelDiameterMeters = 0.15;
+    public static final double kDriveEncoderDistancePerPulse =
+        // Assumes the encoders are directly mounted on the wheel shafts
+        (kWheelDiameterMeters * Math.PI) / (double) kEncoderCPR;
+
+    public static final double kTurningEncoderDistancePerPulse =
+        // Assumes the encoders are on a 1:1 reduction with the module shaft.
+        (2 * Math.PI) / (double) kEncoderCPR;
+
+    public static final double kPModuleTurningController = 1;
+
+    public static final double kPModuleDriveController = 1;
 }
