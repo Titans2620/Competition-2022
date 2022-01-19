@@ -1,0 +1,32 @@
+{
+  "NTProvider": {
+    "types": {
+      "/FMSInfo": "FMSInfo",
+      "/LiveWindow/Ungrouped/Scheduler": "Scheduler"
+    },
+    "windows": {
+      "/FMSInfo": {
+        "window": {
+          "visible": true
+        }
+      }
+    }
+  },
+  "NetworkTables": {
+    "LiveWindow": {
+      ".status": {
+        "open": true
+      },
+      "DriveSubsystem": {
+        "open": true
+      },
+      "Ungrouped": {
+        "Scheduler": {
+          "open": true
+        },
+        "open": true
+      },
+      "open": true
+    }
+  }
+}
