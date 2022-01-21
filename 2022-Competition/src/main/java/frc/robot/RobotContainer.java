@@ -25,6 +25,7 @@ public class RobotContainer {
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
+
   public RobotContainer() {
     // Set up the default command for the drivetrain.
     // The controls are for field-oriented driving:
@@ -39,6 +40,10 @@ public class RobotContainer {
     ));
     // Configure the button bindings
     configureButtonBindings();
+
+    m_driveSubsystem.setDefaultCommand(
+      new RunCommand(() -> 
+          m_driveSubsystem.drive(m_rightJoystick.getY(), m_rightJoystick.getX(), m_rightJoystick.getTwist(), false), m_driveSubsystem));
   }
 
   /**
