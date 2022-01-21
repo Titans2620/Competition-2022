@@ -20,6 +20,7 @@ public class RobotContainer {
   private final DriveSubsystem m_driveSubsystem = new DriveSubsystem();
 
   private final Joystick m_controller = new Joystick(0);
+  
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -35,7 +36,7 @@ public class RobotContainer {
             m_driveSubsystem,
             () -> -m_controller.getX(),
             () -> -m_controller.getY(),
-            () -> -m_controller.getZ()
+            () -> -m_controller.getTwist()
     ));
     // Configure the button bindings
     configureButtonBindings();
@@ -52,7 +53,6 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-      //new Button(m_controller.getTop()).whenPressed(m_driveSubsystem::zeroGyroscope);
   }
 
   /**
