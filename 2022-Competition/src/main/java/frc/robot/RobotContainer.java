@@ -21,8 +21,8 @@ import frc.robot.subsystems.ClimbSubsystem;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
-  //private final DriveSubsystem m_driveSubsystem = new DriveSubsystem();
-  private final IntakeSubsystem m_intakeSubsystem = new IntakeSubsystem();
+  private final DriveSubsystem m_driveSubsystem = new DriveSubsystem();
+  //private final IntakeSubsystem m_intakeSubsystem = new IntakeSubsystem();
   private final ClimbSubsystem m_climbSubsystem = new ClimbSubsystem();
   private final ShooterSubsystem m_ShooterSubsystem = new ShooterSubsystem();
   
@@ -39,17 +39,17 @@ public class RobotContainer {
     // Left stick Y axis -> forward and backwards movement
     // Left stick X axis -> left and right movement
     // Right stick X axis -> rotation
-    /*
+    
     m_driveSubsystem.setDefaultCommand(new DefaultDriveCommand( // Drive //
             m_driveSubsystem,
             () -> -m_controller.getX(),
             () -> -m_controller.getY(),
             () -> -m_controller.getTwist()
     ));
-    */
-    m_intakeSubsystem.setDefaultCommand(new RunCommand( // intake //
+  
+   /* m_intakeSubsystem.setDefaultCommand(new RunCommand( // intake //
       () -> m_intakeSubsystem.intake(m_controller.getRawButton(2), m_controller.getRawButton(11), m_controller.getRawButton(16)), m_intakeSubsystem));
-
+    */
     // Configure the button bindings
     configureButtonBindings();
   }
