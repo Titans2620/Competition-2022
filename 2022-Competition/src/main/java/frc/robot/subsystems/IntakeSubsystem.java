@@ -16,7 +16,12 @@ public class IntakeSubsystem extends SubsystemBase {
   
   public IntakeSubsystem() {}
 
-  public void intake(boolean intakeOn){
+  public void intake(boolean intakeOn, boolean intakeRotateUp, boolean intakeRotateDown){
+    intakeIn(intakeOn);
+    intakeRotate(intakeRotateUp, intakeRotateDown);
+  }
+
+  public void intakeIn(boolean intakeOn){
     if(intakeOn){
       intake.set(Constants.INTAKESPEED);
     }
