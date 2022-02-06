@@ -5,9 +5,13 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.Button;
 import frc.robot.commands.DefaultDriveCommand;
 import frc.robot.subsystems.DriveSubsystem;
+import frc.robot.subsystems.IntakeSubsystem;
+import frc.robot.subsystems.ShooterSubsystem;
+import frc.robot.subsystems.ClimbSubsystem;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -18,9 +22,12 @@ import frc.robot.subsystems.DriveSubsystem;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final DriveSubsystem m_driveSubsystem = new DriveSubsystem();
-
-  private final Joystick m_controller = new Joystick(0);
+  //private final IntakeSubsystem m_intakeSubsystem = new IntakeSubsystem();
+  private final ClimbSubsystem m_climbSubsystem = new ClimbSubsystem();
+  private final ShooterSubsystem m_ShooterSubsystem = new ShooterSubsystem();
   
+  private final Joystick m_controller = new Joystick(0);
+
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -28,16 +35,21 @@ public class RobotContainer {
 
   public RobotContainer() {
     // Set up the default command for the drivetrain.
-    // The controls are for field-oriented driving:
+    // The controls are for field-oriented driving: 
     // Left stick Y axis -> forward and backwards movement
     // Left stick X axis -> left and right movement
     // Right stick X axis -> rotation
-    m_driveSubsystem.setDefaultCommand(new DefaultDriveCommand(
+    
+    m_driveSubsystem.setDefaultCommand(new DefaultDriveCommand( // Drive //
             m_driveSubsystem,
             () -> -m_controller.getX(),
             () -> -m_controller.getY(),
             () -> -m_controller.getTwist()
     ));
+  
+   /* m_intakeSubsystem.setDefaultCommand(new RunCommand( // intake //
+      () -> m_intakeSubsystem.intake(m_controller.getRawButton(2), m_controller.getRawButton(11), m_controller.getRawButton(16)), m_intakeSubsystem));
+    */
     // Configure the button bindings
     configureButtonBindings();
   }
@@ -49,6 +61,7 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
+      //new Button(m_controller.getTop()).whenPressed(m_driveSubsystem::zeroGyroscope);
   }
 
   /**
