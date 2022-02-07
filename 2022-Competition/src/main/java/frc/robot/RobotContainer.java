@@ -44,7 +44,7 @@ public class RobotContainer {
             m_driveSubsystem,
             () -> -m_controller.getX(),
             () -> -m_controller.getY(),
-            () -> -m_controller.getTwist()
+            () -> -m_controller.getZ()
     ));
   
    /* m_intakeSubsystem.setDefaultCommand(new RunCommand( // intake //
@@ -88,7 +88,7 @@ public class RobotContainer {
 
   private static double modifyAxis(double value) {
     // Deadband
-    value = deadband(value, 0.05);
+    value = deadband(value, 0.1);
 
     // Square the axis
     value = Math.copySign(value * value, value);
