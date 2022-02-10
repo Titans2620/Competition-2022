@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.Button;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.DefaultDriveCommand;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
@@ -42,9 +43,9 @@ public class RobotContainer {
     
     m_driveSubsystem.setDefaultCommand(new DefaultDriveCommand( // Drive //
             m_driveSubsystem,
-            () -> -m_controller.getX(),
-            () -> -m_controller.getY(),
-            () -> -m_controller.getTwist()
+            () -> -modifyAxis(m_controller.getX()) * DriveSubsystem.MAX_VELOCITY_METERS_PER_SECOND,
+            () -> -modifyAxis(m_controller.getY()) * DriveSubsystem.MAX_VELOCITY_METERS_PER_SECOND,
+            () -> -modifyAxis(m_controller.getZ()) * DriveSubsystem.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND
     ));
   
    /* m_intakeSubsystem.setDefaultCommand(new RunCommand( // intake //
@@ -61,7 +62,7 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-      //new Button(m_controller.getTop()).whenPressed(m_driveSubsystem::zeroGyroscope);
+      new JoystickButton(m_controller, 1).whenPressed(() -> m_driveSubsystem.zeroGyroscope());
   }
 
   /**
@@ -88,7 +89,7 @@ public class RobotContainer {
 
   private static double modifyAxis(double value) {
     // Deadband
-    value = deadband(value, 0.05);
+    value = deadband(value, 0.1);
 
     // Square the axis
     value = Math.copySign(value * value, value);
