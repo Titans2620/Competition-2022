@@ -1,5 +1,7 @@
 package frc.robot;
 
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
+
 public final class Constants {
     /**
      * The left-to-right distance between the drivetrain wheels
@@ -46,5 +48,20 @@ public final class Constants {
     //SPEEDS//
     public static final double INTAKESPEED = .25;
     public static final double INTAKEROTATESPEED = .25;
+
+    public static final class AutoConstants {
+        public static final double kMaxSpeedMetersPerSecond = 1.25;
+        public static final double kMaxAngularSpeedRadiansPerSecond = (4 * Math.PI) / 10;
+        public static final double kMaxAccelerationMetersPerSecondSquared = 3;
+        public static final double kMaxAngularAccelerationRadiansPerSecondSquared = Math.PI / 4;
+        public static final double kPXController = 1.5;
+        public static final double kPYController = 1.5;
+        public static final double kPThetaController = 3;
+
+        public static final TrapezoidProfile.Constraints kThetaControllerConstraints = //
+                new TrapezoidProfile.Constraints(
+                        kMaxAngularSpeedRadiansPerSecond,
+                        kMaxAngularAccelerationRadiansPerSecondSquared);
+    }
 }
 
