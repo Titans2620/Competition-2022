@@ -2,6 +2,7 @@ package frc.robot.commands;
 
 import java.util.function.DoubleSupplier;
 
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.DriveSubsystem;
@@ -15,6 +16,7 @@ public class DefaultDriveCommand extends CommandBase {
     private final DoubleSupplier m_translationXSupplier;
     private final DoubleSupplier m_translationYSupplier;
     private final DoubleSupplier m_rotationSupplier;
+    private final Rotation2d testRotation = new Rotation2d(0);
 
     public DefaultDriveCommand(DriveSubsystem drivetrainSubsystem, DoubleSupplier translationXSupplier, DoubleSupplier translationYSupplier, DoubleSupplier rotationSupplier) {
         this.m_driveSubsystem = drivetrainSubsystem;
@@ -34,6 +36,8 @@ public class DefaultDriveCommand extends CommandBase {
                         m_translationYSupplier.getAsDouble(),
                         m_rotationSupplier.getAsDouble(),
                         m_driveSubsystem.getGyroscopeRotation()
+                        //testRotation
+                        
                 )
         );
     }

@@ -60,7 +60,14 @@ public class RobotContainer {
     // Left stick X axis -> left and right movement
     // Right stick X axis -> rotation
     
-    m_driveSubsystem.setDefaultCommand(new DefaultDriveCommand(m_driveSubsystem, () -> -m_controller.getX(), () -> -m_controller.getY(), () -> -m_controller.getTwist()));
+
+    m_driveSubsystem.setDefaultCommand(new DefaultDriveCommand( // Drive //
+            m_driveSubsystem,
+            () -> -modifyAxis(m_controller.getX()) * DriveSubsystem.MAX_VELOCITY_METERS_PER_SECOND,
+            () -> -modifyAxis(m_controller.getY()) * DriveSubsystem.MAX_VELOCITY_METERS_PER_SECOND,
+            () -> -modifyAxis(m_controller.getZ()) * DriveSubsystem.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND
+    ));
+
   
    /* m_intakeSubsystem.setDefaultCommand(new RunCommand( // intake //
       () -> m_intakeSubsystem.intake(m_controller.getRawButton(2), m_controller.getRawButton(11), m_controller.getRawButton(16)), m_intakeSubsystem));
@@ -76,8 +83,10 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
+
       new JoystickButton(m_controller, 10).whenPressed(()-> m_driveSubsystem.zeroGyroscope());
       new JoystickButton(m_controller, 1).whenPressed(new LimelightDriveCommand(m_driveSubsystem, m_limelightSubsystem, () -> -m_controller.getX(), () -> -m_controller.getY()));
+
   }
 
   /**
@@ -130,7 +139,7 @@ public class RobotContainer {
 
   private static double modifyAxis(double value) {
     // Deadband
-    value = deadband(value, 0.05);
+    value = deadband(value, 0.1);
 
     // Square the axis
     value = Math.copySign(value * value, value);
