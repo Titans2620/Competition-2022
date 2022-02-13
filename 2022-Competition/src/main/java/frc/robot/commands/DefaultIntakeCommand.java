@@ -5,22 +5,32 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.subsystems.IntakeSubsystem;
 
 public class DefaultIntakeCommand extends CommandBase {
   /********************************************************
   The default intake command should have all motors off and no action should be taken by the subsystem.
   ***********************************************************/
-  public DefaultIntakeCommand() {
+
+  IntakeSubsystem m_intakeSubsystem = new IntakeSubsystem();
+
+  public DefaultIntakeCommand(IntakeSubsystem intakeSubsystem) {
+      m_intakeSubsystem = intakeSubsystem;
+      addRequirements(m_intakeSubsystem);
   }
 
   @Override
   public void initialize() {}
 
   @Override
-  public void execute() {}
+  public void execute() {
+      m_intakeSubsystem.turnOffMotors();
+  }
 
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+      m_intakeSubsystem.turnOffMotors();
+  }
 
   @Override
   public boolean isFinished() {

@@ -6,6 +6,7 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -21,39 +22,36 @@ public class IntakeSubsystem extends SubsystemBase {
   Limit Switch (DIO: 0) - Limit switch situated so that it will return true when the intake rotate arm is in position.
   TBD Sensor (?) - Sensor that will detect when the ball is in the correct position to be shot.
   ***********************************************************/
-  public WPI_VictorSPX intake = new WPI_VictorSPX(Constants.INTAKE_ROLLER);
-  public WPI_VictorSPX intakeRotate = new WPI_VictorSPX(Constants.INTAKE_ROTATE);
+  private WPI_VictorSPX intakeRoller = new WPI_VictorSPX(Constants.INTAKE_ROLLER);
+  private WPI_VictorSPX intakeRotate = new WPI_VictorSPX(Constants.INTAKE_ROTATE);
+  private WPI_VictorSPX feedWheel = new WPI_VictorSPX(Constants.FEED_WHEEL);
+
+  private DigitalInput intakeRotateLimitSwitch = new DigitalInput(Constants.INTAKE_ROTATE_LIMIT);
   
   public IntakeSubsystem() {}
 
-  public void intake(boolean intakeOn, boolean intakeRotateUp, boolean intakeRotateDown){
-    intakeIn(intakeOn);
-    intakeRotate(intakeRotateUp, intakeRotateDown);
+  public void setIntakeRoller(double speed){
+      intakeRoller.set(speed);
   }
 
-  public void intakeIn(boolean intakeOn){
-    if(intakeOn){
-      intake.set(Constants.INTAKESPEED);
-    }
-    else{
-      intake.set(0);
-    }
+  public void setIntakeRotate(double speed){
+      if(intakeRotateLimitSwitch.get() && speed > 0){   //If the arm rotate limit switch is pressed and the arm is attempting to rotate down
+          speed = 0;                                    //set the rotate speed to zero
+      }
+      intakeRotate.set(speed);
   }
 
-  public void intakeRotate(boolean intakeRotateUp, boolean intakeRotateDown){
-    if(intakeRotateUp){
-      intakeRotate.set(Constants.INTAKEROTATESPEED);
-    }
-    else if(intakeRotateDown){
-      intakeRotate.set(-Constants.INTAKESPEED);
-    }
-    else{
+  public void setFeedWheel(double speed){
+      feedWheel.set(speed);
+  }
+
+  public void turnOffMotors(){
+      intakeRoller.set(0);
       intakeRotate.set(0);
-    }
+      intakeRoller.set(0);
   }
 
   @Override
   public void periodic() {
-    // This method will be called once per scheduler run
   }
 }
