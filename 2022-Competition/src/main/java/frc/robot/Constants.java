@@ -1,5 +1,7 @@
 package frc.robot;
 
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
+
 public final class Constants {
     /**
      * The left-to-right distance between the drivetrain wheels
@@ -36,15 +38,41 @@ public final class Constants {
     public static final int BACK_RIGHT_MODULE_STEER_MOTOR = 12;
     public static final double BACK_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(254.17);
 
-    public static final int INTAKE_FEED = 13;
+    public static final int INTAKE_ROLLER = 13;
     public static final int INTAKE_ROTATE = 14;
-    public static final int INNER_FEED = 15;
-    public static final int SHOOTER = 16;
+    public static final int FEED_WHEEL = 15;
+    public static final int SHOOTER_WHEEL = 16;
     public static final int LEFT_CLIMB = 17;
     public static final int RIGHT_CLIMB = 18;
+
+    //Sensors//
+
+    public static final int INTAKE_ROTATE_LIMIT = 0;
+    public static final int CLIMB_LOW_LIMIT = 1;
+    public static final int CLIMB_HIGH_LIMIT = 2;
+
 
     //SPEEDS//
     public static final double INTAKESPEED = .25;
     public static final double INTAKEROTATESPEED = .25;
+
+    public static final double LIMELIGHT_SLOW_SPEED = 0.1;
+    public static final double LIMELIGHT_FAST_SPEED = 0.25;
+    public static final double LIMELIGHT_SEARCH_SPEED = 0.3;
+
+    public static final class AutoConstants {
+        public static final double kMaxSpeedMetersPerSecond = 1.25;
+        public static final double kMaxAngularSpeedRadiansPerSecond = (4 * Math.PI) / 10;
+        public static final double kMaxAccelerationMetersPerSecondSquared = 3;
+        public static final double kMaxAngularAccelerationRadiansPerSecondSquared = Math.PI / 4;
+        public static final double kPXController = 1.5;
+        public static final double kPYController = 1.5;
+        public static final double kPThetaController = 3;
+
+        public static final TrapezoidProfile.Constraints kThetaControllerConstraints = //
+                new TrapezoidProfile.Constraints(
+                        kMaxAngularSpeedRadiansPerSecond,
+                        kMaxAngularAccelerationRadiansPerSecondSquared);
+    }
 }
 
