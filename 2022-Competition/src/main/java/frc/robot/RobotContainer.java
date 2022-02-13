@@ -24,6 +24,7 @@ import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.button.Button;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.DefaultDriveCommand;
+import frc.robot.commands.LimelightDriveCommand;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
@@ -79,6 +80,7 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
       new JoystickButton(m_controller, 1).whenPressed(()-> m_driveSubsystem.zeroGyroscope());
+      new JoystickButton(m_controller, 1).whenPressed(new LimelightDriveCommand(m_driveSubsystem, () -> -m_controller.getX(), () -> -m_controller.getY()));
   }
 
   /**
