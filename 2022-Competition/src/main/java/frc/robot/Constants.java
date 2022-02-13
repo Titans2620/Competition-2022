@@ -38,12 +38,19 @@ public final class Constants {
     public static final int BACK_RIGHT_MODULE_STEER_MOTOR = 12;
     public static final double BACK_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(74.17);
 
-    public static final int INTAKE_FEED = 13;
+    public static final int INTAKE_ROLLER = 13;
     public static final int INTAKE_ROTATE = 14;
-    public static final int INNER_FEED = 15;
-    public static final int SHOOTER = 16;
+    public static final int FEED_WHEEL = 15;
+    public static final int SHOOTER_WHEEL = 16;
     public static final int LEFT_CLIMB = 17;
     public static final int RIGHT_CLIMB = 18;
+
+    //Sensors//
+
+    public static final int INTAKE_ROTATE_LIMIT = 0;
+    public static final int CLIMB_LOW_LIMIT = 1;
+    public static final int CLIMB_HIGH_LIMIT = 2;
+
 
     //SPEEDS//
     public static final double INTAKESPEED = .25;

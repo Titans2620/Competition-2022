@@ -7,6 +7,9 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.DriveSubsystem;
 
 public class DefaultDriveCommand extends CommandBase {
+    /********************************************************
+    The default drive should look for the joystick values for movement in the x and y directions as well as rotation.
+    ***********************************************************/
     private final DriveSubsystem m_driveSubsystem;
 
     private final DoubleSupplier m_translationXSupplier;

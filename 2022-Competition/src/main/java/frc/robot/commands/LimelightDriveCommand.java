@@ -7,30 +7,28 @@ package frc.robot.commands;
 import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
-import edu.wpi.first.networktables.NetworkTable;
-import edu.wpi.first.networktables.NetworkTableEntry;
-import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.DriveSubsystem;
+import frc.robot.subsystems.LimelightSubsystem;
 import frc.robot.Constants;
-import frc.robot.Constants.*;
 
 public class LimelightDriveCommand extends CommandBase {
-
+  /********************************************************
+  The limelight drive command will only run when the trigger is pressed. This will overwrite the rotation joystick and instead aim the robot towards the goal.
+  ***********************************************************/
   private final DriveSubsystem m_driveSubsystem;
+  private final LimelightSubsystem limelightSubsystem;
 
   private final DoubleSupplier m_translationXSupplier;
   private final DoubleSupplier m_translationYSupplier;
   private double m_rotation;
 
-
-  NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
-  
-  public LimelightDriveCommand(DriveSubsystem drivetrainSubsystem, DoubleSupplier translationXSupplier, DoubleSupplier translationYSupplier) {
+  public LimelightDriveCommand(DriveSubsystem drivetrainSubsystem, LimelightSubsystem limelightSubsystem, DoubleSupplier translationXSupplier, DoubleSupplier translationYSupplier) {
       this.m_driveSubsystem = drivetrainSubsystem;
       this.m_translationXSupplier = translationXSupplier;
       this.m_translationYSupplier = translationYSupplier;
       this.m_rotation = 0.0;
+      this.limelightSubsystem = limelightSubsystem;
       addRequirements(drivetrainSubsystem);
   }
 
@@ -42,7 +40,7 @@ public class LimelightDriveCommand extends CommandBase {
   @Override
   public void execute() {
     try{
-      String tableState = getLimelightState();
+      String tableState = limelightSubsystem.getLimelightState();
 
       switch(tableState){
           case "NOT FOUND":
@@ -96,32 +94,5 @@ public class LimelightDriveCommand extends CommandBase {
   public boolean isFinished() {
     return false;
   }
-  public String getLimelightState(){
-      String state = "";
-
-      double tx = table.getEntry("tx").getDouble(-10000);
-      double ty = table.getEntry("ty").getDouble(-10000);
-      double ta = table.getEntry("ta").getDouble(-10000);
-
-      if(tx == -10000 && ty == -10000){
-        state = "Not Found";
-      }
-      else{
-
-          if(tx < -4)
-            state = "fastLeft";
-          else if(tx > 4)
-            state = "fastRight";
-          else if(tx < - 0.75)
-            state = "slowLeft";
-          else if(tx > 0.75)
-            state = "slowRight";
-          else
-            state = "stop";
-
-            state = state.toUpperCase();
-          
-      }
-      return state;
-  }
+  
 }

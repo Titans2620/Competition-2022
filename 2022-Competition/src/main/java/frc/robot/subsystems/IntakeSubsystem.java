@@ -10,8 +10,18 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class IntakeSubsystem extends SubsystemBase {
-  /** Creates a new IntakeSubsystem. */
-  public WPI_VictorSPX intake = new WPI_VictorSPX(Constants.INTAKE_FEED);
+  /********************************************************
+  The intake subsystem consists of three motors, a limit switch, and a TBD sensor. When the intake button is pressed, The intake arm will ensure it is always down based on the limit switch. 
+  The Intake roller will always be on and Feeder wheel will run until a ball is in position to be shot.
+
+  Intake Roller (CANID: 13) - Rolling cylander on front of intake arm that will pull balls into the robot.
+  Intake Rotate (CANID: 14) - Rotating Intake arm that the Intake Roller is attached to.
+  Feeder Wheel (CANID: 15) - Lower Internal wheel that will feed balls the the shooter wheel.
+  
+  Limit Switch (DIO: 0) - Limit switch situated so that it will return true when the intake rotate arm is in position.
+  TBD Sensor (?) - Sensor that will detect when the ball is in the correct position to be shot.
+  ***********************************************************/
+  public WPI_VictorSPX intake = new WPI_VictorSPX(Constants.INTAKE_ROLLER);
   public WPI_VictorSPX intakeRotate = new WPI_VictorSPX(Constants.INTAKE_ROTATE);
   
   public IntakeSubsystem() {}

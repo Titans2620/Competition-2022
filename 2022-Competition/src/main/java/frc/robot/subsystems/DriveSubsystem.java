@@ -21,6 +21,13 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class DriveSubsystem extends SubsystemBase {
+  /**********************************************
+  The drive subsystem controls the movement of the robot. This consists of 8 motors and 4 encoders. As well as a gyroscope. 
+  To get a better idea of what a swerve drive accomplishes watch the following video. Note: They do not use the same type of drive as we are so the code will differ but the concept will be the same.
+  
+  https://www.youtube.com/watch?v=0Xi9yb1IMyA
+  *********************************************/
+
   /**
    * The maximum voltage that will be delivered to the drive motors.
    * <p>
