@@ -6,10 +6,10 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import frc.robot.commands.DefaultClimbCommand;
-import frc.robot.commands.DefaultDriveCommand;
-import frc.robot.commands.DefaultIntakeCommand;
-import frc.robot.commands.DefaultShooterCommand;
+import frc.robot.commands.ClimbDefaultCommand;
+import frc.robot.commands.DriveDefaultCommand;
+import frc.robot.commands.IntakeDefaultCommand;
+import frc.robot.commands.ShooterDefaultCommand;
 import frc.robot.commands.DriveAuto1Command;
 import frc.robot.commands.LimelightDriveCommand;
 import frc.robot.subsystems.DriveSubsystem;
@@ -54,7 +54,7 @@ public class RobotContainer {
 
           
 
-      m_driveSubsystem.setDefaultCommand(new DefaultDriveCommand( // Drive //
+      m_driveSubsystem.setDefaultCommand(new DriveDefaultCommand( // Drive //
               m_driveSubsystem,
               () -> -modifyAxis(m_controller.getX()) * DriveSubsystem.MAX_VELOCITY_METERS_PER_SECOND,
               () -> -modifyAxis(m_controller.getY()) * DriveSubsystem.MAX_VELOCITY_METERS_PER_SECOND,
@@ -62,9 +62,9 @@ public class RobotContainer {
       ));
 
     
-      m_intakeSubsystem.setDefaultCommand(new DefaultIntakeCommand(m_intakeSubsystem));
-      m_climbSubsystem.setDefaultCommand(new DefaultClimbCommand(m_climbSubsystem));
-      m_ShooterSubsystem.setDefaultCommand(new DefaultShooterCommand(m_ShooterSubsystem));
+      m_intakeSubsystem.setDefaultCommand(new IntakeDefaultCommand(m_intakeSubsystem));
+      m_climbSubsystem.setDefaultCommand(new ClimbDefaultCommand(m_climbSubsystem));
+      m_ShooterSubsystem.setDefaultCommand(new ShooterDefaultCommand(m_ShooterSubsystem));
 
       m_chooser.setDefaultOption("Test Auto", auto1);
       
