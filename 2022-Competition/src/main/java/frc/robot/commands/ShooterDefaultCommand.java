@@ -7,11 +7,11 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.ShooterSubsystem;
 
-public class DefaultShooterCommand extends CommandBase {
+public class ShooterDefaultCommand extends CommandBase {
   /********************************************************
   By default the shooter motor should be off and no action should be taken by this subsystem.
   ***********************************************************/
-  public DefaultShooterCommand(ShooterSubsystem shooterSubsystem) {
+  public ShooterDefaultCommand(ShooterSubsystem shooterSubsystem) {
   }
 
   @Override

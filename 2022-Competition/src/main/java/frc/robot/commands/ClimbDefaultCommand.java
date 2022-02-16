@@ -7,11 +7,11 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.ClimbSubsystem;
 
-public class DefaultClimbCommand extends CommandBase {
+public class ClimbDefaultCommand extends CommandBase {
 /*******************************************************
 By default the climb motors will be off and no action will be taken by the subsystem.
 *******************************************************/
-  public DefaultClimbCommand(ClimbSubsystem m_ClimbSubsystem) {
+  public ClimbDefaultCommand(ClimbSubsystem m_ClimbSubsystem) {
   }
 
   @Override
