@@ -17,6 +17,7 @@ public class ArmRotateManualCommand extends CommandBase {
     this.m_ArmSubsystem = m_ArmSubsystem;
     this.up = up;
     this.down = down;
+    addRequirements(this.m_ArmSubsystem);
     // Use addRequirements() here to declare subsystem dependencies.
   }
 

@@ -14,7 +14,7 @@ public class ArmSubsystem extends SubsystemBase {
   /** Creates a new ArmSubsystem. */
 
   WPI_VictorSPX intakeRotate = new WPI_VictorSPX(Constants.INTAKE_ROTATE);
-  DigitalInput limit = new DigitalInput(Constants.INTAKE_ROTATE_LIMIT);
+  //DigitalInput limit = new DigitalInput(Constants.INTAKE_ROTATE_LIMIT);
 
   public ArmSubsystem() {}
 

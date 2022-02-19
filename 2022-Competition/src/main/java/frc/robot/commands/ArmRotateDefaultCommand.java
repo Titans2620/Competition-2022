@@ -13,6 +13,7 @@ public class ArmRotateDefaultCommand extends CommandBase {
   public ArmRotateDefaultCommand(ArmSubsystem m_ArmSubsystem){
     // Use addRequirements() here to declare subsystem dependencies.
     this.m_ArmSubsystem = m_ArmSubsystem;
+    addRequirements(m_ArmSubsystem);
   }
 
   // Called when the command is initially scheduled.

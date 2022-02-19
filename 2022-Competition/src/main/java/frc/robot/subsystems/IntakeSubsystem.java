@@ -26,7 +26,7 @@ public class IntakeSubsystem extends SubsystemBase {
   private WPI_VictorSPX intakeRotate = new WPI_VictorSPX(Constants.INTAKE_ROTATE);
   private WPI_VictorSPX feedWheel = new WPI_VictorSPX(Constants.FEED_WHEEL);
 
-  private DigitalInput intakeRotateLimitSwitch = new DigitalInput(Constants.INTAKE_ROTATE_LIMIT);
+  //private DigitalInput intakeRotateLimitSwitch = new DigitalInput(Constants.INTAKE_ROTATE_LIMIT);
   
   public IntakeSubsystem() {}
 
@@ -35,9 +35,9 @@ public class IntakeSubsystem extends SubsystemBase {
   }
 
   public void setIntakeRotate(double speed){
-      if(intakeRotateLimitSwitch.get() && speed > 0){   //If the arm rotate limit switch is pressed and the arm is attempting to rotate down
-          speed = 0;                                    //set the rotate speed to zero
-      }
+      //if(intakeRotateLimitSwitch.get() && speed > 0){   //If the arm rotate limit switch is pressed and the arm is attempting to rotate down
+          //speed = 0;                                    //set the rotate speed to zero
+      //}
       intakeRotate.set(speed);
   }
 
@@ -48,7 +48,7 @@ public class IntakeSubsystem extends SubsystemBase {
   public void turnOffMotors(){
       intakeRoller.set(0);
       intakeRotate.set(0);
-      intakeRoller.set(0);
+      feedWheel.set(0);
   }
 
   @Override

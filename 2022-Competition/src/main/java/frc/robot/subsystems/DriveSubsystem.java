@@ -66,7 +66,7 @@ public class DriveSubsystem extends SubsystemBase {
   // cause the angle reading to increase until it wraps back over to zero.
   private final PigeonIMU m_pigeon = new PigeonIMU(DRIVETRAIN_PIGEON_ID);
 
-  private final SwerveDriveOdometry odometer = new SwerveDriveOdometry(m_kinematics, new Rotation2d(0));
+  //private final SwerveDriveOdometry odometer = new SwerveDriveOdometry(m_kinematics, new Rotation2d(0));
 
   // These are our modules. We initialize them in the constructor.
   private final SwerveModule m_frontLeftModule;
@@ -76,7 +76,7 @@ public class DriveSubsystem extends SubsystemBase {
 
   private ChassisSpeeds m_chassisSpeeds = new ChassisSpeeds(0.0, 0.0, 0.0);
 
-  public SwerveModuleState[] states = m_kinematics.toSwerveModuleStates(m_chassisSpeeds);
+  //public SwerveModuleState[] states = m_kinematics.toSwerveModuleStates(m_chassisSpeeds);
 
   public DriveSubsystem() {
     ShuffleboardTab tab = Shuffleboard.getTab("Drivetrain");
@@ -103,7 +103,7 @@ public class DriveSubsystem extends SubsystemBase {
 
   }
 
-  public Pose2d getPose(){
+  /*public Pose2d getPose(){
         return odometer.getPoseMeters();
   }
 
@@ -124,7 +124,7 @@ public class DriveSubsystem extends SubsystemBase {
           m_frontRightModule.set(0, m_frontRightModule.getSteerAngle());
           m_backLeftModule.set(0, m_backLeftModule.getSteerAngle());
           m_backRightModule.set(0, m_backRightModule.getSteerAngle());
-  }
+  }*/
   public void setModuleStates(SwerveModuleState[] states){
         SwerveDriveKinematics.desaturateWheelSpeeds(states, MAX_VELOCITY_METERS_PER_SECOND);
 
@@ -137,11 +137,19 @@ public class DriveSubsystem extends SubsystemBase {
 
   public void drive(ChassisSpeeds chassisSpeeds) {
     m_chassisSpeeds = chassisSpeeds;
-    SmartDashboard.putString("Robot Location", getPose().getTranslation().toString());
+    //SmartDashboard.putString("Robot Location", getPose().getTranslation().toString());
   }
 
   @Override
   public void periodic() {
-    states = m_kinematics.toSwerveModuleStates(m_chassisSpeeds);
+    //states = m_kinematics.toSwerveModuleStates(m_chassisSpeeds);
+    SwerveModuleState[] states = m_kinematics.toSwerveModuleStates(m_chassisSpeeds);
+    SwerveDriveKinematics.desaturateWheelSpeeds(states, MAX_VELOCITY_METERS_PER_SECOND);
+
+
+        m_frontLeftModule.set(states[1].speedMetersPerSecond / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE, states[1].angle.getRadians());
+        m_frontRightModule.set(states[3].speedMetersPerSecond / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE, states[3].angle.getRadians());
+        m_backLeftModule.set(states[0].speedMetersPerSecond / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE, states[0].angle.getRadians());
+        m_backRightModule.set(states[2].speedMetersPerSecond / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE, states[2].angle.getRadians());
   }
 }

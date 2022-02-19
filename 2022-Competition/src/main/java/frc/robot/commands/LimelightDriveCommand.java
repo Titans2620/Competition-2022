@@ -87,7 +87,7 @@ public class LimelightDriveCommand extends CommandBase {
 
   @Override
   public void end(boolean interrupted) {
-      m_driveSubsystem.stopModules();
+      //m_driveSubsystem.stopModules();
   }
 
   @Override

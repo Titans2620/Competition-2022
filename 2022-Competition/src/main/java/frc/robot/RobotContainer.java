@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.ArmRotateDefaultCommand;
 import frc.robot.commands.ArmRotateManualCommand;
@@ -33,9 +34,9 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final DriveSubsystem m_driveSubsystem = new DriveSubsystem();
   private final IntakeSubsystem m_intakeSubsystem = new IntakeSubsystem();
-  private final ClimbSubsystem m_climbSubsystem = new ClimbSubsystem();
-  private final ShooterSubsystem m_ShooterSubsystem = new ShooterSubsystem();
-  private final LimelightSubsystem m_limelightSubsystem = new LimelightSubsystem();
+  //private final ClimbSubsystem m_climbSubsystem = new ClimbSubsystem();
+  //private final ShooterSubsystem m_ShooterSubsystem = new ShooterSubsystem();
+  //private final LimelightSubsystem m_limelightSubsystem = new LimelightSubsystem();
   private final ArmSubsystem m_ArmSubsystem = new ArmSubsystem();  
 
   private final Joystick m_controller = new Joystick(0);
@@ -43,11 +44,11 @@ public class RobotContainer {
   //private final XboxController m_drivController = new XboxController(0);
   //private final XboxController m_operatorController = new XboxController(1);
 
-  
+  //CameraServer camera = new ();
 
-  SendableChooser<Command> m_chooser = new SendableChooser<>();
+  //SendableChooser<Command> m_chooser = new SendableChooser<>();
 
-  private final DriveAuto1Command auto1 = new DriveAuto1Command(m_driveSubsystem);
+  //private final DriveAuto1Command auto1 = new DriveAuto1Command(m_driveSubsystem);
 
 
   /**
@@ -61,7 +62,7 @@ public class RobotContainer {
       // Left stick X axis -> left and right movement
       // Right stick X axis -> rotation
 
-      
+      CameraServer.startAutomaticCapture();
 
       m_driveSubsystem.setDefaultCommand(new DriveDefaultCommand( // Drive //
               m_driveSubsystem,
@@ -72,11 +73,11 @@ public class RobotContainer {
 
   
       m_intakeSubsystem.setDefaultCommand(new IntakeDefaultCommand(m_intakeSubsystem));
-      m_climbSubsystem.setDefaultCommand(new ClimbDefaultCommand(m_climbSubsystem));
-      m_ShooterSubsystem.setDefaultCommand(new ShooterDefaultCommand(m_ShooterSubsystem));
+      //m_climbSubsystem.setDefaultCommand(new ClimbDefaultCommand(m_climbSubsystem));
+      //m_ShooterSubsystem.setDefaultCommand(new ShooterDefaultCommand(m_ShooterSubsystem));
       m_ArmSubsystem.setDefaultCommand(new ArmRotateDefaultCommand(m_ArmSubsystem));
   
-      m_chooser.setDefaultOption("Test Auto", auto1);
+      //m_chooser.setDefaultOption("Test Auto", auto1);
       
       // Configure the button bindings
       configureButtonBindings();
@@ -91,9 +92,10 @@ public class RobotContainer {
   private void configureButtonBindings() {
 
     new JoystickButton(m_controller, 10).whenPressed(()-> m_driveSubsystem.zeroGyroscope());
-    new JoystickButton(m_controller, 1).whenPressed(new LimelightDriveCommand(m_driveSubsystem, m_limelightSubsystem, () -> -m_controller.getX(), () -> -m_controller.getY()));
-    new JoystickButton(m_controller, 2).whenPressed(new IntakeManualCommand(m_intakeSubsystem));
-    new JoystickButton(m_controller, 12).toggleWhenPressed(new ArmRotateManualCommand(m_ArmSubsystem, m_controller.getRawButton(11), m_controller.getRawButton(16)));
+    //new JoystickButton(m_controller, 1).whenPressed(new LimelightDriveCommand(m_driveSubsystem, m_limelightSubsystem, () -> -m_controller.getX(), () -> -m_controller.getY()));
+    new JoystickButton(m_controller, 2).whenHeld(new IntakeManualCommand(m_intakeSubsystem));
+    new JoystickButton(m_controller, 12).whileHeld(new ArmRotateManualCommand(m_ArmSubsystem, m_controller.getRawButton(11), m_controller.getRawButton(16)));
+    new JoystickButton(m_controller, 12).whileHeld(new ArmRotateManualCommand(m_ArmSubsystem, m_controller.getRawButton(11), m_controller.getRawButton(16)));
 
   }
 
@@ -103,7 +105,8 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-      return m_chooser.getSelected();
+      //return m_chooser.getSelected();
+      return new InstantCommand();
 
   }
 
