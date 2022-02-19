@@ -55,6 +55,7 @@ public final class Constants {
     //SPEEDS//
     public static final double INTAKESPEED = .25;
     public static final double INTAKEROTATESPEED = .25;
+    public static final double FEEDSPEED = .25;
 
     public static final double LIMELIGHT_SLOW_SPEED = 0.1;
     public static final double LIMELIGHT_FAST_SPEED = 0.25;
