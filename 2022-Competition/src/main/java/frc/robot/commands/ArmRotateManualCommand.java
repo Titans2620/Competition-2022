@@ -6,19 +6,19 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
-import frc.robot.subsystems.IntakeSubsystem;
+import frc.robot.subsystems.ArmSubsystem;
 
-public class IntakeManualCommand extends CommandBase {
-  /**************************************************
-   This will only be run when the infeed button is pressed in manual mode.
-   
-   This will function identically to the infeed command except it will run without sensors.
-   *************************************************/
-  IntakeSubsystem m_IntakeSubsystem = new IntakeSubsystem();
-  public IntakeManualCommand(IntakeSubsystem m_IntakeSubsystem) {
+public class ArmRotateManualCommand extends CommandBase {
+  /** Creates a new ArmRotateManualCommand. */
+  ArmSubsystem m_ArmSubsystem = new ArmSubsystem();
+  boolean up;
+  boolean down;
+  public ArmRotateManualCommand(ArmSubsystem m_ArmSubsystem, boolean up, boolean down){
+    this.m_ArmSubsystem = m_ArmSubsystem;
+    this.up = up;
+    this.down = down;
+    addRequirements(this.m_ArmSubsystem);
     // Use addRequirements() here to declare subsystem dependencies.
-    this.m_IntakeSubsystem = m_IntakeSubsystem;
-    addRequirements(m_IntakeSubsystem);
   }
 
   // Called when the command is initially scheduled.
@@ -29,8 +29,12 @@ public class IntakeManualCommand extends CommandBase {
   @Override
   public void execute() {
 
-    m_IntakeSubsystem.setFeedWheel(Constants.FEEDSPEED);
-    m_IntakeSubsystem.setIntakeRoller(Constants.INTAKESPEED);
+    if(up){
+      m_ArmSubsystem.rotateArmUp(Constants.INTAKEROTATESPEED);
+    }
+    else if(down){
+      m_ArmSubsystem.rotateArmDown(-Constants.INTAKEROTATESPEED);
+    }
 
   }
 

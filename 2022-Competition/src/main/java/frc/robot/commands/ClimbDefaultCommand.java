@@ -11,7 +11,10 @@ public class ClimbDefaultCommand extends CommandBase {
 /*******************************************************
 By default the climb motors will be off and no action will be taken by the subsystem.
 *******************************************************/
+
+  ClimbSubsystem m_ClimbSubsystem = new ClimbSubsystem();
   public ClimbDefaultCommand(ClimbSubsystem m_ClimbSubsystem) {
+    addRequirements(this.m_ClimbSubsystem);
   }
 
   @Override
