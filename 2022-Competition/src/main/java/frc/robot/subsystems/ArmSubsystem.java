@@ -18,11 +18,7 @@ public class ArmSubsystem extends SubsystemBase {
 
   public ArmSubsystem() {}
 
-  public void rotateArmUp(double speed){
-    intakeRotate.set(speed);
-  }
-
-  public void rotateArmDown(double speed){
+  public void rotateArm(double speed){
     intakeRotate.set(speed);
   }
 

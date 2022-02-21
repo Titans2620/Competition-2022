@@ -11,12 +11,15 @@ import frc.robot.subsystems.ArmSubsystem;
 public class ArmRotateManualCommand extends CommandBase {
   /** Creates a new ArmRotateManualCommand. */
   ArmSubsystem m_ArmSubsystem = new ArmSubsystem();
-  boolean up;
-  boolean down;
-  public ArmRotateManualCommand(ArmSubsystem m_ArmSubsystem, boolean up, boolean down){
+  char direction;
+  public ArmRotateManualCommand(ArmSubsystem m_ArmSubsystem, boolean directionUp){
     this.m_ArmSubsystem = m_ArmSubsystem;
-    this.up = up;
-    this.down = down;
+    if(directionUp){
+      direction = 'u';
+    }
+    else{
+      direction = 'd';
+    }
     addRequirements(this.m_ArmSubsystem);
     // Use addRequirements() here to declare subsystem dependencies.
   }
@@ -29,11 +32,11 @@ public class ArmRotateManualCommand extends CommandBase {
   @Override
   public void execute() {
 
-    if(up){
-      m_ArmSubsystem.rotateArmUp(Constants.INTAKEROTATESPEED);
+    if(direction == 'u'){
+      m_ArmSubsystem.rotateArm(Constants.INTAKEROTATEUPSPEED);
     }
-    else if(down){
-      m_ArmSubsystem.rotateArmDown(-Constants.INTAKEROTATESPEED);
+    else if(direction == 'd'){
+      m_ArmSubsystem.rotateArm(-Constants.INTAKEROTATEDOWNSPEED);
     }
 
   }
