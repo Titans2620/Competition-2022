@@ -7,12 +7,16 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.ArmRotateDefaultCommand;
+import frc.robot.commands.ArmRotateIntakeCommand;
 import frc.robot.commands.ArmRotateManualCommand;
 import frc.robot.commands.ClimbDefaultCommand;
 import frc.robot.commands.DriveDefaultCommand;
 import frc.robot.commands.IntakeDefaultCommand;
+import frc.robot.commands.IntakeInfeedCommand;
 import frc.robot.commands.IntakeManualCommand;
 import frc.robot.commands.ShooterDefaultCommand;
 import frc.robot.commands.DriveAuto1Command;
@@ -93,9 +97,10 @@ public class RobotContainer {
 
     new JoystickButton(m_controller, 10).whenPressed(()-> m_driveSubsystem.zeroGyroscope());
     //new JoystickButton(m_controller, 1).whenPressed(new LimelightDriveCommand(m_driveSubsystem, m_limelightSubsystem, () -> -m_controller.getX(), () -> -m_controller.getY()));
-    new JoystickButton(m_controller, 2).whenHeld(new IntakeManualCommand(m_intakeSubsystem));
+    new JoystickButton(m_controller, 2).whenHeld(new ParallelCommandGroup(new IntakeInfeedCommand(m_intakeSubsystem), new ArmRotateIntakeCommand(m_ArmSubsystem)));
     new JoystickButton(m_controller, 3).whenHeld(new ArmRotateManualCommand(m_ArmSubsystem, true));
     new JoystickButton(m_controller, 4).whenHeld(new ArmRotateManualCommand(m_ArmSubsystem, false));
+
 
   }
 

@@ -5,22 +5,13 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.Constants;
 import frc.robot.subsystems.ArmSubsystem;
 
-public class ArmRotateManualCommand extends CommandBase {
-  /** Creates a new ArmRotateManualCommand. */
+public class ArmRotateIntakeCommand extends CommandBase {
   ArmSubsystem m_ArmSubsystem = new ArmSubsystem();
-  char direction;
-  public ArmRotateManualCommand(ArmSubsystem m_ArmSubsystem, boolean directionUp){
+  /** Creates a new ArmRotateCommand. */
+  public ArmRotateIntakeCommand(ArmSubsystem m_ArmSubsystem) {
     this.m_ArmSubsystem = m_ArmSubsystem;
-    if(directionUp){
-      direction = 'u';
-    }
-    else{
-      direction = 'd';
-    }
-    addRequirements(this.m_ArmSubsystem);
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
@@ -31,14 +22,7 @@ public class ArmRotateManualCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-
-    if(direction == 'u'){
-      m_ArmSubsystem.rotateArm(Constants.INTAKEROTATEUPSPEED);
-    }
-    else if(direction == 'd'){
-      m_ArmSubsystem.rotateArm(-Constants.INTAKEROTATEDOWNSPEED);
-    }
-
+    
   }
 
   // Called once the command ends or is interrupted.

@@ -40,12 +40,17 @@ public class IntakeSubsystem extends SubsystemBase {
   int blue;
   int green;
   String colorState;
-  //private DigitalInput intakeRotateLimitSwitch = new DigitalInput(Constants.INTAKE_ROTATE_LIMIT);
   
   public IntakeSubsystem() {}
 
   public void setIntakeRoller(double speed){
       intakeRoller.set(speed);
+  }
+
+  public void setAutoFeedWheel(){
+    if(colorState != "neither"){
+      feedWheel.set(Constants.FEEDSPEED);
+    }
   }
 
   public void setFeedWheel(double speed){

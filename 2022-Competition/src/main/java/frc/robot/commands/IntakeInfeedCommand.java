@@ -5,6 +5,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Constants;
 import frc.robot.subsystems.IntakeSubsystem;
 
 public class IntakeInfeedCommand extends CommandBase {
@@ -14,8 +15,11 @@ public class IntakeInfeedCommand extends CommandBase {
    2. Intake Arm will be in the down position (If not, move to down position based on limit switch)
    3. Feed Wheel will be running unless a ball it in position based on an undetermined sensor.
   **************************************************/
+  public IntakeSubsystem m_IntakeSubsystem = new IntakeSubsystem();
+
   public IntakeInfeedCommand(IntakeSubsystem m_IntakeSubsystem) {
     // Use addRequirements() here to declare subsystem dependencies.
+    this.m_IntakeSubsystem = m_IntakeSubsystem;
     addRequirements(m_IntakeSubsystem);
   }
 
@@ -25,7 +29,11 @@ public class IntakeInfeedCommand extends CommandBase {
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {}
+  public void execute() {
+    m_IntakeSubsystem.setIntakeRoller(Constants.INTAKESPEED);
+    m_IntakeSubsystem.setAutoFeedWheel();
+    
+  }
 
   // Called once the command ends or is interrupted.
   @Override
