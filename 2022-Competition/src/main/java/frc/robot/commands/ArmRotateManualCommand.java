@@ -36,7 +36,7 @@ public class ArmRotateManualCommand extends CommandBase {
       m_ArmSubsystem.rotateArm(Constants.INTAKEROTATEUPSPEED);
     }
     else if(direction == 'd'){
-      m_ArmSubsystem.rotateArm(-Constants.INTAKEROTATEDOWNSPEED);
+      m_ArmSubsystem.rotateArm(Constants.INTAKEROTATEDOWNSPEED);
     }
 
   }

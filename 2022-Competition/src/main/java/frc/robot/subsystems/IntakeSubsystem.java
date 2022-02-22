@@ -36,6 +36,10 @@ public class IntakeSubsystem extends SubsystemBase {
   Color detectedColor;
   double IR;
 
+  int red;
+  int blue;
+  int green;
+  String colorState;
   //private DigitalInput intakeRotateLimitSwitch = new DigitalInput(Constants.INTAKE_ROTATE_LIMIT);
   
   public IntakeSubsystem() {}
@@ -53,14 +57,32 @@ public class IntakeSubsystem extends SubsystemBase {
       feedWheel.set(0);
   }
 
+  public void getColor(){
+      if(red > 500 && blue < 300){
+        colorState = "red";
+      }
+      else if(red < 500 && blue > 350){
+        colorState = "blue";
+      }
+      else{
+        colorState = "neither";
+      }
+  }
+
   @Override
   public void periodic() {
       detectedColor = m_colorSensor.getColor();
-      IR = m_colorSensor.getIR();
+      //IR = m_colorSensor.getIR();
+      red = m_colorSensor.getRed();
+      blue = m_colorSensor.getBlue();
+      green = m_colorSensor.getGreen();
 
-      SmartDashboard.putNumber("Red", m_colorSensor.getRed());
-      SmartDashboard.putNumber("Green", m_colorSensor.getGreen());
-      SmartDashboard.putNumber("Blue", m_colorSensor.getBlue());
-      SmartDashboard.putNumber("IR", m_colorSensor.getIR());
+      SmartDashboard.putNumber("Red", red);
+      SmartDashboard.putNumber("Green", green);
+      SmartDashboard.putNumber("Blue", blue);
+      //SmartDashboard.putNumber("IR", IR);
+
+      getColor();
+      SmartDashboard.putString("Color", colorState);
   }
 }
