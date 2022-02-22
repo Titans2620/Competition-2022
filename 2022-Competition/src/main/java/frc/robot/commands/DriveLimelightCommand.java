@@ -12,7 +12,7 @@ import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.LimelightSubsystem;
 import frc.robot.Constants;
 
-public class LimelightDriveCommand extends CommandBase {
+public class DriveLimelightCommand extends CommandBase {
   /********************************************************
   The limelight drive command will only run when the trigger is pressed. This will overwrite the rotation joystick and instead aim the robot towards the goal.
   ***********************************************************/
@@ -23,7 +23,7 @@ public class LimelightDriveCommand extends CommandBase {
   private final DoubleSupplier m_translationYSupplier;
   private double m_rotation;
 
-  public LimelightDriveCommand(DriveSubsystem drivetrainSubsystem, LimelightSubsystem limelightSubsystem, DoubleSupplier translationXSupplier, DoubleSupplier translationYSupplier) {
+  public DriveLimelightCommand(DriveSubsystem drivetrainSubsystem, LimelightSubsystem limelightSubsystem, DoubleSupplier translationXSupplier, DoubleSupplier translationYSupplier) {
       this.m_driveSubsystem = drivetrainSubsystem;
       this.m_translationXSupplier = translationXSupplier;
       this.m_translationYSupplier = translationYSupplier;

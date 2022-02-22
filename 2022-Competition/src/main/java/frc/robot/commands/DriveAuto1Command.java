@@ -52,14 +52,14 @@ public class DriveAuto1Command extends CommandBase {
       ProfiledPIDController thetaController = new ProfiledPIDController(AutoConstants.kPThetaController, 0, 0, AutoConstants.kThetaControllerConstraints);
       thetaController.enableContinuousInput(-Math.PI, Math.PI);
 
-      /*SwerveControllerCommand swerveControllerCommand = new SwerveControllerCommand(trajectory, m_driveSubsystem::getPose, m_driveSubsystem.m_kinematics, xController, yController, thetaController, m_driveSubsystem::setModuleStates, m_driveSubsystem);
+      SwerveControllerCommand swerveControllerCommand = new SwerveControllerCommand(trajectory, m_driveSubsystem::getPose, m_driveSubsystem.m_kinematics, xController, yController, thetaController, m_driveSubsystem::setModuleStates, m_driveSubsystem);
 
         new SequentialCommandGroup(
             new InstantCommand(() -> m_driveSubsystem.resetOdometry(trajectory.getInitialPose())), 
             swerveControllerCommand, 
             new InstantCommand(() -> m_driveSubsystem.stopModules())
             );
-*/
+
   }
 
   // Called once the command ends or is interrupted.

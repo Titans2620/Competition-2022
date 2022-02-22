@@ -5,8 +5,12 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
+import com.revrobotics.ColorSensorV3;
 
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.I2C;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -23,10 +27,17 @@ public class IntakeSubsystem extends SubsystemBase {
   TBD Sensor (?) - Sensor that will detect when the ball is in the correct position to be shot.
   ***********************************************************/
   private WPI_VictorSPX intakeRoller = new WPI_VictorSPX(Constants.INTAKE_ROLLER);
-  private WPI_VictorSPX intakeRotate = new WPI_VictorSPX(Constants.INTAKE_ROTATE);
   private WPI_VictorSPX feedWheel = new WPI_VictorSPX(Constants.FEED_WHEEL);
 
-  //private DigitalInput intakeRotateLimitSwitch = new DigitalInput(Constants.INTAKE_ROTATE_LIMIT);
+  private final I2C.Port i2cPort = I2C.Port.kOnboard;
+
+  private final ColorSensorV3 m_colorSensor = new ColorSensorV3(i2cPort);
+
+  Color detectedColor;
+  double IR;
+
+  int red, blue, green;
+  String colorState;
   
   public IntakeSubsystem() {}
 
@@ -34,11 +45,13 @@ public class IntakeSubsystem extends SubsystemBase {
       intakeRoller.set(speed);
   }
 
-  public void setIntakeRotate(double speed){
-      //if(intakeRotateLimitSwitch.get() && speed > 0){   //If the arm rotate limit switch is pressed and the arm is attempting to rotate down
-          //speed = 0;                                    //set the rotate speed to zero
-      //}
-      intakeRotate.set(speed);
+  public void setAutoFeedWheel(double speed){
+    if(colorState == "neither"){
+      feedWheel.set(speed);
+    }
+    else{
+      feedWheel.set(0);
+    }
   }
 
   public void setFeedWheel(double speed){
@@ -47,11 +60,35 @@ public class IntakeSubsystem extends SubsystemBase {
 
   public void turnOffMotors(){
       intakeRoller.set(0);
-      intakeRotate.set(0);
       feedWheel.set(0);
+  }
+
+  public void getColor(){
+      if(red > 500 && blue < 300){
+        colorState = "red";
+      }
+      else if(red < 500 && blue > 350){
+        colorState = "blue";
+      }
+      else{
+        colorState = "neither";
+      }
   }
 
   @Override
   public void periodic() {
+      detectedColor = m_colorSensor.getColor();
+      //IR = m_colorSensor.getIR();
+      red = m_colorSensor.getRed();
+      blue = m_colorSensor.getBlue();
+      green = m_colorSensor.getGreen();
+
+      SmartDashboard.putNumber("Red", red);
+      SmartDashboard.putNumber("Green", green);
+      SmartDashboard.putNumber("Blue", blue);
+      //SmartDashboard.putNumber("IR", IR);
+
+      getColor();
+      SmartDashboard.putString("Color", colorState);
   }
 }

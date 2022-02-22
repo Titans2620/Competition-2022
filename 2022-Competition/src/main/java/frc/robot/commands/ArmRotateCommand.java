@@ -5,15 +5,23 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Constants;
 import frc.robot.subsystems.ArmSubsystem;
 
-public class ArmRotateDefaultCommand extends CommandBase {
-  /** Creates a new ArmRotateDefaultCommand. */
+public class ArmRotateCommand extends CommandBase {
+  /** Creates a new ArmRotateManualCommand. */
   ArmSubsystem m_ArmSubsystem;
-  public ArmRotateDefaultCommand(ArmSubsystem m_ArmSubsystem){
-    // Use addRequirements() here to declare subsystem dependencies.
+  char direction;
+  public ArmRotateCommand(ArmSubsystem m_ArmSubsystem, boolean directionUp){
     this.m_ArmSubsystem = m_ArmSubsystem;
-    addRequirements(m_ArmSubsystem);
+    if(directionUp){
+      direction = 'u';
+    }
+    else{
+      direction = 'd';
+    }
+    addRequirements(this.m_ArmSubsystem);
+    // Use addRequirements() here to declare subsystem dependencies.
   }
 
   // Called when the command is initially scheduled.
@@ -23,13 +31,19 @@ public class ArmRotateDefaultCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_ArmSubsystem.stopMotor();
+
+    if(direction == 'u'){
+      m_ArmSubsystem.autoRotateArm(Constants.INTAKEROTATEUPSPEED);
+    }
+    else if(direction == 'd'){
+      m_ArmSubsystem.autoRotateArm(Constants.INTAKEROTATEDOWNSPEED);
+    }
+
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {
-  }
+  public void end(boolean interrupted) {}
 
   // Returns true when the command should end.
   @Override

@@ -13,8 +13,10 @@ public class IntakeEjectCommand extends CommandBase {
 
   It will function identically to the infeed command except it will not care about sensors and the feed wheel and roller will be moving in the opposite direction.
   ***********************************************/
+  IntakeSubsystem m_intakeSubsystem = new IntakeSubsystem();
   public IntakeEjectCommand(IntakeSubsystem m_intakeSubsystem) {
     // Use addRequirements() here to declare subsystem dependencies.
+    this.m_intakeSubsystem = m_intakeSubsystem;
     addRequirements(m_intakeSubsystem);
   }
 
@@ -24,7 +26,9 @@ public class IntakeEjectCommand extends CommandBase {
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {}
+  public void execute() {
+    
+  }
 
   // Called once the command ends or is interrupted.
   @Override

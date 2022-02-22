@@ -5,6 +5,7 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 
@@ -14,16 +15,23 @@ public class ArmSubsystem extends SubsystemBase {
   /** Creates a new ArmSubsystem. */
 
   WPI_VictorSPX intakeRotate = new WPI_VictorSPX(Constants.INTAKE_ROTATE);
-  //DigitalInput limit = new DigitalInput(Constants.INTAKE_ROTATE_LIMIT);
+  DigitalInput limit;
 
-  public ArmSubsystem() {}
+  public ArmSubsystem() {
+    limit = new DigitalInput(Constants.INTAKE_ROTATE_LIMIT);
+  }
 
-  public void rotateArmUp(double speed){
+  public void rotateArm(double speed){
     intakeRotate.set(speed);
   }
 
-  public void rotateArmDown(double speed){
-    intakeRotate.set(speed);
+  public void autoRotateArm(Double speed){
+    if((!limit.get() && speed < 0) || speed > 0){
+      intakeRotate.set(speed);
+    }
+    else{
+      intakeRotate.set(0);
+    }
   }
 
   public void stopMotor(){
@@ -31,6 +39,7 @@ public class ArmSubsystem extends SubsystemBase {
   }
   @Override
   public void periodic() {
+    SmartDashboard.putBoolean("Intake Arm Down Switch", limit.get());
     // This method will be called once per scheduler run
   }
 }
