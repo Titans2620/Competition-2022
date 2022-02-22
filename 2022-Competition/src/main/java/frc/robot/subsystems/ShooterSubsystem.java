@@ -12,6 +12,7 @@ public class ShooterSubsystem extends SubsystemBase {
 
   Shooter Wheel (CANID: 16) - Shooter wheels that will launch the ball towards the goal. These will need to get up to speed before the feeder wheel provides the ball.
   ***********************************************************/
+  
   public ShooterSubsystem() {}
 
   @Override

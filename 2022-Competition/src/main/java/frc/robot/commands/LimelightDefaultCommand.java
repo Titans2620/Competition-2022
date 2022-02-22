@@ -5,15 +5,16 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.Constants;
-import frc.robot.subsystems.ArmSubsystem;
+import frc.robot.subsystems.LimelightSubsystem;
 
-public class ArmRotateIntakeCommand extends CommandBase {
-  ArmSubsystem m_ArmSubsystem = new ArmSubsystem();
-  /** Creates a new ArmRotateCommand. */
-  public ArmRotateIntakeCommand(ArmSubsystem m_ArmSubsystem) {
-    this.m_ArmSubsystem = m_ArmSubsystem;
-    addRequirements(m_ArmSubsystem);
+public class LimelightDefaultCommand extends CommandBase {
+
+  LimelightSubsystem m_limelightSubsystem = new LimelightSubsystem();
+  /** Creates a new LimelightDefaultCommand. */
+  public LimelightDefaultCommand(LimelightSubsystem limelightSubsystem) {
+    m_limelightSubsystem = limelightSubsystem;
+
+    addRequirements(limelightSubsystem);
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
@@ -24,7 +25,7 @@ public class ArmRotateIntakeCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-      m_ArmSubsystem.autoRotateArm(Constants.INTAKEROTATEDOWNSPEED);
+    m_limelightSubsystem.setLimelightLED("off");
   }
 
   // Called once the command ends or is interrupted.

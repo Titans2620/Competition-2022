@@ -36,9 +36,7 @@ public class IntakeSubsystem extends SubsystemBase {
   Color detectedColor;
   double IR;
 
-  int red;
-  int blue;
-  int green;
+  int red, blue, green;
   String colorState;
   
   public IntakeSubsystem() {}
@@ -47,9 +45,9 @@ public class IntakeSubsystem extends SubsystemBase {
       intakeRoller.set(speed);
   }
 
-  public void setAutoFeedWheel(){
+  public void setAutoFeedWheel(double speed){
     if(colorState != "neither"){
-      feedWheel.set(Constants.FEEDSPEED);
+      feedWheel.set(speed);
     }
   }
 

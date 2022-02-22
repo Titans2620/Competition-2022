@@ -31,7 +31,7 @@ public class IntakeInfeedCommand extends CommandBase {
   @Override
   public void execute() {
     m_IntakeSubsystem.setIntakeRoller(Constants.INTAKESPEED);
-    m_IntakeSubsystem.setAutoFeedWheel();
+    m_IntakeSubsystem.setAutoFeedWheel(Constants.FEEDSPEED);
     
   }
 

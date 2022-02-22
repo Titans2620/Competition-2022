@@ -94,56 +94,60 @@ public class DriveSubsystem extends SubsystemBase {
    * Sets the gyroscope angle to zero. This can be used to set the direction the robot is currently facing to the
    * 'forwards' direction.
    */
-  public void zeroGyroscope() {
-    m_pigeon.setFusedHeading(0.0);
-  }
+        public void zeroGyroscope() {
+        m_pigeon.setFusedHeading(0.0);
+        }
 
-  public Rotation2d getGyroscopeRotation() {
-    return Rotation2d.fromDegrees(m_pigeon.getFusedHeading());
+        public Rotation2d getGyroscopeRotation() {
+        return Rotation2d.fromDegrees(m_pigeon.getFusedHeading());
 
-  }
+        }
 
-  public Pose2d getPose(){
-        return odometer.getPoseMeters();
-  }
+        public Pose2d getPose(){
+                return odometer.getPoseMeters();
+        }
 
-  public double getHeading(){
-          return m_pigeon.getCompassHeading();
-  }
+        public double getHeading(){
+                return m_pigeon.getCompassHeading();
+        }
 
-  public Rotation2d getRotation2d(){
-          return Rotation2d.fromDegrees(getHeading());
-  }
+        public Rotation2d getRotation2d(){
+                return Rotation2d.fromDegrees(getHeading());
+        }
 
-  public void resetOdometry(Pose2d pose){
-          odometer.resetPosition(pose, getRotation2d());
-  }
+        public void resetOdometry(Pose2d pose){
+                odometer.resetPosition(pose, getRotation2d());
+        }
 
-  public void stopModules(){
-          m_frontLeftModule.set(0, m_frontLeftModule.getSteerAngle());
-          m_frontRightModule.set(0, m_frontRightModule.getSteerAngle());
-          m_backLeftModule.set(0, m_backLeftModule.getSteerAngle());
-          m_backRightModule.set(0, m_backRightModule.getSteerAngle());
-  }
-  public void setModuleStates(SwerveModuleState[] states){
-        SwerveDriveKinematics.desaturateWheelSpeeds(states, MAX_VELOCITY_METERS_PER_SECOND);
+        public void stopModules(){
+                m_frontLeftModule.set(0, m_frontLeftModule.getSteerAngle());
+                m_frontRightModule.set(0, m_frontRightModule.getSteerAngle());
+                m_backLeftModule.set(0, m_backLeftModule.getSteerAngle());
+                m_backRightModule.set(0, m_backRightModule.getSteerAngle());
+        }
+        public void setModuleStates(SwerveModuleState[] states){
+                SwerveDriveKinematics.desaturateWheelSpeeds(states, MAX_VELOCITY_METERS_PER_SECOND);
 
 
-        m_frontLeftModule.set(states[1].speedMetersPerSecond / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE, states[1].angle.getRadians());
-        m_frontRightModule.set(states[3].speedMetersPerSecond / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE, states[3].angle.getRadians());
-        m_backLeftModule.set(states[0].speedMetersPerSecond / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE, states[0].angle.getRadians());
-        m_backRightModule.set(states[2].speedMetersPerSecond / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE, states[2].angle.getRadians());
-  }
+                m_frontLeftModule.set(states[1].speedMetersPerSecond / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE, states[1].angle.getRadians());
+                m_frontRightModule.set(states[3].speedMetersPerSecond / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE, states[3].angle.getRadians());
+                m_backLeftModule.set(states[0].speedMetersPerSecond / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE, states[0].angle.getRadians());
+                m_backRightModule.set(states[2].speedMetersPerSecond / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE, states[2].angle.getRadians());
+        }
 
-  public void drive(ChassisSpeeds chassisSpeeds) {
-    m_chassisSpeeds = chassisSpeeds;
-    SmartDashboard.putString("Robot Location", getPose().getTranslation().toString());
-  }
+        public void drive(ChassisSpeeds chassisSpeeds) {
+        m_chassisSpeeds = chassisSpeeds;
+        SmartDashboard.putString("Robot Location", getPose().getTranslation().toString());
+        }
 
-  @Override
+        @Override
         public void periodic() {
                 states = m_kinematics.toSwerveModuleStates(m_chassisSpeeds);
                 setModuleStates(states);
+                SmartDashboard.putNumber("Pigeon Pitch", m_pigeon.getPitch());
+                SmartDashboard.putNumber("Pigeon Roll", m_pigeon.getRoll());
+                SmartDashboard.putNumber("Pigeon Yaw", m_pigeon.getYaw());
+                SmartDashboard.putNumber("Pigeon Rotation", m_pigeon.getFusedHeading());
     
         }
 }
