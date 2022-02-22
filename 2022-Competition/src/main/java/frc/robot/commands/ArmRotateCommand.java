@@ -8,11 +8,11 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
 import frc.robot.subsystems.ArmSubsystem;
 
-public class ArmRotateManualCommand extends CommandBase {
+public class ArmRotateCommand extends CommandBase {
   /** Creates a new ArmRotateManualCommand. */
-  ArmSubsystem m_ArmSubsystem = new ArmSubsystem();
+  ArmSubsystem m_ArmSubsystem;
   char direction;
-  public ArmRotateManualCommand(ArmSubsystem m_ArmSubsystem, boolean directionUp){
+  public ArmRotateCommand(ArmSubsystem m_ArmSubsystem, boolean directionUp){
     this.m_ArmSubsystem = m_ArmSubsystem;
     if(directionUp){
       direction = 'u';
@@ -33,10 +33,10 @@ public class ArmRotateManualCommand extends CommandBase {
   public void execute() {
 
     if(direction == 'u'){
-      m_ArmSubsystem.rotateArm(Constants.INTAKEROTATEUPSPEED);
+      m_ArmSubsystem.autoRotateArm(Constants.INTAKEROTATEUPSPEED);
     }
     else if(direction == 'd'){
-      m_ArmSubsystem.rotateArm(-Constants.INTAKEROTATEDOWNSPEED);
+      m_ArmSubsystem.autoRotateArm(Constants.INTAKEROTATEDOWNSPEED);
     }
 
   }

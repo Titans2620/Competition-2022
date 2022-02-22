@@ -9,7 +9,7 @@ import frc.robot.Constants;
 import frc.robot.subsystems.ArmSubsystem;
 
 public class ArmRotateIntakeCommand extends CommandBase {
-  ArmSubsystem m_ArmSubsystem = new ArmSubsystem();
+  ArmSubsystem m_ArmSubsystem;
   /** Creates a new ArmRotateCommand. */
   public ArmRotateIntakeCommand(ArmSubsystem m_ArmSubsystem) {
     this.m_ArmSubsystem = m_ArmSubsystem;

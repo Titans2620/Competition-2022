@@ -12,7 +12,7 @@ import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.ArmRotateDefaultCommand;
 import frc.robot.commands.ArmRotateIntakeCommand;
-import frc.robot.commands.ArmRotateManualCommand;
+import frc.robot.commands.ArmRotateCommand;
 import frc.robot.commands.ClimbDefaultCommand;
 import frc.robot.commands.DriveDefaultCommand;
 import frc.robot.commands.IntakeDefaultCommand;
@@ -101,8 +101,8 @@ public class RobotContainer {
     //new JoystickButton(m_controller, 1).whenPressed(new LimelightDriveCommand(m_driveSubsystem, m_limelightSubsystem, () -> -m_controller.getX(), () -> -m_controller.getY()));
     if(!m_controller.getRawButton(3) || !m_controller.getRawButton(4))
         new JoystickButton(m_controller, 2).whenHeld(new ParallelCommandGroup(new IntakeInfeedCommand(m_intakeSubsystem), new ArmRotateIntakeCommand(m_ArmSubsystem)));
-    new JoystickButton(m_controller, 3).whenHeld(new ArmRotateManualCommand(m_ArmSubsystem, true));
-    new JoystickButton(m_controller, 4).whenHeld(new ArmRotateManualCommand(m_ArmSubsystem, false));
+    new JoystickButton(m_controller, 3).whenHeld(new ArmRotateCommand(m_ArmSubsystem, true));
+    new JoystickButton(m_controller, 4).whenHeld(new ArmRotateCommand(m_ArmSubsystem, false));
 
 
   }

@@ -15,17 +15,22 @@ public class ArmSubsystem extends SubsystemBase {
   /** Creates a new ArmSubsystem. */
 
   WPI_VictorSPX intakeRotate = new WPI_VictorSPX(Constants.INTAKE_ROTATE);
-  DigitalInput limit = new DigitalInput(Constants.INTAKE_ROTATE_LIMIT);
+  DigitalInput limit;
 
-  public ArmSubsystem() {}
+  public ArmSubsystem() {
+    limit = new DigitalInput(Constants.INTAKE_ROTATE_LIMIT);
+  }
 
   public void rotateArm(double speed){
     intakeRotate.set(speed);
   }
 
   public void autoRotateArm(Double speed){
-    if(!limit.get()){
+    if((!limit.get() && speed < 0) || speed > 0){
       intakeRotate.set(speed);
+    }
+    else{
+      intakeRotate.set(0);
     }
   }
 

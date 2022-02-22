@@ -46,8 +46,11 @@ public class IntakeSubsystem extends SubsystemBase {
   }
 
   public void setAutoFeedWheel(double speed){
-    if(colorState != "neither"){
+    if(colorState == "neither"){
       feedWheel.set(speed);
+    }
+    else{
+      feedWheel.set(0);
     }
   }
 

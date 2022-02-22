@@ -9,7 +9,7 @@ import frc.robot.subsystems.ArmSubsystem;
 
 public class ArmRotateDefaultCommand extends CommandBase {
   /** Creates a new ArmRotateDefaultCommand. */
-  ArmSubsystem m_ArmSubsystem = new ArmSubsystem();
+  ArmSubsystem m_ArmSubsystem;
   public ArmRotateDefaultCommand(ArmSubsystem m_ArmSubsystem){
     // Use addRequirements() here to declare subsystem dependencies.
     this.m_ArmSubsystem = m_ArmSubsystem;
