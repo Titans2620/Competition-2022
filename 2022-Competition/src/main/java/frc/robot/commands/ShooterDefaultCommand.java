@@ -13,8 +13,8 @@ public class ShooterDefaultCommand extends CommandBase {
   ***********************************************************/
 
   ShooterSubsystem m_ShooterSubsystem = new ShooterSubsystem();
-  public ShooterDefaultCommand(ShooterSubsystem shooterSubsystem) {
-    m_ShooterSubsystem = shooterSubsystem;
+  public ShooterDefaultCommand(ShooterSubsystem m_shooterSubsystem) {
+    this.m_ShooterSubsystem = m_shooterSubsystem;
     addRequirements(m_ShooterSubsystem);
   }
 
@@ -22,7 +22,9 @@ public class ShooterDefaultCommand extends CommandBase {
   public void initialize() {}
 
   @Override
-  public void execute() {}
+  public void execute() {
+    m_ShooterSubsystem.stopShooter();
+  }
 
   @Override
   public void end(boolean interrupted) {}

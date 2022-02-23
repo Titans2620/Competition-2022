@@ -1,10 +1,14 @@
 package frc.robot;
 
+import com.revrobotics.ColorSensorV3;
+
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.GenericHID;
+import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
@@ -20,6 +24,8 @@ import frc.robot.commands.IntakeInfeedCommand;
 import frc.robot.commands.IntakeManualCommand;
 import frc.robot.commands.LimelightDefaultCommand;
 import frc.robot.commands.ShooterDefaultCommand;
+import frc.robot.commands.ShooterManualShootCommand;
+import frc.robot.commands.ShooterShootCommand;
 import frc.robot.commands.DriveAuto1Command;
 import frc.robot.commands.DriveLimelightCommand;
 import frc.robot.subsystems.DriveSubsystem;
@@ -51,6 +57,13 @@ public class RobotContainer {
 
   SendableChooser<Command> m_chooser = new SendableChooser<>();
 
+  private final I2C.Port i2cPort = I2C.Port.kOnboard;
+  private final ColorSensorV3 m_colorSensor = new ColorSensorV3(i2cPort);
+
+  int red;
+  int blue;
+  int green;
+  String colorState;
   //private final DriveAuto1Command auto1 = new DriveAuto1Command(m_driveSubsystem);
 
 
@@ -87,6 +100,15 @@ public class RobotContainer {
       
       // Configure the button bindings
       configureButtonBindings();
+      
+      // Color Sensor
+      red = m_colorSensor.getRed();
+      blue = m_colorSensor.getBlue();
+      green = m_colorSensor.getGreen();
+      getColor();
+
+      // Smart Dashboard
+      putSmartdashboard();
   }
 
   /**
@@ -98,9 +120,10 @@ public class RobotContainer {
   private void configureButtonBindings() {
 
     new JoystickButton(m_controller, 10).whenPressed(()-> m_driveSubsystem.zeroGyroscope());
-    //new JoystickButton(m_controller, 1).whenPressed(new LimelightDriveCommand(m_driveSubsystem, m_limelightSubsystem, () -> -m_controller.getX(), () -> -m_controller.getY()));
+    new JoystickButton(m_controller, 3).whenHeld(new ShooterManualShootCommand(m_ShooterSubsystem, m_limelightSubsystem, m_intakeSubsystem));
+    //new JoystickButton(m_controller, 3).whenHeld(new ParallelCommandGroup(new ShooterShootCommand(m_ShooterSubsystem, m_intakeSubsystem), new DriveLimelightCommand(m_driveSubsystem, m_limelightSubsystem, () -> -m_controller.getX(), () -> -m_controller.getY())));
     if(!m_controller.getRawButton(3) || !m_controller.getRawButton(4))
-        new JoystickButton(m_controller, 2).whenHeld(new ParallelCommandGroup(new IntakeInfeedCommand(m_intakeSubsystem), new ArmRotateIntakeCommand(m_ArmSubsystem)));
+        new JoystickButton(m_controller, 2).whenHeld(new ParallelCommandGroup(new IntakeInfeedCommand(m_intakeSubsystem, colorState), new ArmRotateIntakeCommand(m_ArmSubsystem)));
     new JoystickButton(m_controller, 3).whenHeld(new ArmRotateCommand(m_ArmSubsystem, true));
     new JoystickButton(m_controller, 4).whenHeld(new ArmRotateCommand(m_ArmSubsystem, false));
 
@@ -127,6 +150,25 @@ public class RobotContainer {
     } else {
       return 0.0;
     }
+  }
+
+  public void getColor(){
+    if(red > 500 && blue < 300){
+      colorState = "red";
+    }
+    else if(red < 500 && blue > 350){
+      colorState = "blue";
+    }
+    else{
+      colorState = "neither";
+    }
+  }
+
+  public void putSmartdashboard(){
+    SmartDashboard.putNumber("Red", red);
+    SmartDashboard.putNumber("Green", green);
+    SmartDashboard.putNumber("Blue", blue);
+    SmartDashboard.putString("Color", colorState);
   }
 
   private static double modifyAxis(double value) {

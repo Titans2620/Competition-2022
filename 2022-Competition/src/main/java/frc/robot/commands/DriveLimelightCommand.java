@@ -23,10 +23,10 @@ public class DriveLimelightCommand extends CommandBase {
   private final DoubleSupplier m_translationYSupplier;
   private double m_rotation;
 
-  public DriveLimelightCommand(DriveSubsystem drivetrainSubsystem, LimelightSubsystem limelightSubsystem, DoubleSupplier translationXSupplier, DoubleSupplier translationYSupplier) {
+  public DriveLimelightCommand(DriveSubsystem drivetrainSubsystem, LimelightSubsystem limelightSubsystem, DoubleSupplier d, DoubleSupplier e) {
       this.m_driveSubsystem = drivetrainSubsystem;
-      this.m_translationXSupplier = translationXSupplier;
-      this.m_translationYSupplier = translationYSupplier;
+      this.m_translationXSupplier = d;
+      this.m_translationYSupplier = e;
       this.m_rotation = 0.0;
       this.limelightSubsystem = limelightSubsystem;
       addRequirements(drivetrainSubsystem);

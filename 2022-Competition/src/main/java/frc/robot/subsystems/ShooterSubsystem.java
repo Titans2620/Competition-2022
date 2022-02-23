@@ -4,15 +4,24 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
+
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 
 public class ShooterSubsystem extends SubsystemBase {
-  /********************************************************
-  The shooter subsystem will consist of a shooter motor and will implement the limelight subsystem.
 
-  Shooter Wheel (CANID: 16) - Shooter wheels that will launch the ball towards the goal. These will need to get up to speed before the feeder wheel provides the ball.
-  ***********************************************************/
-  
+  WPI_VictorSPX shooter = new WPI_VictorSPX(Constants.SHOOTER_WHEEL);
+
+  public void setShooter(double speed){
+    shooter.set(speed);
+  }
+
+  public void stopShooter(){
+    shooter.set(0);
+  }
+
+  /** Creates a new ShooterSubsystem. */
   public ShooterSubsystem() {}
 
   @Override
