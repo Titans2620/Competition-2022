@@ -113,6 +113,7 @@ public class RobotContainer {
 
     new JoystickButton(m_operatorController, 7).whenPressed(()-> m_driveSubsystem.zeroGyroscope());
     new JoystickButton(m_operatorController, 6).whenHeld(new ShooterManualShootCommand(m_ShooterSubsystem));
+    new JoystickButton(m_operatorController, 7).whenHeld(new ParallelCommandGroup(new DriveLimelightCommand(m_driveSubsystem, m_limelightSubsystem, () -> -m_driveController.getRawAxis(0), () -> -m_driveController.getRawAxis(1)), new ShooterShootCommand(m_ShooterSubsystem, m_intakeSubsystem, m_ColorSensorSubsystem, getAlliance())));
     //new JoystickButton(m_controller, 3).whenHeld(new ParallelCommandGroup(new ShooterShootCommand(m_ShooterSubsystem, m_intakeSubsystem), new DriveLimelightCommand(m_driveSubsystem, m_limelightSubsystem, () -> -m_controller.getX(), () -> -m_controller.getY())));
     if(!m_operatorController.getRawButton(2) || !m_operatorController.getRawButton(3))
         new JoystickButton(m_operatorController, 1).whenHeld(new ParallelCommandGroup(new IntakeInfeedCommand(m_intakeSubsystem, m_ColorSensorSubsystem), new ArmRotateIntakeCommand(m_ArmSubsystem)));
@@ -141,6 +142,15 @@ public class RobotContainer {
       }
     } else {
       return 0.0;
+    }
+  }
+
+  public String getAlliance(){
+    if(isRedAlliance.getBoolean(true)){
+      return "red";
+    }
+    else{
+      return "blue";
     }
   }
 

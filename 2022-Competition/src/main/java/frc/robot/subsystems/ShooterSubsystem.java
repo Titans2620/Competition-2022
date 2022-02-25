@@ -22,6 +22,7 @@ public class ShooterSubsystem extends SubsystemBase {
   NetworkTableEntry isRedAlliance;
 
   public void setShooter(double speed){
+
     shooter.set(speed);
   }
 
@@ -34,6 +35,10 @@ public class ShooterSubsystem extends SubsystemBase {
     shooter = new CANSparkMax(Constants.SHOOTER_WHEEL, MotorType.kBrushless);
     encoder = shooter.getEncoder();
 
+  }
+
+  public double getEncoderValue(){
+      return encoder.getVelocity();
   }
 
   @Override

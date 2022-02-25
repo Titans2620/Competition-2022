@@ -7,6 +7,7 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
+import frc.robot.subsystems.ColorSensorSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.LimelightSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
@@ -23,35 +24,40 @@ public class ShooterShootCommand extends CommandBase {
       4a. (Limelight state is good & shooter motor is at correct speed) - Turn on Feed Wheel
       4b. (Otherwise) - Leave Feed Wheel off.
    ***************************************************/
-  Timer timer = new Timer();
   ShooterSubsystem m_ShooterSubsystem = new ShooterSubsystem();
   LimelightSubsystem m_limeLightSubsystem = new LimelightSubsystem();
   IntakeSubsystem m_IntakeSubsystem = new IntakeSubsystem();
+  ColorSensorSubsystem m_ColorSensorSubsystem = new ColorSensorSubsystem();
 
-  public ShooterShootCommand(ShooterSubsystem m_ShooterSubsystem, IntakeSubsystem m_IntakeSubsystem) {
+  String alliance;
+
+  public ShooterShootCommand(ShooterSubsystem m_ShooterSubsystem, IntakeSubsystem m_IntakeSubsystem, ColorSensorSubsystem m_ColorSensorSubsystem, String alliance) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.m_ShooterSubsystem = m_ShooterSubsystem;
     this.m_limeLightSubsystem = m_limeLightSubsystem;
     this.m_IntakeSubsystem = m_IntakeSubsystem;
+    this.m_ColorSensorSubsystem = m_ColorSensorSubsystem;
+    this.alliance = alliance;
+
     addRequirements(m_ShooterSubsystem);
-    addRequirements(m_IntakeSubsystem);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    timer.reset();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute(){
-    if(timer.get() < 3){
-      m_ShooterSubsystem.setShooter(Constants.SHOOTERSPEED);
+    m_limeLightSubsystem.setLimelightCamMode("Search");
+    m_limeLightSubsystem.setLimelightLED("On");
+    m_ShooterSubsystem.setShooter(Constants.SHOOTERSPEED);
+    if((alliance != m_ColorSensorSubsystem.getColorState()) || ( m_limeLightSubsystem.getLimelightState() == "stop" && m_ShooterSubsystem.getEncoderValue() > 7000.0)){
+        new IntakeShootCommand(m_IntakeSubsystem);
     }
     else{
-      m_ShooterSubsystem.setShooter(Constants.SHOOTERSPEED);
-      new IntakeShootCommand(m_IntakeSubsystem);
+        new IntakeDefaultCommand(m_IntakeSubsystem);
     }
   }
 
