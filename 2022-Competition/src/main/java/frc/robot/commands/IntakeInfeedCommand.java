@@ -4,8 +4,13 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
+import frc.robot.subsystems.ColorSensorSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 
 public class IntakeInfeedCommand extends CommandBase {
@@ -17,12 +22,13 @@ public class IntakeInfeedCommand extends CommandBase {
   **************************************************/
   public IntakeSubsystem m_IntakeSubsystem = new IntakeSubsystem();
 
-  String colorState;
+  ColorSensorSubsystem m_ColorSensorSubsystem;
 
-  public IntakeInfeedCommand(IntakeSubsystem m_IntakeSubsystem, String colorState) {
+  public IntakeInfeedCommand(IntakeSubsystem m_IntakeSubsystem, ColorSensorSubsystem m_ColorSensorSubsystem) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.m_IntakeSubsystem = m_IntakeSubsystem;
-    this.colorState = colorState;
+    this.m_ColorSensorSubsystem = m_ColorSensorSubsystem;
+
     addRequirements(m_IntakeSubsystem);
   }
 
@@ -33,8 +39,10 @@ public class IntakeInfeedCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+
     m_IntakeSubsystem.setIntakeRoller(Constants.INTAKESPEED);
-    m_IntakeSubsystem.setAutoFeedWheel(Constants.FEEDSPEED, colorState);
+    if(m_ColorSensorSubsystem.getColorState() == "Red")
+    m_IntakeSubsystem.setFeedWheel(Constants.FEEDSPEED);
     
   }
 

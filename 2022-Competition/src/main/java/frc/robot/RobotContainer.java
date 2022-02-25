@@ -3,6 +3,9 @@ package frc.robot;
 import com.revrobotics.ColorSensorV3;
 
 import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.Joystick;
@@ -34,6 +37,7 @@ import frc.robot.subsystems.LimelightSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ClimbSubsystem;
+import frc.robot.subsystems.ColorSensorSubsystem;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -45,25 +49,20 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final DriveSubsystem m_driveSubsystem = new DriveSubsystem();
   private final IntakeSubsystem m_intakeSubsystem = new IntakeSubsystem();
-  private final ClimbSubsystem m_climbSubsystem = new ClimbSubsystem();
+  //private final ClimbSubsystem m_climbSubsystem = new ClimbSubsystem();
   private final ShooterSubsystem m_ShooterSubsystem = new ShooterSubsystem();
   private final LimelightSubsystem m_limelightSubsystem = new LimelightSubsystem();
-  private final ArmSubsystem m_ArmSubsystem = new ArmSubsystem();  
+  private final ArmSubsystem m_ArmSubsystem = new ArmSubsystem(); 
+  private final ColorSensorSubsystem m_ColorSensorSubsystem = new ColorSensorSubsystem(); 
 
-  private final Joystick m_controller = new Joystick(0);
+  //private final Joystick m_controller = new Joystick(0);
 
-  //private final XboxController m_driveController = new XboxController(0);
-  //private final XboxController m_operatorController = new XboxController(1);
+  private final XboxController m_driveController = new XboxController(0);
+  private final XboxController m_operatorController = new XboxController(1);
 
   SendableChooser<Command> m_chooser = new SendableChooser<>();
-
-  private final I2C.Port i2cPort = I2C.Port.kOnboard;
-  private final ColorSensorV3 m_colorSensor = new ColorSensorV3(i2cPort);
-
-  int red;
-  int blue;
-  int green;
-  String colorState;
+  
+  NetworkTableEntry isRedAlliance;
   //private final DriveAuto1Command auto1 = new DriveAuto1Command(m_driveSubsystem);
 
 
@@ -72,25 +71,20 @@ public class RobotContainer {
    */
 
   public RobotContainer() {
-      // Set up the default command for the drivetrain.
-      // The controls are for field-oriented driving: 
-      // Left stick Y axis -> forward and backwards movement
-      // Left stick X axis -> left and right movement
-      // Right stick X axis -> rotation
 
       CameraServer.startAutomaticCapture();
 
       m_driveSubsystem.setDefaultCommand(new DriveDefaultCommand( // Drive //
               m_driveSubsystem,
-              () -> modifyAxis(m_controller.getX()) * DriveSubsystem.MAX_VELOCITY_METERS_PER_SECOND,
-              () -> -modifyAxis(m_controller.getY()) * DriveSubsystem.MAX_VELOCITY_METERS_PER_SECOND,
-              () -> modifyAxis(m_controller.getZ()) * DriveSubsystem.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND
+              () -> modifyAxis(m_driveController.getRawAxis(0)) * DriveSubsystem.MAX_VELOCITY_METERS_PER_SECOND,
+              () -> -modifyAxis(m_driveController.getRawAxis(1)) * DriveSubsystem.MAX_VELOCITY_METERS_PER_SECOND,
+              () -> modifyAxis(m_driveController.getRawAxis(4)) * DriveSubsystem.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND
       ));
 
   
       m_intakeSubsystem.setDefaultCommand(new IntakeDefaultCommand(m_intakeSubsystem));
       //m_climbSubsystem.setDefaultCommand(new ClimbDefaultCommand(m_climbSubsystem));
-      //m_ShooterSubsystem.setDefaultCommand(new ShooterDefaultCommand(m_ShooterSubsystem));
+      m_ShooterSubsystem.setDefaultCommand(new ShooterDefaultCommand(m_ShooterSubsystem));
       m_ArmSubsystem.setDefaultCommand(new ArmRotateDefaultCommand(m_ArmSubsystem));
       m_limelightSubsystem.setDefaultCommand(new LimelightDefaultCommand(m_limelightSubsystem));
 
@@ -100,12 +94,10 @@ public class RobotContainer {
       
       // Configure the button bindings
       configureButtonBindings();
-      
-      // Color Sensor
-      red = m_colorSensor.getRed();
-      blue = m_colorSensor.getBlue();
-      green = m_colorSensor.getGreen();
-      getColor();
+
+      NetworkTableInstance inst = NetworkTableInstance.getDefault();
+      NetworkTable table = inst.getTable("FMSInfo");
+      isRedAlliance = table.getEntry("IsRedAlliance");
 
       // Smart Dashboard
       putSmartdashboard();
@@ -119,13 +111,13 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
 
-    new JoystickButton(m_controller, 10).whenPressed(()-> m_driveSubsystem.zeroGyroscope());
-    new JoystickButton(m_controller, 3).whenHeld(new ShooterManualShootCommand(m_ShooterSubsystem, m_limelightSubsystem, m_intakeSubsystem));
+    new JoystickButton(m_operatorController, 7).whenPressed(()-> m_driveSubsystem.zeroGyroscope());
+    new JoystickButton(m_operatorController, 6).whenHeld(new ShooterManualShootCommand(m_ShooterSubsystem));
     //new JoystickButton(m_controller, 3).whenHeld(new ParallelCommandGroup(new ShooterShootCommand(m_ShooterSubsystem, m_intakeSubsystem), new DriveLimelightCommand(m_driveSubsystem, m_limelightSubsystem, () -> -m_controller.getX(), () -> -m_controller.getY())));
-    if(!m_controller.getRawButton(3) || !m_controller.getRawButton(4))
-        new JoystickButton(m_controller, 2).whenHeld(new ParallelCommandGroup(new IntakeInfeedCommand(m_intakeSubsystem, colorState), new ArmRotateIntakeCommand(m_ArmSubsystem)));
-    new JoystickButton(m_controller, 3).whenHeld(new ArmRotateCommand(m_ArmSubsystem, true));
-    new JoystickButton(m_controller, 4).whenHeld(new ArmRotateCommand(m_ArmSubsystem, false));
+    if(!m_operatorController.getRawButton(2) || !m_operatorController.getRawButton(3))
+        new JoystickButton(m_operatorController, 1).whenHeld(new ParallelCommandGroup(new IntakeInfeedCommand(m_intakeSubsystem, m_ColorSensorSubsystem), new ArmRotateIntakeCommand(m_ArmSubsystem)));
+    new JoystickButton(m_operatorController, 2).whenHeld(new ArmRotateCommand(m_ArmSubsystem, true));
+    new JoystickButton(m_operatorController, 3).whenHeld(new ArmRotateCommand(m_ArmSubsystem, false));
 
 
   }
@@ -152,23 +144,8 @@ public class RobotContainer {
     }
   }
 
-  public void getColor(){
-    if(red > 500 && blue < 300){
-      colorState = "red";
-    }
-    else if(red < 500 && blue > 350){
-      colorState = "blue";
-    }
-    else{
-      colorState = "neither";
-    }
-  }
-
   public void putSmartdashboard(){
-    SmartDashboard.putNumber("Red", red);
-    SmartDashboard.putNumber("Green", green);
-    SmartDashboard.putNumber("Blue", blue);
-    SmartDashboard.putString("Color", colorState);
+    SmartDashboard.putBoolean("Is Red Alliance", isRedAlliance.getBoolean(true));
   }
 
   private static double modifyAxis(double value) {

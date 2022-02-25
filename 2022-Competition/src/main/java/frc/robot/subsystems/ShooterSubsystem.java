@@ -6,12 +6,20 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 
+import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.RelativeEncoder;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 public class ShooterSubsystem extends SubsystemBase {
 
-  WPI_VictorSPX shooter = new WPI_VictorSPX(Constants.SHOOTER_WHEEL);
+  private CANSparkMax shooter;
+  private RelativeEncoder encoder;
+  
+  NetworkTableEntry isRedAlliance;
 
   public void setShooter(double speed){
     shooter.set(speed);
@@ -22,10 +30,15 @@ public class ShooterSubsystem extends SubsystemBase {
   }
 
   /** Creates a new ShooterSubsystem. */
-  public ShooterSubsystem() {}
+  public ShooterSubsystem() {
+    shooter = new CANSparkMax(Constants.SHOOTER_WHEEL, MotorType.kBrushless);
+    encoder = shooter.getEncoder();
+
+  }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    SmartDashboard.putNumber("Shooter Encoder", encoder.getVelocity());
   }
 }

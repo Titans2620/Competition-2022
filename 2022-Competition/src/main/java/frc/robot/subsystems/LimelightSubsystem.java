@@ -46,6 +46,7 @@ public class LimelightSubsystem extends SubsystemBase {
   
   public LimelightSubsystem() {
       setLimelightLED("off");
+      setLimelightCamMode("Camera");
   }
 
   @Override
@@ -104,6 +105,21 @@ public class LimelightSubsystem extends SubsystemBase {
             default:
                 table.getEntry("ledMode").setNumber(1);
                 System.out.println("The entered Limelight LED State is incorrect. Valid inputs are ON, OFF, BLINK, and PIPELINE. Unexpected String was " + ledState);
+        }
+        
+    }
+    public void setLimelightCamMode(String camState){
+        camState = camState.toUpperCase();
+        switch(camState){
+            case "CAMERA":
+                table.getEntry("camMode").setNumber(1);
+                break;
+            case "SEARCH":
+                table.getEntry("camMode").setNumber(0);
+                break;
+            default:
+                table.getEntry("camMode").setNumber(0);
+                System.out.println("The entered Limelight Cam State is incorrect. Valid inputs are Camera and Search. Unexpected String was " + camState);
         }
         
     }

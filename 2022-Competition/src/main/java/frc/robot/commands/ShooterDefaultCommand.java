@@ -12,7 +12,7 @@ public class ShooterDefaultCommand extends CommandBase {
   By default the shooter motor should be off and no action should be taken by this subsystem.
   ***********************************************************/
 
-  ShooterSubsystem m_ShooterSubsystem = new ShooterSubsystem();
+  ShooterSubsystem m_ShooterSubsystem;
   public ShooterDefaultCommand(ShooterSubsystem m_shooterSubsystem) {
     this.m_ShooterSubsystem = m_shooterSubsystem;
     addRequirements(m_ShooterSubsystem);
