@@ -26,6 +26,7 @@ public class IntakeShootCommand extends CommandBase {
     this.m_ColorSensorSubsystem = m_ColorSensorSubsystem;
     this.m_LimelightSubsystem = m_LimelightSubsystem;
     this.alliance = alliance;
+    addRequirements(m_IntakeSubsystem);
   }
 
   // Called when the command is initially scheduled.
@@ -35,7 +36,9 @@ public class IntakeShootCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if((alliance != m_ColorSensorSubsystem.getColorState()) || ( m_LimelightSubsystem.getLimelightState() == "stop" && m_ShooterSubsystem.getEncoderValue() > 3000.0)){
+    System.out.println("Shoot: " + m_LimelightSubsystem.getLimelightState() + "|" + m_ShooterSubsystem.getEncoderValue());
+    if((alliance != m_ColorSensorSubsystem.getColorState()) || (m_LimelightSubsystem.getLimelightState() == Constants.LIMELIGHT_STOP && m_ShooterSubsystem.getEncoderValue() > 3000.0)){
+      System.out.println("Shoot: ");
       m_IntakeSubsystem.setFeedWheel(Constants.FEEDSPEED);
     }
     else{

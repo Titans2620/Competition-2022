@@ -8,6 +8,7 @@ import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 
 public class LimelightSubsystem extends SubsystemBase {
     /********************************************************
@@ -63,24 +64,23 @@ public class LimelightSubsystem extends SubsystemBase {
         ty = table.getEntry("ty").getDouble(-10000);
         ta = table.getEntry("ta").getDouble(-10000);
 
-        if(tx == -10000 && ty == -10000){
-            state = "Not Found";
+        if(tx == 0.0 && ty == 0.0){
+            state = "NOT FOUND";
         }
         else{
 
-            if(tx < -4)
-            state = "fastLeft";
-            else if(tx > 4)
-            state = "fastRight";
-            else if(tx < - 0.75)
-            state = "slowLeft";
-            else if(tx > 0.75)
-            state = "slowRight";
+            if(tx < -4.0)
+                state = "FASTLEFT";
+            else if(tx > 4.0)
+                state = "FASTRIGHT";
+            else if(tx < - 0.75 && tx > -4.0)
+                state = "SLOWLEFT";
+            else if(tx > 0.75 && tx < -4.0)
+                state = "SLOWRIGHT";
             else
-            state = "stop";
+                state = Constants.LIMELIGHT_STOP;
             
         }
-        state = state.toUpperCase();
         return state;
     }
 

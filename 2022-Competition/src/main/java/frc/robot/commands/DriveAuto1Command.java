@@ -41,8 +41,8 @@ public class DriveAuto1Command extends CommandBase {
     Trajectory trajectory = TrajectoryGenerator.generateTrajectory(
       new Pose2d(0,0, new Rotation2d(0)),
        List.of(
-          new Translation2d(1,0),
-          new Translation2d(1, -1)),
+          new Translation2d(10,0),
+          new Translation2d(10, -10)),
       new Pose2d(2, -1, Rotation2d.fromDegrees(180)),
       trajectoryConfig);
 
@@ -56,7 +56,7 @@ public class DriveAuto1Command extends CommandBase {
 
         new SequentialCommandGroup(
             new InstantCommand(() -> m_driveSubsystem.resetOdometry(trajectory.getInitialPose())), 
-            swerveControllerCommand, 
+            swerveControllerCommand,
             new InstantCommand(() -> m_driveSubsystem.stopModules())
             );
 

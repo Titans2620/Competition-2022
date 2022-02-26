@@ -101,7 +101,7 @@ public class DriveSubsystem extends SubsystemBase {
    */
         public void zeroGyroscope() {
                 m_pigeon.zeroGyroBiasNow();
-                m_pigeon.setYaw(160);
+                m_pigeon.setYaw(360);
         }
 
         public Rotation2d getGyroscopeRotation() {

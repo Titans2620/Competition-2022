@@ -57,12 +57,14 @@ public final class Constants {
     public static final double INTAKESPEED = -1.0;
     public static final double INTAKEROTATEUPSPEED = .25;
     public static final double INTAKEROTATEDOWNSPEED = -.25;
-    public static final double FEEDSPEED = .35;
+    public static final double FEEDSPEED = .25;
     public static final double SHOOTERSPEED = .65;
 
     public static final double LIMELIGHT_SLOW_SPEED = 0.1;
     public static final double LIMELIGHT_FAST_SPEED = 0.25;
     public static final double LIMELIGHT_SEARCH_SPEED = 0.3;
+
+    public static final String LIMELIGHT_STOP = "STOP";
 
     public static final class AutoConstants {
         public static final double kMaxSpeedMetersPerSecond = 1.25;
