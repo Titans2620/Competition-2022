@@ -4,19 +4,46 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
+
+import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.RelativeEncoder;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 public class ShooterSubsystem extends SubsystemBase {
-  /********************************************************
-  The shooter subsystem will consist of a shooter motor and will implement the limelight subsystem.
 
-  Shooter Wheel (CANID: 16) - Shooter wheels that will launch the ball towards the goal. These will need to get up to speed before the feeder wheel provides the ball.
-  ***********************************************************/
+  private CANSparkMax shooter;
+  private RelativeEncoder encoder;
   
-  public ShooterSubsystem() {}
+  NetworkTableEntry isRedAlliance;
+
+  public void setShooter(double speed){
+
+    shooter.set(speed);
+  }
+
+  public void stopShooter(){
+    shooter.set(0);
+  }
+
+  /** Creates a new ShooterSubsystem. */
+  public ShooterSubsystem() {
+    shooter = new CANSparkMax(Constants.SHOOTER_WHEEL, MotorType.kBrushless);
+    encoder = shooter.getEncoder();
+
+  }
+
+  public double getEncoderValue(){
+      return encoder.getVelocity();
+  }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    SmartDashboard.putNumber("Shooter Encoder", encoder.getVelocity());
   }
 }

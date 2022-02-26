@@ -1,10 +1,17 @@
 package frc.robot;
 
+import com.revrobotics.ColorSensorV3;
+
 import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.GenericHID;
+import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
@@ -18,8 +25,13 @@ import frc.robot.commands.DriveDefaultCommand;
 import frc.robot.commands.IntakeDefaultCommand;
 import frc.robot.commands.IntakeInfeedCommand;
 import frc.robot.commands.IntakeManualCommand;
+import frc.robot.commands.IntakeShootCommand;
 import frc.robot.commands.LimelightDefaultCommand;
+import frc.robot.commands.LimelightGetStateCommand;
+import frc.robot.commands.LimelightSearchCommand;
 import frc.robot.commands.ShooterDefaultCommand;
+import frc.robot.commands.ShooterManualShootCommand;
+import frc.robot.commands.ShooterShootCommand;
 import frc.robot.commands.DriveAuto1Command;
 import frc.robot.commands.DriveLimelightCommand;
 import frc.robot.subsystems.DriveSubsystem;
@@ -28,6 +40,7 @@ import frc.robot.subsystems.LimelightSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ClimbSubsystem;
+import frc.robot.subsystems.ColorSensorSubsystem;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -39,18 +52,18 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final DriveSubsystem m_driveSubsystem = new DriveSubsystem();
   private final IntakeSubsystem m_intakeSubsystem = new IntakeSubsystem();
-  private final ClimbSubsystem m_climbSubsystem = new ClimbSubsystem();
+  //private final ClimbSubsystem m_climbSubsystem = new ClimbSubsystem();
   private final ShooterSubsystem m_ShooterSubsystem = new ShooterSubsystem();
   private final LimelightSubsystem m_limelightSubsystem = new LimelightSubsystem();
-  private final ArmSubsystem m_ArmSubsystem = new ArmSubsystem();  
+  private final ArmSubsystem m_ArmSubsystem = new ArmSubsystem(); 
+  private final ColorSensorSubsystem m_ColorSensorSubsystem = new ColorSensorSubsystem(); 
 
-  private final Joystick m_controller = new Joystick(0);
-
-  //private final XboxController m_driveController = new XboxController(0);
-  //private final XboxController m_operatorController = new XboxController(1);
+  private final XboxController m_driveController = new XboxController(0);
+  private final XboxController m_operatorController = new XboxController(1);
 
   SendableChooser<Command> m_chooser = new SendableChooser<>();
-
+  
+  NetworkTableEntry isRedAlliance;
   //private final DriveAuto1Command auto1 = new DriveAuto1Command(m_driveSubsystem);
 
 
@@ -59,25 +72,20 @@ public class RobotContainer {
    */
 
   public RobotContainer() {
-      // Set up the default command for the drivetrain.
-      // The controls are for field-oriented driving: 
-      // Left stick Y axis -> forward and backwards movement
-      // Left stick X axis -> left and right movement
-      // Right stick X axis -> rotation
 
       CameraServer.startAutomaticCapture();
 
       m_driveSubsystem.setDefaultCommand(new DriveDefaultCommand( // Drive //
               m_driveSubsystem,
-              () -> modifyAxis(m_controller.getX()) * DriveSubsystem.MAX_VELOCITY_METERS_PER_SECOND,
-              () -> -modifyAxis(m_controller.getY()) * DriveSubsystem.MAX_VELOCITY_METERS_PER_SECOND,
-              () -> modifyAxis(m_controller.getZ()) * DriveSubsystem.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND
+              () -> modifyAxis(m_driveController.getRawAxis(0)) * DriveSubsystem.MAX_VELOCITY_METERS_PER_SECOND,
+              () -> -modifyAxis(m_driveController.getRawAxis(1)) * DriveSubsystem.MAX_VELOCITY_METERS_PER_SECOND,
+              () -> modifyAxis(m_driveController.getRawAxis(4)) * DriveSubsystem.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND
       ));
 
   
       m_intakeSubsystem.setDefaultCommand(new IntakeDefaultCommand(m_intakeSubsystem));
       //m_climbSubsystem.setDefaultCommand(new ClimbDefaultCommand(m_climbSubsystem));
-      //m_ShooterSubsystem.setDefaultCommand(new ShooterDefaultCommand(m_ShooterSubsystem));
+      m_ShooterSubsystem.setDefaultCommand(new ShooterDefaultCommand(m_ShooterSubsystem));
       m_ArmSubsystem.setDefaultCommand(new ArmRotateDefaultCommand(m_ArmSubsystem));
       m_limelightSubsystem.setDefaultCommand(new LimelightDefaultCommand(m_limelightSubsystem));
 
@@ -87,6 +95,9 @@ public class RobotContainer {
       
       // Configure the button bindings
       configureButtonBindings();
+
+      // Smart Dashboard
+      putSmartdashboard();
   }
 
   /**
@@ -97,12 +108,17 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
 
-    new JoystickButton(m_controller, 10).whenPressed(()-> m_driveSubsystem.zeroGyroscope());
-    //new JoystickButton(m_controller, 1).whenPressed(new LimelightDriveCommand(m_driveSubsystem, m_limelightSubsystem, () -> -m_controller.getX(), () -> -m_controller.getY()));
-    if(!m_controller.getRawButton(3) || !m_controller.getRawButton(4))
-        new JoystickButton(m_controller, 2).whenHeld(new ParallelCommandGroup(new IntakeInfeedCommand(m_intakeSubsystem), new ArmRotateIntakeCommand(m_ArmSubsystem)));
-    new JoystickButton(m_controller, 3).whenHeld(new ArmRotateCommand(m_ArmSubsystem, true));
-    new JoystickButton(m_controller, 4).whenHeld(new ArmRotateCommand(m_ArmSubsystem, false));
+    //new JoystickButton(m_operatorController, 4).whenPressed(()-> m_driveSubsystem.zeroGyroscope());
+    //new JoystickButton(m_operatorController, 6).whenHeld(new LimelightSearchCommand(m_limelightSubsystem));
+    //new JoystickButton(m_operatorController, 6).whenHeld(new ShooterShootCommand(m_ShooterSubsystem, m_intakeSubsystem, m_ColorSensorSubsystem, m_limelightSubsystem, getAlliance()));
+    new JoystickButton(m_operatorController, 6).whenHeld(new ParallelCommandGroup(new DriveLimelightCommand(m_driveSubsystem, m_limelightSubsystem, () -> modifyAxis(m_driveController.getRawAxis(0)) * DriveSubsystem.MAX_VELOCITY_METERS_PER_SECOND, () -> -modifyAxis(m_driveController.getRawAxis(1)) * DriveSubsystem.MAX_VELOCITY_METERS_PER_SECOND),
+    new ShooterShootCommand(m_ShooterSubsystem, m_limelightSubsystem),
+    new LimelightSearchCommand(m_limelightSubsystem),
+    new IntakeShootCommand(m_intakeSubsystem, m_ShooterSubsystem, m_ColorSensorSubsystem, m_limelightSubsystem, getAlliance())));
+    if(!m_operatorController.getRawButton(2) || !m_operatorController.getRawButton(3))
+        new JoystickButton(m_operatorController, 1).whenHeld(new ParallelCommandGroup(new IntakeInfeedCommand(m_intakeSubsystem, m_ColorSensorSubsystem), new ArmRotateIntakeCommand(m_ArmSubsystem)));
+    new JoystickButton(m_operatorController, 2).whenHeld(new ArmRotateCommand(m_ArmSubsystem, true));
+    new JoystickButton(m_operatorController, 3).whenHeld(new ArmRotateCommand(m_ArmSubsystem, false));
 
 
   }
@@ -127,6 +143,22 @@ public class RobotContainer {
     } else {
       return 0.0;
     }
+  }
+
+  public String getAlliance(){
+    NetworkTableInstance inst = NetworkTableInstance.getDefault();
+    NetworkTable table = inst.getTable("FMSInfo");
+    isRedAlliance = table.getEntry("IsRedAlliance");
+    if(isRedAlliance.getBoolean(true)){
+      return "red";
+    }
+    else{
+      return "blue";
+    }
+  }
+
+  public void putSmartdashboard(){
+    SmartDashboard.putBoolean("Is Red Alliance", isRedAlliance.getBoolean(true));
   }
 
   private static double modifyAxis(double value) {

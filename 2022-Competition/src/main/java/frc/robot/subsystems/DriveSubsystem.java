@@ -2,6 +2,7 @@ package frc.robot.subsystems;
 
 import static frc.robot.Constants.*;
 
+import com.ctre.phoenix.sensors.Pigeon2;
 import com.ctre.phoenix.sensors.PigeonIMU;
 import com.swervedrivespecialties.swervelib.Mk3SwerveModuleHelper;
 import com.swervedrivespecialties.swervelib.SdsModuleConfigurations;
@@ -64,7 +65,9 @@ public class DriveSubsystem extends SubsystemBase {
   // By default we use a Pigeon for our gyroscope. But if you use another gyroscope, like a NavX, you can change this.
   // The important thing about how you configure your gyroscope is that rotating the robot counter-clockwise should
   // cause the angle reading to increase until it wraps back over to zero.
-  private final PigeonIMU m_pigeon = new PigeonIMU(DRIVETRAIN_PIGEON_ID);
+  //private final PigeonIMU m_pigeon = new PigeonIMU(DRIVETRAIN_PIGEON_ID);
+  private final Pigeon2 m_pigeon = new Pigeon2(DRIVETRAIN_PIGEON_ID);
+  
 
   private final SwerveDriveOdometry odometer = new SwerveDriveOdometry(m_kinematics, new Rotation2d(0));
 
@@ -88,18 +91,21 @@ public class DriveSubsystem extends SubsystemBase {
     m_backLeftModule = Mk3SwerveModuleHelper.createFalcon500(tab.getLayout("Back Left Module", BuiltInLayouts.kList).withSize(2, 4).withPosition(4, 0),Mk3SwerveModuleHelper.GearRatio.STANDARD, BACK_LEFT_MODULE_DRIVE_MOTOR, BACK_LEFT_MODULE_STEER_MOTOR, BACK_LEFT_MODULE_STEER_ENCODER, BACK_LEFT_MODULE_STEER_OFFSET);
 
     m_backRightModule = Mk3SwerveModuleHelper.createFalcon500(tab.getLayout("Back Right Module", BuiltInLayouts.kList).withSize(2, 4).withPosition(6, 0),Mk3SwerveModuleHelper.GearRatio.STANDARD, BACK_RIGHT_MODULE_DRIVE_MOTOR, BACK_RIGHT_MODULE_STEER_MOTOR, BACK_RIGHT_MODULE_STEER_ENCODER, BACK_RIGHT_MODULE_STEER_OFFSET);
-  }
+  
+        m_pigeon.setYaw(360);
+}
 
   /**
    * Sets the gyroscope angle to zero. This can be used to set the direction the robot is currently facing to the
    * 'forwards' direction.
    */
         public void zeroGyroscope() {
-        m_pigeon.setFusedHeading(0.0);
+                m_pigeon.zeroGyroBiasNow();
+                m_pigeon.setYaw(160);
         }
 
         public Rotation2d getGyroscopeRotation() {
-        return Rotation2d.fromDegrees(m_pigeon.getFusedHeading());
+                return Rotation2d.fromDegrees(m_pigeon.getYaw());
 
         }
 
@@ -147,7 +153,6 @@ public class DriveSubsystem extends SubsystemBase {
                 SmartDashboard.putNumber("Pigeon Pitch", m_pigeon.getPitch());
                 SmartDashboard.putNumber("Pigeon Roll", m_pigeon.getRoll());
                 SmartDashboard.putNumber("Pigeon Yaw", m_pigeon.getYaw());
-                SmartDashboard.putNumber("Pigeon Rotation", m_pigeon.getFusedHeading());
     
         }
 }

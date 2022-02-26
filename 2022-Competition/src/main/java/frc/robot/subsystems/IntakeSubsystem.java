@@ -29,15 +29,11 @@ public class IntakeSubsystem extends SubsystemBase {
   private WPI_VictorSPX intakeRoller = new WPI_VictorSPX(Constants.INTAKE_ROLLER);
   private WPI_VictorSPX feedWheel = new WPI_VictorSPX(Constants.FEED_WHEEL);
 
-  private final I2C.Port i2cPort = I2C.Port.kOnboard;
-
-  private final ColorSensorV3 m_colorSensor = new ColorSensorV3(i2cPort);
-
+  
   Color detectedColor;
   double IR;
 
   int red, blue, green;
-  String colorState;
   
   public IntakeSubsystem() {}
 
@@ -45,7 +41,7 @@ public class IntakeSubsystem extends SubsystemBase {
       intakeRoller.set(speed);
   }
 
-  public void setAutoFeedWheel(double speed){
+  public void setAutoFeedWheel(double speed, String colorState){
     if(colorState == "neither"){
       feedWheel.set(speed);
     }
@@ -63,32 +59,10 @@ public class IntakeSubsystem extends SubsystemBase {
       feedWheel.set(0);
   }
 
-  public void getColor(){
-      if(red > 500 && blue < 300){
-        colorState = "red";
-      }
-      else if(red < 500 && blue > 350){
-        colorState = "blue";
-      }
-      else{
-        colorState = "neither";
-      }
-  }
+  
 
   @Override
   public void periodic() {
-      detectedColor = m_colorSensor.getColor();
-      //IR = m_colorSensor.getIR();
-      red = m_colorSensor.getRed();
-      blue = m_colorSensor.getBlue();
-      green = m_colorSensor.getGreen();
 
-      SmartDashboard.putNumber("Red", red);
-      SmartDashboard.putNumber("Green", green);
-      SmartDashboard.putNumber("Blue", blue);
-      //SmartDashboard.putNumber("IR", IR);
-
-      getColor();
-      SmartDashboard.putString("Color", colorState);
   }
 }

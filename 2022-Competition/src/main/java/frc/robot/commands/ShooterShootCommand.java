@@ -4,8 +4,12 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Constants;
+import frc.robot.subsystems.ColorSensorSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
+import frc.robot.subsystems.LimelightSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 
 public class ShooterShootCommand extends CommandBase {
@@ -20,19 +24,31 @@ public class ShooterShootCommand extends CommandBase {
       4a. (Limelight state is good & shooter motor is at correct speed) - Turn on Feed Wheel
       4b. (Otherwise) - Leave Feed Wheel off.
    ***************************************************/
-  public ShooterShootCommand(ShooterSubsystem m_ShooterSubsystem, IntakeSubsystem m_IntakeSubsystem) {
+  ShooterSubsystem m_ShooterSubsystem;
+  LimelightSubsystem m_limeLightSubsystem;
+
+  String alliance;
+
+  public ShooterShootCommand(ShooterSubsystem m_ShooterSubsystem, LimelightSubsystem m_LimelightSubsystem) {
     // Use addRequirements() here to declare subsystem dependencies.
+    this.m_ShooterSubsystem = m_ShooterSubsystem;
+    this.m_limeLightSubsystem = m_LimelightSubsystem;
+
     addRequirements(m_ShooterSubsystem);
-    addRequirements(m_IntakeSubsystem);
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {}
+  public void execute(){
+    m_limeLightSubsystem.setLimelightCamMode("Search");
+    m_limeLightSubsystem.setLimelightLED("On");
+    m_ShooterSubsystem.setShooter(Constants.SHOOTERSPEED);
+  }
 
   // Called once the command ends or is interrupted.
   @Override

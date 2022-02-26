@@ -16,7 +16,6 @@ public class DriveDefaultCommand extends CommandBase {
     private final DoubleSupplier m_translationXSupplier;
     private final DoubleSupplier m_translationYSupplier;
     private final DoubleSupplier m_rotationSupplier;
-    private final Rotation2d testRotation = new Rotation2d(0);
 
     public DriveDefaultCommand(DriveSubsystem drivetrainSubsystem, DoubleSupplier translationXSupplier, DoubleSupplier translationYSupplier, DoubleSupplier rotationSupplier) {
         this.m_driveSubsystem = drivetrainSubsystem;
@@ -36,7 +35,6 @@ public class DriveDefaultCommand extends CommandBase {
                         m_translationYSupplier.getAsDouble(),
                         m_rotationSupplier.getAsDouble(),
                         m_driveSubsystem.getGyroscopeRotation()
-                        //testRotation
                         
                 )
         );
