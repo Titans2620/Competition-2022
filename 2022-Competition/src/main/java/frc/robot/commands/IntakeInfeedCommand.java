@@ -41,8 +41,12 @@ public class IntakeInfeedCommand extends CommandBase {
   public void execute() {
 
     m_IntakeSubsystem.setIntakeRoller(Constants.INTAKESPEED);
-    m_IntakeSubsystem.setFeedWheel(Constants.FEEDSPEED);
-    
+    if(m_ColorSensorSubsystem.getColorState() == "neither"){
+      m_IntakeSubsystem.setFeedWheel(Constants.FEEDSPEED);
+    }
+    else{
+      m_IntakeSubsystem.setFeedWheel(0);
+    }
   }
 
   // Called once the command ends or is interrupted.

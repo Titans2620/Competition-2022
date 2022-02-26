@@ -8,7 +8,7 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.LimelightSubsystem;
 
 public class LimelightSearchCommand extends CommandBase {
-  LimelightSubsystem m_limelightSubsystem = new LimelightSubsystem();
+  LimelightSubsystem m_limelightSubsystem;
 
   /** Creates a new LimelightSearchCommand. */
   public LimelightSearchCommand(LimelightSubsystem limelightSubsystem) {
@@ -26,6 +26,7 @@ public class LimelightSearchCommand extends CommandBase {
   @Override
   public void execute() {
       m_limelightSubsystem.setLimelightLED("on");
+      m_limelightSubsystem.setLimelightCamMode("Search");
   }
 
   // Called once the command ends or is interrupted.

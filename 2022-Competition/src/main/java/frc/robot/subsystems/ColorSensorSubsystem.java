@@ -31,13 +31,16 @@ public class ColorSensorSubsystem extends SubsystemBase {
       this.green = m_colorSensor.getGreen();
       updateColor();
       SmartDashboard.putString("Color", colorState);
+      SmartDashboard.putNumber("Red", red);
+      SmartDashboard.putNumber("Blue", blue);
+      SmartDashboard.putNumber("Green", green);
   }
 
   public void updateColor(){
-    if(red > 500 && blue < 300){
+    if(red > blue && green > 800 ){
       colorState = "red";
     }
-    else if(red < 500 && blue > 350){
+    else if(red < blue && green > 800){
       colorState = "blue";
     }
     else{

@@ -45,8 +45,6 @@ public class LimelightSubsystem extends SubsystemBase {
   
   
   public LimelightSubsystem() {
-      setLimelightLED("off");
-      setLimelightCamMode("Camera");
   }
 
   @Override
@@ -60,7 +58,7 @@ public class LimelightSubsystem extends SubsystemBase {
     }
 
     public String getLimelightState(){
-
+        
         tx = table.getEntry("tx").getDouble(-10000);
         ty = table.getEntry("ty").getDouble(-10000);
         ta = table.getEntry("ta").getDouble(-10000);
@@ -80,10 +78,9 @@ public class LimelightSubsystem extends SubsystemBase {
             state = "slowRight";
             else
             state = "stop";
-
-            state = state.toUpperCase();
             
         }
+        state = state.toUpperCase();
         return state;
     }
 

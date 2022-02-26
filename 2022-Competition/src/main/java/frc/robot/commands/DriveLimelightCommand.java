@@ -7,6 +7,7 @@ package frc.robot.commands;
 import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.LimelightSubsystem;
@@ -39,7 +40,6 @@ public class DriveLimelightCommand extends CommandBase {
 
   @Override
   public void execute() {
-    try{
       String tableState = limelightSubsystem.getLimelightState();
 
       switch(tableState){
@@ -67,27 +67,26 @@ public class DriveLimelightCommand extends CommandBase {
               break;
           default:
               m_rotation = 0.0;
-              throw new Exception("The Limelight State is an invalid value, Valid states are: NOT FOUND, FASTLEFT, FASTRIGHT, SLOWLEFT, SLOWRIGHT, and STOP. The current state is: " + tableState);
+              System.out.println("The Limelight State is an invalid value, Valid states are: NOT FOUND, FASTLEFT, FASTRIGHT, SLOWLEFT, SLOWRIGHT, and STOP. The current state is: " + tableState);
       }
 
       m_driveSubsystem.drive(
                 ChassisSpeeds.fromFieldRelativeSpeeds(
                         m_translationXSupplier.getAsDouble(),
                         m_translationYSupplier.getAsDouble(),
-                        m_rotation,
+                        m_rotation * DriveSubsystem.MAX_VELOCITY_METERS_PER_SECOND,
                         m_driveSubsystem.getGyroscopeRotation()
                 )
         );
-    } catch(Exception ex){
-          System.out.println(ex.toString());
 
-    }
-
+        SmartDashboard.putNumber("TranslationX", m_translationXSupplier.getAsDouble());
+        SmartDashboard.putNumber("TranslationY", m_translationYSupplier.getAsDouble());
+        SmartDashboard.putNumber("TranslationR", m_rotation);
   }
 
   @Override
   public void end(boolean interrupted) {
-      //m_driveSubsystem.stopModules();
+        m_driveSubsystem.drive(new ChassisSpeeds(0.0, 0.0, 0.0));
   }
 
   @Override

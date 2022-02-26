@@ -4,16 +4,28 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
+import frc.robot.subsystems.ColorSensorSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
+import frc.robot.subsystems.LimelightSubsystem;
+import frc.robot.subsystems.ShooterSubsystem;
 
 public class IntakeShootCommand extends CommandBase {
   /** Creates a new IntakeShootCommand. */
-  IntakeSubsystem m_IntakeSubsystem = new IntakeSubsystem();
-  public IntakeShootCommand(IntakeSubsystem m_IntakeSubsystem) {
+  IntakeSubsystem m_IntakeSubsystem;
+  ShooterSubsystem m_ShooterSubsystem;
+  ColorSensorSubsystem m_ColorSensorSubsystem;
+  LimelightSubsystem m_LimelightSubsystem;
+  String alliance;
+  public IntakeShootCommand(IntakeSubsystem m_IntakeSubsystem, ShooterSubsystem m_ShooterSubsystem, ColorSensorSubsystem m_ColorSensorSubsystem, LimelightSubsystem m_LimelightSubsystem, String alliance) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.m_IntakeSubsystem = m_IntakeSubsystem;
+    this.m_ShooterSubsystem = m_ShooterSubsystem;
+    this.m_ColorSensorSubsystem = m_ColorSensorSubsystem;
+    this.m_LimelightSubsystem = m_LimelightSubsystem;
+    this.alliance = alliance;
   }
 
   // Called when the command is initially scheduled.
@@ -23,7 +35,13 @@ public class IntakeShootCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_IntakeSubsystem.setFeedWheel(Constants.FEEDSPEED);
+    if((alliance != m_ColorSensorSubsystem.getColorState()) || ( m_LimelightSubsystem.getLimelightState() == "stop" && m_ShooterSubsystem.getEncoderValue() > 3000.0)){
+      m_IntakeSubsystem.setFeedWheel(Constants.FEEDSPEED);
+    }
+    else{
+      m_IntakeSubsystem.setFeedWheel(0);
+     }
+    
   }
 
   // Called once the command ends or is interrupted.

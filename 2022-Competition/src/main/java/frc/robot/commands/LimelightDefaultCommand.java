@@ -26,6 +26,7 @@ public class LimelightDefaultCommand extends CommandBase {
   @Override
   public void execute() {
     m_limelightSubsystem.setLimelightLED("off");
+    m_limelightSubsystem.setLimelightCamMode("Camera");
   }
 
   // Called once the command ends or is interrupted.

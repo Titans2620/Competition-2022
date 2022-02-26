@@ -24,20 +24,15 @@ public class ShooterShootCommand extends CommandBase {
       4a. (Limelight state is good & shooter motor is at correct speed) - Turn on Feed Wheel
       4b. (Otherwise) - Leave Feed Wheel off.
    ***************************************************/
-  ShooterSubsystem m_ShooterSubsystem = new ShooterSubsystem();
-  LimelightSubsystem m_limeLightSubsystem = new LimelightSubsystem();
-  IntakeSubsystem m_IntakeSubsystem = new IntakeSubsystem();
-  ColorSensorSubsystem m_ColorSensorSubsystem = new ColorSensorSubsystem();
+  ShooterSubsystem m_ShooterSubsystem;
+  LimelightSubsystem m_limeLightSubsystem;
 
   String alliance;
 
-  public ShooterShootCommand(ShooterSubsystem m_ShooterSubsystem, IntakeSubsystem m_IntakeSubsystem, ColorSensorSubsystem m_ColorSensorSubsystem, String alliance) {
+  public ShooterShootCommand(ShooterSubsystem m_ShooterSubsystem, LimelightSubsystem m_LimelightSubsystem) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.m_ShooterSubsystem = m_ShooterSubsystem;
-    this.m_limeLightSubsystem = m_limeLightSubsystem;
-    this.m_IntakeSubsystem = m_IntakeSubsystem;
-    this.m_ColorSensorSubsystem = m_ColorSensorSubsystem;
-    this.alliance = alliance;
+    this.m_limeLightSubsystem = m_LimelightSubsystem;
 
     addRequirements(m_ShooterSubsystem);
   }
@@ -53,12 +48,6 @@ public class ShooterShootCommand extends CommandBase {
     m_limeLightSubsystem.setLimelightCamMode("Search");
     m_limeLightSubsystem.setLimelightLED("On");
     m_ShooterSubsystem.setShooter(Constants.SHOOTERSPEED);
-    if((alliance != m_ColorSensorSubsystem.getColorState()) || ( m_limeLightSubsystem.getLimelightState() == "stop" && m_ShooterSubsystem.getEncoderValue() > 7000.0)){
-        new IntakeShootCommand(m_IntakeSubsystem);
-    }
-    else{
-        new IntakeDefaultCommand(m_IntakeSubsystem);
-    }
   }
 
   // Called once the command ends or is interrupted.

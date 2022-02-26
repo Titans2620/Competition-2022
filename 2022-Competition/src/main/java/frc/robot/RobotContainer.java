@@ -25,7 +25,10 @@ import frc.robot.commands.DriveDefaultCommand;
 import frc.robot.commands.IntakeDefaultCommand;
 import frc.robot.commands.IntakeInfeedCommand;
 import frc.robot.commands.IntakeManualCommand;
+import frc.robot.commands.IntakeShootCommand;
 import frc.robot.commands.LimelightDefaultCommand;
+import frc.robot.commands.LimelightGetStateCommand;
+import frc.robot.commands.LimelightSearchCommand;
 import frc.robot.commands.ShooterDefaultCommand;
 import frc.robot.commands.ShooterManualShootCommand;
 import frc.robot.commands.ShooterShootCommand;
@@ -54,8 +57,6 @@ public class RobotContainer {
   private final LimelightSubsystem m_limelightSubsystem = new LimelightSubsystem();
   private final ArmSubsystem m_ArmSubsystem = new ArmSubsystem(); 
   private final ColorSensorSubsystem m_ColorSensorSubsystem = new ColorSensorSubsystem(); 
-
-  //private final Joystick m_controller = new Joystick(0);
 
   private final XboxController m_driveController = new XboxController(0);
   private final XboxController m_operatorController = new XboxController(1);
@@ -95,10 +96,6 @@ public class RobotContainer {
       // Configure the button bindings
       configureButtonBindings();
 
-      NetworkTableInstance inst = NetworkTableInstance.getDefault();
-      NetworkTable table = inst.getTable("FMSInfo");
-      isRedAlliance = table.getEntry("IsRedAlliance");
-
       // Smart Dashboard
       putSmartdashboard();
   }
@@ -111,10 +108,13 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
 
-    new JoystickButton(m_operatorController, 7).whenPressed(()-> m_driveSubsystem.zeroGyroscope());
-    new JoystickButton(m_operatorController, 6).whenHeld(new ShooterManualShootCommand(m_ShooterSubsystem));
-    new JoystickButton(m_operatorController, 7).whenHeld(new ParallelCommandGroup(new DriveLimelightCommand(m_driveSubsystem, m_limelightSubsystem, () -> -m_driveController.getRawAxis(0), () -> -m_driveController.getRawAxis(1)), new ShooterShootCommand(m_ShooterSubsystem, m_intakeSubsystem, m_ColorSensorSubsystem, getAlliance())));
-    //new JoystickButton(m_controller, 3).whenHeld(new ParallelCommandGroup(new ShooterShootCommand(m_ShooterSubsystem, m_intakeSubsystem), new DriveLimelightCommand(m_driveSubsystem, m_limelightSubsystem, () -> -m_controller.getX(), () -> -m_controller.getY())));
+    //new JoystickButton(m_operatorController, 4).whenPressed(()-> m_driveSubsystem.zeroGyroscope());
+    //new JoystickButton(m_operatorController, 6).whenHeld(new LimelightSearchCommand(m_limelightSubsystem));
+    //new JoystickButton(m_operatorController, 6).whenHeld(new ShooterShootCommand(m_ShooterSubsystem, m_intakeSubsystem, m_ColorSensorSubsystem, m_limelightSubsystem, getAlliance()));
+    new JoystickButton(m_operatorController, 6).whenHeld(new ParallelCommandGroup(new DriveLimelightCommand(m_driveSubsystem, m_limelightSubsystem, () -> modifyAxis(m_driveController.getRawAxis(0)) * DriveSubsystem.MAX_VELOCITY_METERS_PER_SECOND, () -> -modifyAxis(m_driveController.getRawAxis(1)) * DriveSubsystem.MAX_VELOCITY_METERS_PER_SECOND),
+    new ShooterShootCommand(m_ShooterSubsystem, m_limelightSubsystem),
+    new LimelightSearchCommand(m_limelightSubsystem),
+    new IntakeShootCommand(m_intakeSubsystem, m_ShooterSubsystem, m_ColorSensorSubsystem, m_limelightSubsystem, getAlliance())));
     if(!m_operatorController.getRawButton(2) || !m_operatorController.getRawButton(3))
         new JoystickButton(m_operatorController, 1).whenHeld(new ParallelCommandGroup(new IntakeInfeedCommand(m_intakeSubsystem, m_ColorSensorSubsystem), new ArmRotateIntakeCommand(m_ArmSubsystem)));
     new JoystickButton(m_operatorController, 2).whenHeld(new ArmRotateCommand(m_ArmSubsystem, true));
@@ -146,6 +146,9 @@ public class RobotContainer {
   }
 
   public String getAlliance(){
+    NetworkTableInstance inst = NetworkTableInstance.getDefault();
+    NetworkTable table = inst.getTable("FMSInfo");
+    isRedAlliance = table.getEntry("IsRedAlliance");
     if(isRedAlliance.getBoolean(true)){
       return "red";
     }
