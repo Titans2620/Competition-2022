@@ -147,9 +147,9 @@ public class RobotContainer {
       Trajectory trajectory = TrajectoryGenerator.generateTrajectory(
         new Pose2d(0,0, new Rotation2d(0)),
          List.of(
-            new Translation2d(10,0),
-            new Translation2d(10, -10)),
-        new Pose2d(2, -1, Rotation2d.fromDegrees(180)),
+            new Translation2d(3,0),
+            new Translation2d(3, -3)),
+        new Pose2d(1, -1, Rotation2d.fromDegrees(0)),
         trajectoryConfig);
   
         PIDController xController = new PIDController(AutoConstants.kPXController, 0, 0);
@@ -160,7 +160,7 @@ public class RobotContainer {
   
         SwerveControllerCommand swerveControllerCommand = new SwerveControllerCommand(trajectory, m_driveSubsystem::getPose, m_driveSubsystem.m_kinematics, xController, yController, thetaController, m_driveSubsystem::setModuleStates, m_driveSubsystem);
   
-        return  new SequentialCommandGroup(
+        return new SequentialCommandGroup(
               new InstantCommand(() -> m_driveSubsystem.resetOdometry(trajectory.getInitialPose())), 
               swerveControllerCommand,
               new InstantCommand(() -> m_driveSubsystem.stopModules())
