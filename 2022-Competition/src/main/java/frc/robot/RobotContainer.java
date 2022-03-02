@@ -5,29 +5,15 @@ import java.util.List;
 import com.revrobotics.ColorSensorV3;
 
 import edu.wpi.first.cameraserver.CameraServer;
-import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.controller.ProfiledPIDController;
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.trajectory.Trajectory;
-import edu.wpi.first.math.trajectory.TrajectoryConfig;
-import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.GenericHID;
-import edu.wpi.first.wpilibj.I2C;
-import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
-import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.ArmRotateDefaultCommand;
 import frc.robot.commands.ArmRotateIntakeCommand;
@@ -45,7 +31,8 @@ import frc.robot.commands.LimelightSearchCommand;
 import frc.robot.commands.ShooterDefaultCommand;
 import frc.robot.commands.ShooterManualShootCommand;
 import frc.robot.commands.ShooterShootCommand;
-import frc.robot.commands.DriveAuto1Command;
+import frc.robot.commands.AutonomousTaxi;
+import frc.robot.commands.AutonomousTaxiShoot;
 import frc.robot.commands.DriveLimelightCommand;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
@@ -77,7 +64,8 @@ public class RobotContainer {
   SendableChooser<Command> m_chooser = new SendableChooser<>();
   
   NetworkTableEntry isRedAlliance;
-  private final DriveAuto1Command auto1 = new DriveAuto1Command(m_driveSubsystem);
+  private final AutonomousTaxi taxi = new AutonomousTaxi(m_driveSubsystem);
+  private final AutonomousTaxiShoot taxiShoot = new AutonomousTaxiShoot(m_driveSubsystem, m_intakeSubsystem, m_ShooterSubsystem, m_ColorSensorSubsystem, m_limelightSubsystem);
 
 
   /**
@@ -104,7 +92,8 @@ public class RobotContainer {
 
   
 
-      m_chooser.setDefaultOption("Test Auto", auto1);
+      m_chooser.setDefaultOption("Taxi", taxi);
+      m_chooser.setDefaultOption("Taxi and Shoot", taxiShoot);
       
       // Configure the button bindings
       configureButtonBindings();
@@ -140,31 +129,8 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-      //return m_chooser.getSelected();
+      return m_chooser.getSelected();
 
-      TrajectoryConfig trajectoryConfig = new TrajectoryConfig(AutoConstants.kMaxSpeedMetersPerSecond, AutoConstants.kMaxSpeedMetersPerSecond).setKinematics(m_driveSubsystem.m_kinematics);
-
-      Trajectory trajectory = TrajectoryGenerator.generateTrajectory(
-        new Pose2d(0,0, new Rotation2d(0)),
-         List.of(
-            new Translation2d(10,0),
-            new Translation2d(10, -10)),
-        new Pose2d(2, -1, Rotation2d.fromDegrees(180)),
-        trajectoryConfig);
-  
-        PIDController xController = new PIDController(AutoConstants.kPXController, 0, 0);
-        PIDController yController = new PIDController(AutoConstants.kPYController, 0, 0);
-  
-        ProfiledPIDController thetaController = new ProfiledPIDController(AutoConstants.kPThetaController, 0, 0, AutoConstants.kThetaControllerConstraints);
-        thetaController.enableContinuousInput(-Math.PI, Math.PI);
-  
-        SwerveControllerCommand swerveControllerCommand = new SwerveControllerCommand(trajectory, m_driveSubsystem::getPose, m_driveSubsystem.m_kinematics, xController, yController, thetaController, m_driveSubsystem::setModuleStates, m_driveSubsystem);
-  
-        return  new SequentialCommandGroup(
-              new InstantCommand(() -> m_driveSubsystem.resetOdometry(trajectory.getInitialPose())), 
-              swerveControllerCommand,
-              new InstantCommand(() -> m_driveSubsystem.stopModules())
-              );
   }
 
   private static double deadband(double value, double deadband) {
