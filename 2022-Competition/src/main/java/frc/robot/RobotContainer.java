@@ -76,7 +76,7 @@ public class RobotContainer {
   
   NetworkTableEntry isRedAlliance;
   private final AutonomousTaxiCommandGroup taxi = new AutonomousTaxiCommandGroup(m_driveSubsystem);
-  private final AutonomousTaxiShootCommandGroup taxiShoot = new AutonomousTaxiShootCommandGroup(m_driveSubsystem, m_intakeSubsystem, m_ShooterSubsystem, m_ColorSensorSubsystem, m_limelightSubsystem);
+  private final AutonomousTaxiShootCommandGroup taxiShoot = new AutonomousTaxiShootCommandGroup(m_driveSubsystem, m_intakeSubsystem, m_ShooterSubsystem);
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.

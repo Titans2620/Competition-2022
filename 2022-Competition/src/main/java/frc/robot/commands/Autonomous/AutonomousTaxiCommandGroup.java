@@ -25,10 +25,10 @@ import frc.robot.subsystems.DriveSubsystem;
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class AutonomousTaxiCommandGroup extends SequentialCommandGroup {
 
-DriveSubsystem m_dDriveSubsystem;
+DriveSubsystem m_driveSubsystem;
   /** Creates a new AutonomousTaxiCommandGroup. */
   public AutonomousTaxiCommandGroup(DriveSubsystem m_driveSubsystem) {
-    this.m_dDriveSubsystem = m_driveSubsystem;
+    this.m_driveSubsystem = m_driveSubsystem;
     addRequirements(m_driveSubsystem);
     TrajectoryConfig trajectoryConfig = new TrajectoryConfig(AutoConstants.kMaxSpeedMetersPerSecond, AutoConstants.kMaxAccelerationMetersPerSecondSquared).setKinematics(m_driveSubsystem.m_kinematics);
 
@@ -46,11 +46,11 @@ DriveSubsystem m_dDriveSubsystem;
       ProfiledPIDController thetaController = new ProfiledPIDController(AutoConstants.kPThetaController, 0, 0, AutoConstants.kThetaControllerConstraints);
       thetaController.enableContinuousInput(-Math.PI, Math.PI);
 
-      SwerveControllerCommand swerveControllerCommand = new SwerveControllerCommand(trajectory, m_driveSubsystem::getPose, m_driveSubsystem.m_kinematics, xController, yController, thetaController, m_driveSubsystem::setModuleStates, m_driveSubsystem);
+      SwerveControllerCommand swerveControllerCommand = new SwerveControllerCommand(trajectory, this.m_driveSubsystem::getPose, this.m_driveSubsystem.m_kinematics, xController, yController, thetaController, m_driveSubsystem::setModuleStates, this.m_driveSubsystem);
         
     addCommands(
-        new InstantCommand(() -> m_driveSubsystem.resetOdometry(trajectory.getInitialPose())), 
+        new InstantCommand(() -> this.m_driveSubsystem.resetOdometry(trajectory.getInitialPose())), 
         swerveControllerCommand,
-        new InstantCommand(() -> m_driveSubsystem.stopModules()));
+        new InstantCommand(() -> this.m_driveSubsystem.stopModules()));
     } 
 }
