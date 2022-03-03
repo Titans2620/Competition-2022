@@ -2,7 +2,7 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.commands;
+package frc.robot.commands.Autonomous;
 
 import java.util.List;
 
@@ -20,20 +20,22 @@ import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import frc.robot.Constants.AutoConstants;
+import frc.robot.commands.IntakeInfeedCommand;
+import frc.robot.commands.ShooterShootCommand;
 import frc.robot.subsystems.ColorSensorSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.LimelightSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 
-public class AutonomousTaxiShoot extends CommandBase {
+public class AutonomousTaxiShootCommandGroup extends CommandBase {
   private DriveSubsystem m_DriveSubsystem;
   private IntakeSubsystem m_IntakeSubsystem;
   private ShooterSubsystem m_ShooterSubsystem;
   private ColorSensorSubsystem m_ColorSensorSubsystem;
   private LimelightSubsystem m_LimelightSubsystem;
   /** Creates a new AutonomousTaxiShoot. */
-  public AutonomousTaxiShoot(DriveSubsystem m_DriveSubsystem, IntakeSubsystem m_IntakeSubsystem, ShooterSubsystem m_ShooterSubsystem, ColorSensorSubsystem m_ColorSensorSubsystem, LimelightSubsystem m_LimelightSubsystem) {
+  public AutonomousTaxiShootCommandGroup(DriveSubsystem m_DriveSubsystem, IntakeSubsystem m_IntakeSubsystem, ShooterSubsystem m_ShooterSubsystem, ColorSensorSubsystem m_ColorSensorSubsystem, LimelightSubsystem m_LimelightSubsystem) {
       this.m_DriveSubsystem = m_DriveSubsystem;
       this.m_IntakeSubsystem = m_IntakeSubsystem;
       this.m_ShooterSubsystem = m_ShooterSubsystem;

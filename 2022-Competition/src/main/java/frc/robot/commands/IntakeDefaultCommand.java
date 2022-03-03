@@ -12,7 +12,7 @@ public class IntakeDefaultCommand extends CommandBase {
   The default intake command should have all motors off and no action should be taken by the subsystem.
   ***********************************************************/
 
-  IntakeSubsystem m_intakeSubsystem = new IntakeSubsystem();
+  IntakeSubsystem m_intakeSubsystem;
 
   public IntakeDefaultCommand(IntakeSubsystem intakeSubsystem) {
       m_intakeSubsystem = intakeSubsystem;

@@ -5,6 +5,14 @@ import java.util.List;
 import com.revrobotics.ColorSensorV3;
 
 import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.trajectory.Trajectory;
+import edu.wpi.first.math.trajectory.TrajectoryConfig;
+import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
@@ -13,7 +21,10 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.ArmRotateDefaultCommand;
 import frc.robot.commands.ArmRotateIntakeCommand;
@@ -31,8 +42,8 @@ import frc.robot.commands.LimelightSearchCommand;
 import frc.robot.commands.ShooterDefaultCommand;
 import frc.robot.commands.ShooterManualShootCommand;
 import frc.robot.commands.ShooterShootCommand;
-import frc.robot.commands.AutonomousTaxi;
-import frc.robot.commands.AutonomousTaxiShoot;
+import frc.robot.commands.Autonomous.AutonomousTaxiCommandGroup;
+import frc.robot.commands.Autonomous.AutonomousTaxiShootCommandGroup;
 import frc.robot.commands.DriveLimelightCommand;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
@@ -64,9 +75,8 @@ public class RobotContainer {
   SendableChooser<Command> m_chooser = new SendableChooser<>();
   
   NetworkTableEntry isRedAlliance;
-  private final AutonomousTaxi taxi = new AutonomousTaxi(m_driveSubsystem);
-  private final AutonomousTaxiShoot taxiShoot = new AutonomousTaxiShoot(m_driveSubsystem, m_intakeSubsystem, m_ShooterSubsystem, m_ColorSensorSubsystem, m_limelightSubsystem);
-
+  private final AutonomousTaxiCommandGroup taxi = new AutonomousTaxiCommandGroup(m_driveSubsystem);
+  private final AutonomousTaxiShootCommandGroup taxiShoot = new AutonomousTaxiShootCommandGroup(m_driveSubsystem, m_intakeSubsystem, m_ShooterSubsystem, m_ColorSensorSubsystem, m_limelightSubsystem);
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -80,7 +90,7 @@ public class RobotContainer {
               m_driveSubsystem,
               () -> modifyAxis(m_driveController.getRawAxis(0)) * DriveSubsystem.MAX_VELOCITY_METERS_PER_SECOND,
               () -> -modifyAxis(m_driveController.getRawAxis(1)) * DriveSubsystem.MAX_VELOCITY_METERS_PER_SECOND,
-              () -> modifyAxis(m_driveController.getRawAxis(4)) * DriveSubsystem.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND
+              () -> -modifyAxis(m_driveController.getRawAxis(4)) * DriveSubsystem.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND
       ));
 
   
@@ -93,7 +103,7 @@ public class RobotContainer {
   
 
       m_chooser.setDefaultOption("Taxi", taxi);
-      m_chooser.setDefaultOption("Taxi and Shoot", taxiShoot);
+      m_chooser.addOption("Taxi and Shoot", taxiShoot);
       
       // Configure the button bindings
       configureButtonBindings();
@@ -130,7 +140,6 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
       return m_chooser.getSelected();
-
   }
 
   private static double deadband(double value, double deadband) {

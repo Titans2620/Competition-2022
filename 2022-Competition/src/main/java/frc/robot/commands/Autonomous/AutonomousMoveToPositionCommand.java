@@ -2,22 +2,19 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.commands;
+package frc.robot.commands.Autonomous;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.IntakeSubsystem;
+import frc.robot.subsystems.DriveSubsystem;
 
-public class IntakeEjectCommand extends CommandBase {
-  /*********************************************
-  This command will run if a ball is stuck or we otherwise need to run the infeed backwards. 
+public class AutonomousMoveToPositionCommand extends CommandBase {
+  /** Creates a new AutonomousMoveToPositionCommand. */
+  DriveSubsystem m_DriveSubsystem;
 
-  It will function identically to the infeed command except it will not care about sensors and the feed wheel and roller will be moving in the opposite direction.
-  ***********************************************/
-  IntakeSubsystem m_intakeSubsystem;
-  public IntakeEjectCommand(IntakeSubsystem m_intakeSubsystem) {
+  public AutonomousMoveToPositionCommand(DriveSubsystem m_DriveSubsystem) {
+    this.m_DriveSubsystem = m_DriveSubsystem;
+    addRequirements(m_DriveSubsystem);
     // Use addRequirements() here to declare subsystem dependencies.
-    this.m_intakeSubsystem = m_intakeSubsystem;
-    addRequirements(m_intakeSubsystem);
   }
 
   // Called when the command is initially scheduled.
@@ -26,9 +23,7 @@ public class IntakeEjectCommand extends CommandBase {
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {
-    
-  }
+  public void execute() {}
 
   // Called once the command ends or is interrupted.
   @Override

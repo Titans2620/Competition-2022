@@ -29,13 +29,16 @@ public class IntakeSubsystem extends SubsystemBase {
   private WPI_VictorSPX intakeRoller = new WPI_VictorSPX(Constants.INTAKE_ROLLER);
   private WPI_VictorSPX feedWheel = new WPI_VictorSPX(Constants.FEED_WHEEL);
 
+  private DigitalInput lineSensor;
   
   Color detectedColor;
   double IR;
 
   int red, blue, green;
   
-  public IntakeSubsystem() {}
+  public IntakeSubsystem() {
+    lineSensor = new DigitalInput(Constants.LINESENSOR);
+  }
 
   public void setIntakeRoller(double speed){
       intakeRoller.set(speed);
@@ -59,10 +62,12 @@ public class IntakeSubsystem extends SubsystemBase {
       feedWheel.set(0);
   }
 
-  
+  public boolean isLineSensorObstructed(){
+      return !lineSensor.get();
+  }
 
   @Override
   public void periodic() {
-
+      SmartDashboard.putBoolean("Line Sensor", isLineSensorObstructed());
   }
 }
