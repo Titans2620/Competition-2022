@@ -114,7 +114,7 @@ public class DriveSubsystem extends SubsystemBase {
         }
 
         public double getHeading(){
-                return m_pigeon.getCompassHeading();
+                return Math.IEEEremainder(m_pigeon.getYaw(), 360);
         }
 
         public Rotation2d getRotation2d(){
@@ -142,8 +142,9 @@ public class DriveSubsystem extends SubsystemBase {
         }
 
         public void drive(ChassisSpeeds chassisSpeeds) {
-        m_chassisSpeeds = chassisSpeeds;
-        SmartDashboard.putString("Robot Location", getPose().getTranslation().toString());
+                m_chassisSpeeds = chassisSpeeds;
+                SmartDashboard.putNumber("Robot Location X", getPose().getX());
+                SmartDashboard.putNumber("Robot Location Y", getPose().getX());
         }
 
         @Override
