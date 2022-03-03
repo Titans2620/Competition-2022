@@ -143,8 +143,6 @@ public class DriveSubsystem extends SubsystemBase {
 
         public void drive(ChassisSpeeds chassisSpeeds) {
                 m_chassisSpeeds = chassisSpeeds;
-                SmartDashboard.putNumber("Robot Location X", getPose().getX());
-                SmartDashboard.putNumber("Robot Location Y", getPose().getX());
         }
 
         @Override
@@ -154,6 +152,8 @@ public class DriveSubsystem extends SubsystemBase {
                 SmartDashboard.putNumber("Pigeon Pitch", m_pigeon.getPitch());
                 SmartDashboard.putNumber("Pigeon Roll", m_pigeon.getRoll());
                 SmartDashboard.putNumber("Pigeon Yaw", m_pigeon.getYaw());
+                SmartDashboard.putNumber("Robot Location X", getPose().getX());
+                SmartDashboard.putNumber("Robot Location Y", getPose().getY());
     
         }
 }
