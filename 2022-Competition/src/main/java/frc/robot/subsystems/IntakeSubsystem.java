@@ -34,6 +34,8 @@ public class IntakeSubsystem extends SubsystemBase {
   Color detectedColor;
   double IR;
 
+  
+
   int red, blue, green;
   
   public IntakeSubsystem() {

@@ -36,9 +36,8 @@ public class IntakeShootCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    System.out.println("Shoot: " + m_LimelightSubsystem.getLimelightState() + "|" + m_ShooterSubsystem.getEncoderValue());
     if((alliance != m_ColorSensorSubsystem.getColorState()) || (m_LimelightSubsystem.getLimelightState() == Constants.LIMELIGHT_STOP && m_ShooterSubsystem.getEncoderValue() > 3000.0)){
-      System.out.println("Shoot: ");
+      
       m_IntakeSubsystem.setFeedWheel(Constants.FEEDSPEED);
     }
     else{

@@ -33,7 +33,7 @@ public class DriveDefaultCommand extends CommandBase {
     @Override
     public void execute() {
         // You can use `new ChassisSpeeds(...)` for robot-oriented movement instead of field-oriented movement
-        if(fieldOrientation.getAsBoolean()){
+        if(!fieldOrientation.getAsBoolean()){
             m_driveSubsystem.drive(
                 ChassisSpeeds.fromFieldRelativeSpeeds(
                         m_translationXSupplier.getAsDouble(),

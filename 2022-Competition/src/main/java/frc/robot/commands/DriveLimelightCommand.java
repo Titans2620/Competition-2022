@@ -48,6 +48,7 @@ public class DriveLimelightCommand extends CommandBase {
   @Override
   public void execute() {
       String tableState = limelightSubsystem.getLimelightState();
+      System.out.println("alliance: " + allianceColor + " | " + "State: " + m_ColorSensorSubsystem.getColorState());
       if(m_ColorSensorSubsystem.getColorState() == allianceColor){
         switch(tableState){
             case "NOT FOUND":
@@ -84,7 +85,7 @@ public class DriveLimelightCommand extends CommandBase {
                 ChassisSpeeds.fromFieldRelativeSpeeds(
                         m_translationXSupplier.getAsDouble(),
                         m_translationYSupplier.getAsDouble(),
-                        m_rotation * DriveSubsystem.MAX_VELOCITY_METERS_PER_SECOND,
+                        -m_rotation * DriveSubsystem.MAX_VELOCITY_METERS_PER_SECOND,
                         m_driveSubsystem.getGyroscopeRotation()
                 )
         );
