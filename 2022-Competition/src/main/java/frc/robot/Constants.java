@@ -66,6 +66,8 @@ public final class Constants {
 
     public static final String LIMELIGHT_STOP = "STOP";
 
+    public static final int SHOOTER_MAX_RPM = 4000;
+
     public static final class AutoConstants {
         public static final double kMaxSpeedMetersPerSecond = 1.25;
         public static final double kMaxAngularSpeedRadiansPerSecond = (4 * Math.PI) / 10;

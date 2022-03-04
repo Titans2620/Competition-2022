@@ -6,12 +6,15 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
+import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 public class ShooterSubsystem extends SubsystemBase {
@@ -20,6 +23,47 @@ public class ShooterSubsystem extends SubsystemBase {
   private RelativeEncoder encoder;
   
   NetworkTableEntry isRedAlliance;
+
+  private SparkMaxPIDController shooterPIDController;
+
+   // PID coefficients
+   double kP = 6e-5; 
+   double kI = 0;
+   double kD = 0; 
+   double kIz = 0; 
+   double kFF = 0.000015; 
+   double kMaxOutput = 1; 
+   double kMinOutput = -1;
+   double maxRPM = 5700;
+
+   double rpmSetPoint;
+
+  /** Creates a new ShooterSubsystem. */
+  public ShooterSubsystem() {
+    shooter = new CANSparkMax(Constants.SHOOTER_WHEEL, MotorType.kBrushless);
+    shooter.restoreFactoryDefaults();
+    encoder = shooter.getEncoder();
+    
+    shooterPIDController = shooter.getPIDController();
+  
+    // set PID coefficients
+    shooterPIDController.setP(kP);
+    shooterPIDController.setI(kI);
+    shooterPIDController.setD(kD);
+    shooterPIDController.setIZone(kIz);
+    shooterPIDController.setFF(kFF);
+    shooterPIDController.setOutputRange(kMinOutput, kMaxOutput);
+  
+    // display PID coefficients on SmartDashboard
+    SmartDashboard.putNumber("P Gain", kP);
+    SmartDashboard.putNumber("I Gain", kI);
+    SmartDashboard.putNumber("D Gain", kD);
+    SmartDashboard.putNumber("I Zone", kIz);
+    SmartDashboard.putNumber("Feed Forward", kFF);
+    SmartDashboard.putNumber("Max Output", kMaxOutput);
+    SmartDashboard.putNumber("Min Output", kMinOutput);
+
+  }
 
   public void setShooter(double speed){
 
@@ -30,10 +74,29 @@ public class ShooterSubsystem extends SubsystemBase {
     shooter.set(0);
   }
 
-  /** Creates a new ShooterSubsystem. */
-  public ShooterSubsystem() {
-    shooter = new CANSparkMax(Constants.SHOOTER_WHEEL, MotorType.kBrushless);
-    encoder = shooter.getEncoder();
+  public void feedForwardPIDShooter(double percentOfMaxRPM){
+    // read PID coefficients from SmartDashboard
+    double p = SmartDashboard.getNumber("P Gain", 0);
+    double i = SmartDashboard.getNumber("I Gain", 0);
+    double d = SmartDashboard.getNumber("D Gain", 0);
+    double iz = SmartDashboard.getNumber("I Zone", 0);
+    double ff = SmartDashboard.getNumber("Feed Forward", 0);
+    double max = SmartDashboard.getNumber("Max Output", 0);
+    double min = SmartDashboard.getNumber("Min Output", 0);
+
+    // if PID coefficients on SmartDashboard have changed, write new values to controller
+    if((p != kP)) { shooterPIDController.setP(p); kP = p; }
+    if((i != kI)) { shooterPIDController.setI(i); kI = i; }
+    if((d != kD)) { shooterPIDController.setD(d); kD = d; }
+    if((iz != kIz)) { shooterPIDController.setIZone(iz); kIz = iz; }
+    if((ff != kFF)) { shooterPIDController.setFF(ff); kFF = ff; }
+    if((max != kMaxOutput) || (min != kMinOutput)) { 
+      shooterPIDController.setOutputRange(min, max); 
+      kMinOutput = min; kMaxOutput = max; 
+    }
+
+    rpmSetPoint = percentOfMaxRPM * Constants.SHOOTER_MAX_RPM;
+    shooterPIDController.setReference(rpmSetPoint, CANSparkMax.ControlType.kVelocity);
 
   }
 
