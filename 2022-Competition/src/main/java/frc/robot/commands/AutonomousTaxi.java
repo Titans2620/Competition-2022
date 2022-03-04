@@ -21,12 +21,13 @@ import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.subsystems.DriveSubsystem;
 
-public class DriveAuto1Command extends CommandBase {
+public class AutonomousTaxi extends CommandBase {
   /** Creates a new TestAutonomous. */
   private DriveSubsystem m_driveSubsystem;
 
-  public DriveAuto1Command(DriveSubsystem driveSubsystem) {
+  public AutonomousTaxi(DriveSubsystem driveSubsystem) {
       m_driveSubsystem = driveSubsystem;
+      addRequirements(m_driveSubsystem);
   }
 
   // Called when the command is initially scheduled.
@@ -43,7 +44,7 @@ public class DriveAuto1Command extends CommandBase {
        List.of(
           new Translation2d(10,0),
           new Translation2d(10, -10)),
-      new Pose2d(2, -1, Rotation2d.fromDegrees(180)),
+      new Pose2d(2, -1, Rotation2d.fromDegrees(0)),
       trajectoryConfig);
 
       PIDController xController = new PIDController(AutoConstants.kPXController, 0, 0);

@@ -37,10 +37,10 @@ public class ColorSensorSubsystem extends SubsystemBase {
   }
 
   public void updateColor(){
-    if(red > blue && green > 500 ){
+    if(red > blue && green > 600 ){
       colorState = "red";
     }
-    else if(red < blue && green > 500){
+    else if(red < blue && green > 600){
       colorState = "blue";
     }
     else{

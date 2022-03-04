@@ -20,7 +20,7 @@ public class IntakeInfeedCommand extends CommandBase {
    2. Intake Arm will be in the down position (If not, move to down position based on limit switch)
    3. Feed Wheel will be running unless a ball it in position based on an undetermined sensor.
   **************************************************/
-  public IntakeSubsystem m_IntakeSubsystem = new IntakeSubsystem();
+  public IntakeSubsystem m_IntakeSubsystem;
 
   ColorSensorSubsystem m_ColorSensorSubsystem;
 
@@ -42,7 +42,14 @@ public class IntakeInfeedCommand extends CommandBase {
 
     m_IntakeSubsystem.setIntakeRoller(Constants.INTAKESPEED);
     if(m_ColorSensorSubsystem.getColorState() == "neither"){
-      m_IntakeSubsystem.setFeedWheel(Constants.FEEDSPEED);
+        if(m_IntakeSubsystem.isLineSensorObstructed()){
+          System.out.println("Test");
+            m_IntakeSubsystem.setFeedWheel(Constants.FEEDSPEED);
+        }
+        else{
+          
+            m_IntakeSubsystem.setFeedWheel(0);
+        }
     }
     else{
       m_IntakeSubsystem.setFeedWheel(0);
