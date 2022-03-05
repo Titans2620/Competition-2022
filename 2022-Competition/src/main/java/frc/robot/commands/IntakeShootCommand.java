@@ -40,6 +40,7 @@ public class IntakeShootCommand extends CommandBase {
 
     double variance = m_ShooterSubsystem.getTargetRPM(Constants.SHOOTERSPEED) - m_ShooterSubsystem.getEncoderValue();
     if((alliance != m_ColorSensorSubsystem.getColorState()) || (m_LimelightSubsystem.getLimelightState() == Constants.LIMELIGHT_STOP && Math.abs(variance) > 50)){
+
       m_IntakeSubsystem.setFeedWheel(Constants.FEEDSPEED);
     }
     else{

@@ -13,7 +13,7 @@ public class IntakeEjectCommand extends CommandBase {
 
   It will function identically to the infeed command except it will not care about sensors and the feed wheel and roller will be moving in the opposite direction.
   ***********************************************/
-  IntakeSubsystem m_intakeSubsystem = new IntakeSubsystem();
+  IntakeSubsystem m_intakeSubsystem;
   public IntakeEjectCommand(IntakeSubsystem m_intakeSubsystem) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.m_intakeSubsystem = m_intakeSubsystem;

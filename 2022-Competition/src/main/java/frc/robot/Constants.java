@@ -38,6 +38,7 @@ public final class Constants {
     public static final int BACK_RIGHT_MODULE_STEER_MOTOR = 12;
     public static final double BACK_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(94);
 
+
     public static final int INTAKE_ROLLER = 13;
     public static final int INTAKE_ROTATE = 14;
     public static final int FEED_WHEEL = 15;
@@ -51,6 +52,7 @@ public final class Constants {
     public static final int INTAKE_ROTATE_LIMIT = 0;
     public static final int CLIMB_LOW_LIMIT = 1;
     public static final int CLIMB_HIGH_LIMIT = 2;
+    public static final int LINESENSOR = 3;
 
 
     //SPEEDS//
@@ -58,7 +60,7 @@ public final class Constants {
     public static final double INTAKEROTATEUPSPEED = .25;
     public static final double INTAKEROTATEDOWNSPEED = -.25;
     public static final double FEEDSPEED = .25;
-    public static final double SHOOTERSPEED = .70;
+    public static final double SHOOTERSPEED = .72;
 
     public static final double LIMELIGHT_SLOW_SPEED = 0.1;
     public static final double LIMELIGHT_FAST_SPEED = 0.25;

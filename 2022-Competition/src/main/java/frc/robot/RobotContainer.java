@@ -17,15 +17,12 @@ import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.GenericHID;
-import edu.wpi.first.wpilibj.I2C;
-import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
-import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -45,7 +42,8 @@ import frc.robot.commands.LimelightSearchCommand;
 import frc.robot.commands.ShooterDefaultCommand;
 import frc.robot.commands.ShooterManualShootCommand;
 import frc.robot.commands.ShooterShootCommand;
-import frc.robot.commands.DriveAuto1Command;
+import frc.robot.commands.Autonomous.AutonomousTaxiCommandGroup;
+import frc.robot.commands.Autonomous.AutonomousTaxiShootCommandGroup;
 import frc.robot.commands.DriveLimelightCommand;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
@@ -77,8 +75,8 @@ public class RobotContainer {
   SendableChooser<Command> m_chooser = new SendableChooser<>();
   
   NetworkTableEntry isRedAlliance;
-  private final DriveAuto1Command auto1 = new DriveAuto1Command(m_driveSubsystem);
-
+  private final AutonomousTaxiCommandGroup taxi = new AutonomousTaxiCommandGroup(m_driveSubsystem);
+  private final AutonomousTaxiShootCommandGroup taxiShoot = new AutonomousTaxiShootCommandGroup(m_driveSubsystem, m_intakeSubsystem, m_ShooterSubsystem);
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -92,7 +90,8 @@ public class RobotContainer {
               m_driveSubsystem,
               () -> modifyAxis(m_driveController.getRawAxis(0)) * DriveSubsystem.MAX_VELOCITY_METERS_PER_SECOND,
               () -> -modifyAxis(m_driveController.getRawAxis(1)) * DriveSubsystem.MAX_VELOCITY_METERS_PER_SECOND,
-              () -> modifyAxis(m_driveController.getRawAxis(4)) * DriveSubsystem.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND
+              () -> -modifyAxis(m_driveController.getRawAxis(4)) * DriveSubsystem.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND,
+              () -> m_driveController.getRawButton(7)
       ));
 
   
@@ -104,7 +103,8 @@ public class RobotContainer {
 
   
 
-      m_chooser.setDefaultOption("Test Auto", auto1);
+      m_chooser.setDefaultOption("Taxi", taxi);
+      m_chooser.addOption("Taxi and Shoot", taxiShoot);
       
       // Configure the button bindings
       configureButtonBindings();
@@ -113,12 +113,6 @@ public class RobotContainer {
       putSmartdashboard();
   }
 
-  /**
-   * Use this method to define your button->command mappings. Buttons can be created by
-   * instantiating a {@link GenericHID} or one of its subclasses ({@link
-   * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing it to a {@link
-   * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
-   */
   private void configureButtonBindings() {
 
     new JoystickButton(m_driveController, 8).whenPressed(()-> m_driveSubsystem.zeroGyroscope());
@@ -140,31 +134,7 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-      //return m_chooser.getSelected();
-
-      TrajectoryConfig trajectoryConfig = new TrajectoryConfig(AutoConstants.kMaxSpeedMetersPerSecond, AutoConstants.kMaxSpeedMetersPerSecond).setKinematics(m_driveSubsystem.m_kinematics);
-
-      Trajectory trajectory = TrajectoryGenerator.generateTrajectory(
-        new Pose2d(0,0, new Rotation2d(0)),
-         List.of(
-            new Translation2d(10,0),
-            new Translation2d(10, -10)),
-        new Pose2d(2, -1, Rotation2d.fromDegrees(180)),
-        trajectoryConfig);
-  
-        PIDController xController = new PIDController(AutoConstants.kPXController, 0, 0);
-        PIDController yController = new PIDController(AutoConstants.kPYController, 0, 0);
-  
-        ProfiledPIDController thetaController = new ProfiledPIDController(AutoConstants.kPThetaController, 0, 0, AutoConstants.kThetaControllerConstraints);
-        thetaController.enableContinuousInput(-Math.PI, Math.PI);
-  
-        SwerveControllerCommand swerveControllerCommand = new SwerveControllerCommand(trajectory, m_driveSubsystem::getPose, m_driveSubsystem.m_kinematics, xController, yController, thetaController, m_driveSubsystem::setModuleStates, m_driveSubsystem);
-  
-        return  new SequentialCommandGroup(
-              new InstantCommand(() -> m_driveSubsystem.resetOdometry(trajectory.getInitialPose())), 
-              swerveControllerCommand,
-              new InstantCommand(() -> m_driveSubsystem.stopModules())
-              );
+      return m_chooser.getSelected();
   }
 
   private static double deadband(double value, double deadband) {

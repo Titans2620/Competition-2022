@@ -14,7 +14,7 @@ public class IntakeManualCommand extends CommandBase {
    
    This will function identically to the infeed command except it will run without sensors.
    *************************************************/
-  IntakeSubsystem m_IntakeSubsystem = new IntakeSubsystem();
+  IntakeSubsystem m_IntakeSubsystem;
   public IntakeManualCommand(IntakeSubsystem m_IntakeSubsystem) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.m_IntakeSubsystem = m_IntakeSubsystem;
