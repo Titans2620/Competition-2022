@@ -5,6 +5,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
 import frc.robot.subsystems.ColorSensorSubsystem;
@@ -36,14 +37,15 @@ public class IntakeShootCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    System.out.println("Shoot: " + m_LimelightSubsystem.getLimelightState() + "|" + m_ShooterSubsystem.getEncoderValue());
-    if((alliance != m_ColorSensorSubsystem.getColorState()) || (m_LimelightSubsystem.getLimelightState() == Constants.LIMELIGHT_STOP && m_ShooterSubsystem.getEncoderValue() > 3000.0)){
-      System.out.println("Shoot: ");
+
+    double variance = m_ShooterSubsystem.getTargetRPM(Constants.SHOOTERSPEED) - m_ShooterSubsystem.getEncoderValue();
+    if((alliance != m_ColorSensorSubsystem.getColorState()) || (m_LimelightSubsystem.getLimelightState() == Constants.LIMELIGHT_STOP && Math.abs(variance) > 50)){
       m_IntakeSubsystem.setFeedWheel(Constants.FEEDSPEED);
     }
     else{
       m_IntakeSubsystem.setFeedWheel(0);
      }
+     SmartDashboard.putNumber("variance", variance);
     
   }
 

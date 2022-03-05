@@ -47,7 +47,7 @@ public class ShooterShootCommand extends CommandBase {
   public void execute(){
     m_limeLightSubsystem.setLimelightCamMode("Search");
     m_limeLightSubsystem.setLimelightLED("On");
-    m_ShooterSubsystem.feedForwardPIDShooter(0.6);
+    m_ShooterSubsystem.feedForwardPIDShooter(Constants.SHOOTERSPEED);
   }
 
   // Called once the command ends or is interrupted.

@@ -27,14 +27,13 @@ public class ShooterSubsystem extends SubsystemBase {
   private SparkMaxPIDController shooterPIDController;
 
    // PID coefficients
-   double kP = 6e-5; 
-   double kI = 0;
-   double kD = 0; 
+   double kP = 0.000100; //0.001000 
+   double kI = -0.000002;
+   double kD = 0.000001; 
    double kIz = 0; 
-   double kFF = 0.000015; 
+   double kFF = 0.000195; 
    double kMaxOutput = 1; 
    double kMinOutput = -1;
-   double maxRPM = 5700;
 
    double rpmSetPoint;
 
@@ -102,6 +101,10 @@ public class ShooterSubsystem extends SubsystemBase {
 
   public double getEncoderValue(){
       return encoder.getVelocity();
+  }
+
+  public double getTargetRPM(double percentOfMaxRPM){
+    return rpmSetPoint = percentOfMaxRPM * Constants.SHOOTER_MAX_RPM;
   }
 
   @Override

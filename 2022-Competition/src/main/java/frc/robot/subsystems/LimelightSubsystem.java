@@ -43,7 +43,11 @@ public class LimelightSubsystem extends SubsystemBase {
   private static double tx;
   private static double ty;
   private static double ta;
+
+  private static double distance;
   
+    private static double angleToGoalDegrees;
+    private static double angleToGoalRadians;
   
   public LimelightSubsystem() {
   }
@@ -55,9 +59,19 @@ public class LimelightSubsystem extends SubsystemBase {
         SmartDashboard.putNumber("Limelight tx: ", tx);
         SmartDashboard.putNumber("Limelight ty: ", ty);
         SmartDashboard.putNumber("Limelight ta: ", ta);
+        SmartDashboard.putNumber("Goal Distance", getLimelightDistanceFromGoal());
 
     }
 
+    public double getLimelightDistanceFromGoal(){
+
+        angleToGoalDegrees = Constants.LIMELIGHT_MOUNT_ANGLE_DEGREES + ty;
+        angleToGoalRadians = angleToGoalDegrees * (3.14159 / 180.0);
+
+        distance = (Constants.LIMELIGHT_TARGET_HEIGHT_INCHES - Constants.LIMELIGHT_LENSE_FLOOR_HEIGHT)/Math.tan(angleToGoalRadians);
+
+        return distance;
+    }
     public String getLimelightState(){
         
         tx = table.getEntry("tx").getDouble(-10000);
