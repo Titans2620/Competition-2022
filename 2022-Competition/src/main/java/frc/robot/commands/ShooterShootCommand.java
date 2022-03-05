@@ -28,6 +28,7 @@ public class ShooterShootCommand extends CommandBase {
   LimelightSubsystem m_limeLightSubsystem;
 
   String alliance;
+  double speedBoost;
 
   public ShooterShootCommand(ShooterSubsystem m_ShooterSubsystem, LimelightSubsystem m_LimelightSubsystem) {
     // Use addRequirements() here to declare subsystem dependencies.
@@ -47,7 +48,15 @@ public class ShooterShootCommand extends CommandBase {
   public void execute(){
     m_limeLightSubsystem.setLimelightCamMode("Search");
     m_limeLightSubsystem.setLimelightLED("On");
-    m_ShooterSubsystem.setShooter(Constants.SHOOTERSPEED);
+
+    if(m_limeLightSubsystem.getLimelightDistanceFromGoal() > Constants.SHOOTER_MIN_DISTANCE_INCHES && m_limeLightSubsystem.getLimelightDistanceFromGoal() < Constants.SHOOTER_MAX_DISTANCE_INCHES){
+      speedBoost = (m_limeLightSubsystem.getLimelightDistanceFromGoal() - Constants.SHOOTER_MIN_DISTANCE_INCHES) / (Constants.SHOOTER_MAX_DISTANCE_INCHES - Constants.SHOOTER_MIN_DISTANCE_INCHES);
+
+      m_ShooterSubsystem.feedForwardPIDShooter(Constants.SHOOTER_MIN_SPEED_PERCENT + (speedBoost * (Constants.SHOOTER_MAX_SPEED_PERCENT - Constants.SHOOTER_MIN_SPEED_PERCENT)));
+    }
+    else{
+      m_ShooterSubsystem.stopShooter();
+    }
   }
 
   // Called once the command ends or is interrupted.

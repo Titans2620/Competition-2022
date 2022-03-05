@@ -27,6 +27,7 @@ public class DriveLimelightCommand extends CommandBase {
   private final DoubleSupplier m_translationZSupplier;
   private double m_rotation;
   public String allianceColor;
+  public String lastStateWhenNotFound = "FASTLEFT";
 
   public DriveLimelightCommand(DriveSubsystem drivetrainSubsystem, LimelightSubsystem limelightSubsystem, DoubleSupplier d, DoubleSupplier e, ColorSensorSubsystem m_ColorSensorSubsystem, String allianceColor, DoubleSupplier z) {
       this.m_driveSubsystem = drivetrainSubsystem;
@@ -54,11 +55,18 @@ public class DriveLimelightCommand extends CommandBase {
             case "NOT FOUND":
                 //If the limelight does not find the reflective tape we will rotate to attempt to find it. 
                 //Note: This will result in a spinning motion if there is an issue with the Limelight detecting the reflective tape.
-                m_rotation = m_translationZSupplier.getAsDouble();
+                //m_rotation = m_translationZSupplier.getAsDouble();
+                if(lastStateWhenNotFound == "FASTRIGHT"){
+                    m_rotation = Constants.LIMELIGHT_SEARCH_SPEED;
+                }
+                else{
+                    m_rotation = -Constants.LIMELIGHT_SEARCH_SPEED;
+                }
                 break;
             case "FASTLEFT":
                 //The reflective tape is too far to the left so a CCW (Counterclockwise) rotation will be needed to center the shooter.
                 m_rotation = -Constants.LIMELIGHT_FAST_SPEED;
+                lastStateWhenNotFound = "FASTLEFT";
                 break;
             case "SLOWLEFT":
                 m_rotation = -Constants.LIMELIGHT_SLOW_SPEED;
@@ -66,6 +74,7 @@ public class DriveLimelightCommand extends CommandBase {
             case "FASTRIGHT":
                 //The reflective tape is too far to the right so a CCW (Clockwise) rotation will be needed to center the shooter.
                 m_rotation = Constants.LIMELIGHT_FAST_SPEED;
+                lastStateWhenNotFound = "FASTRIGHT";
                 break;
             case "SLOWRIGHT":
                 m_rotation = Constants.LIMELIGHT_SLOW_SPEED;
@@ -79,7 +88,7 @@ public class DriveLimelightCommand extends CommandBase {
         }
     }
     else{
-        m_rotation = 0.0;
+        m_rotation = m_translationZSupplier.getAsDouble();
     }
             m_driveSubsystem.drive(
                 ChassisSpeeds.fromFieldRelativeSpeeds(

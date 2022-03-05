@@ -21,22 +21,23 @@ public final class Constants {
     public static final int FRONT_LEFT_MODULE_DRIVE_MOTOR = 1;
     public static final int FRONT_LEFT_MODULE_STEER_ENCODER = 2;
     public static final int FRONT_LEFT_MODULE_STEER_MOTOR = 3;
-    public static final double FRONT_LEFT_MODULE_STEER_OFFSET = -Math.toRadians(243); //239
+    public static final double FRONT_LEFT_MODULE_STEER_OFFSET = -Math.toRadians(60);
 
     public static final int FRONT_RIGHT_MODULE_DRIVE_MOTOR = 4; 
     public static final int FRONT_RIGHT_MODULE_STEER_ENCODER = 5;
     public static final int FRONT_RIGHT_MODULE_STEER_MOTOR = 6;
-    public static final double FRONT_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(185); //185
+    public static final double FRONT_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(8);
 
     public static final int BACK_LEFT_MODULE_DRIVE_MOTOR = 7;
     public static final int BACK_LEFT_MODULE_STEER_ENCODER = 8;
     public static final int BACK_LEFT_MODULE_STEER_MOTOR = 9; 
-    public static final double BACK_LEFT_MODULE_STEER_OFFSET = -Math.toRadians(165); //175
+    public static final double BACK_LEFT_MODULE_STEER_OFFSET = -Math.toRadians(348);
 
     public static final int BACK_RIGHT_MODULE_DRIVE_MOTOR = 10;
     public static final int BACK_RIGHT_MODULE_STEER_ENCODER = 11;
     public static final int BACK_RIGHT_MODULE_STEER_MOTOR = 12;
-    public static final double BACK_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(165); //125
+    public static final double BACK_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(94);
+
 
     public static final int INTAKE_ROLLER = 13;
     public static final int INTAKE_ROTATE = 14;
@@ -63,9 +64,18 @@ public final class Constants {
 
     public static final double LIMELIGHT_SLOW_SPEED = 0.1;
     public static final double LIMELIGHT_FAST_SPEED = 0.25;
-    public static final double LIMELIGHT_SEARCH_SPEED = 0.0;
+    public static final double LIMELIGHT_SEARCH_SPEED = 0.5;
+    public static final double LIMELIGHT_MOUNT_ANGLE_DEGREES = 7.0;
+    public static final double LIMELIGHT_TARGET_HEIGHT_INCHES = 102.0; //8'6"
+    public static final double LIMELIGHT_LENSE_FLOOR_HEIGHT = 26.75;
 
     public static final String LIMELIGHT_STOP = "STOP";
+
+    public static final int SHOOTER_MAX_RPM = 5100;
+    public static final double SHOOTER_MIN_SPEED_PERCENT = 0.65;
+    public static final double SHOOTER_MAX_SPEED_PERCENT = 0.8;
+    public static final int SHOOTER_MIN_DISTANCE_INCHES = 120;
+    public static final int SHOOTER_MAX_DISTANCE_INCHES = 250;
 
     public static final class AutoConstants {
         public static final double kMaxSpeedMetersPerSecond = 1.25;

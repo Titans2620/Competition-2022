@@ -91,8 +91,8 @@ public class DriveSubsystem extends SubsystemBase {
         m_backLeftModule = Mk3SwerveModuleHelper.createFalcon500(tab.getLayout("Back Left Module", BuiltInLayouts.kList).withSize(2, 4).withPosition(4, 0),Mk3SwerveModuleHelper.GearRatio.STANDARD, BACK_LEFT_MODULE_DRIVE_MOTOR, BACK_LEFT_MODULE_STEER_MOTOR, BACK_LEFT_MODULE_STEER_ENCODER, BACK_LEFT_MODULE_STEER_OFFSET);
 
         m_backRightModule = Mk3SwerveModuleHelper.createFalcon500(tab.getLayout("Back Right Module", BuiltInLayouts.kList).withSize(2, 4).withPosition(6, 0),Mk3SwerveModuleHelper.GearRatio.STANDARD, BACK_RIGHT_MODULE_DRIVE_MOTOR, BACK_RIGHT_MODULE_STEER_MOTOR, BACK_RIGHT_MODULE_STEER_ENCODER, BACK_RIGHT_MODULE_STEER_OFFSET);
-        
-        m_pigeon.setYaw(90);
+  
+        m_pigeon.setYaw(270);
 }
 
   /**
@@ -101,7 +101,7 @@ public class DriveSubsystem extends SubsystemBase {
    */
         public void zeroGyroscope() {
                 m_pigeon.zeroGyroBiasNow();
-                m_pigeon.setYaw(90);
+                m_pigeon.setYaw(270);
         }
 
         public Rotation2d getGyroscopeRotation() {
