@@ -62,7 +62,7 @@ public final class Constants {
 
     public static final double LIMELIGHT_SLOW_SPEED = 0.1;
     public static final double LIMELIGHT_FAST_SPEED = 0.25;
-    public static final double LIMELIGHT_SEARCH_SPEED = 0.0;
+    public static final double LIMELIGHT_SEARCH_SPEED = 0.5;
     public static final double LIMELIGHT_MOUNT_ANGLE_DEGREES = 7.0;
     public static final double LIMELIGHT_TARGET_HEIGHT_INCHES = 102.0; //8'6"
     public static final double LIMELIGHT_LENSE_FLOOR_HEIGHT = 26.75;
@@ -70,6 +70,10 @@ public final class Constants {
     public static final String LIMELIGHT_STOP = "STOP";
 
     public static final int SHOOTER_MAX_RPM = 5100;
+    public static final double SHOOTER_MIN_SPEED_PERCENT = 0.65;
+    public static final double SHOOTER_MAX_SPEED_PERCENT = 0.8;
+    public static final int SHOOTER_MIN_DISTANCE_INCHES = 120;
+    public static final int SHOOTER_MAX_DISTANCE_INCHES = 250;
 
     public static final class AutoConstants {
         public static final double kMaxSpeedMetersPerSecond = 1.25;
