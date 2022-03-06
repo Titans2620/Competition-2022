@@ -39,7 +39,5 @@ public class ArmSubsystem extends SubsystemBase {
   }
   @Override
   public void periodic() {
-    SmartDashboard.putBoolean("Intake Arm Down Switch", limit.get());
-    // This method will be called once per scheduler run
   }
 }

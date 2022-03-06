@@ -69,7 +69,7 @@ public class DriveSubsystem extends SubsystemBase {
   private final Pigeon2 m_pigeon = new Pigeon2(DRIVETRAIN_PIGEON_ID);
   
 
-  private final SwerveDriveOdometry odometer = new SwerveDriveOdometry(m_kinematics, new Rotation2d(0));
+  private final SwerveDriveOdometry odometer = new SwerveDriveOdometry(m_kinematics, getGyroscopeRotation(), new Pose2d(0.0, 0.0, new Rotation2d(-90)));
 
   // These are our modules. We initialize them in the constructor.
   private final SwerveModule m_frontLeftModule;
@@ -92,7 +92,7 @@ public class DriveSubsystem extends SubsystemBase {
 
         m_backRightModule = Mk3SwerveModuleHelper.createFalcon500(tab.getLayout("Back Right Module", BuiltInLayouts.kList).withSize(2, 4).withPosition(6, 0),Mk3SwerveModuleHelper.GearRatio.STANDARD, BACK_RIGHT_MODULE_DRIVE_MOTOR, BACK_RIGHT_MODULE_STEER_MOTOR, BACK_RIGHT_MODULE_STEER_ENCODER, BACK_RIGHT_MODULE_STEER_OFFSET);
   
-        m_pigeon.setYaw(270);
+        m_pigeon.setYaw(-90);
 }
 
   /**
@@ -100,8 +100,7 @@ public class DriveSubsystem extends SubsystemBase {
    * 'forwards' direction.
    */
         public void zeroGyroscope() {
-                m_pigeon.zeroGyroBiasNow();
-                m_pigeon.setYaw(270);
+                m_pigeon.setYaw(-90);
         }
 
         public Rotation2d getGyroscopeRotation() {
@@ -147,13 +146,15 @@ public class DriveSubsystem extends SubsystemBase {
 
         @Override
         public void periodic() {
+                odometer.update(getRotation2d(), m_kinematics.toSwerveModuleStates(m_chassisSpeeds));
                 states = m_kinematics.toSwerveModuleStates(m_chassisSpeeds);
                 setModuleStates(states);
-                SmartDashboard.putNumber("Pigeon Pitch", m_pigeon.getPitch());
-                SmartDashboard.putNumber("Pigeon Roll", m_pigeon.getRoll());
-                SmartDashboard.putNumber("Pigeon Yaw", m_pigeon.getYaw());
-                SmartDashboard.putNumber("Robot Location X", getPose().getX());
-                SmartDashboard.putNumber("Robot Location Y", getPose().getY());
+
+                SmartDashboard.putNumber("Robot Heading", getHeading());
+                SmartDashboard.putString("Robot Location", getPose().getTranslation().toString());
+                SmartDashboard.putNumber("X Direction Swerve", m_chassisSpeeds.vxMetersPerSecond);
+                SmartDashboard.putNumber("Y Direction Swerve", m_chassisSpeeds.vyMetersPerSecond);
+                SmartDashboard.putNumber("A Direction Swerve", m_chassisSpeeds.omegaRadiansPerSecond);
     
         }
 }
