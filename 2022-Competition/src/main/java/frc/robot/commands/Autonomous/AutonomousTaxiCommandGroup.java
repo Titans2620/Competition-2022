@@ -33,13 +33,12 @@ DriveSubsystem m_driveSubsystem;
     TrajectoryConfig trajectoryConfig = new TrajectoryConfig(AutoConstants.kMaxSpeedMetersPerSecond, AutoConstants.kMaxAccelerationMetersPerSecondSquared).setKinematics(m_driveSubsystem.m_kinematics);
 
     Trajectory trajectory = TrajectoryGenerator.generateTrajectory(
-      new Pose2d(0,0, new Rotation2d(0)),
+      new Pose2d(0,0, new Rotation2d(Math.toRadians(0))),
        List.of(
-          new Translation2d(0.5,0),
-          new Translation2d(0.5,0.5),
-          new Translation2d(-0.5,0.5),
-          new Translation2d(-0.5,-0.5)),
-      new Pose2d(0, 0, Rotation2d.fromDegrees(0)), trajectoryConfig);
+          new Translation2d(-0.75, 0),
+          new Translation2d(-0.75, 0.75),
+          new Translation2d(-1.5, 0.75)),
+      new Pose2d(2, 0.75, Rotation2d.fromDegrees(Math.toRadians(0))), trajectoryConfig);
 
       PIDController xController = new PIDController(AutoConstants.kPXController, 0, 0);
       PIDController yController = new PIDController(AutoConstants.kPYController, 0, 0);
@@ -52,6 +51,7 @@ DriveSubsystem m_driveSubsystem;
 
     addCommands(
         new InstantCommand(() -> this.m_driveSubsystem.resetOdometry(trajectory.getInitialPose())), 
+        new InstantCommand(() -> this.m_driveSubsystem.zeroGyroscope()),
         swerveControllerCommand,
         new InstantCommand(() -> this.m_driveSubsystem.stopModules()));
     } 

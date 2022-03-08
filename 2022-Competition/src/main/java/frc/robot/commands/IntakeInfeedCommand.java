@@ -43,7 +43,6 @@ public class IntakeInfeedCommand extends CommandBase {
     m_IntakeSubsystem.setIntakeRoller(Constants.INTAKESPEED);
     if(m_ColorSensorSubsystem.getColorState() == "neither"){
         if(m_IntakeSubsystem.isLineSensorObstructed()){
-          System.out.println("Test");
             m_IntakeSubsystem.setFeedWheel(Constants.FEEDSPEED);
         }
         else{

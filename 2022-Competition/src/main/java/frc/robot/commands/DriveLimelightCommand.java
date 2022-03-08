@@ -49,7 +49,6 @@ public class DriveLimelightCommand extends CommandBase {
   @Override
   public void execute() {
       String tableState = limelightSubsystem.getLimelightState();
-      System.out.println("alliance: " + allianceColor + " | " + "State: " + m_ColorSensorSubsystem.getColorState());
       if(m_ColorSensorSubsystem.getColorState() == allianceColor){
         switch(tableState){
             case "NOT FOUND":
@@ -62,22 +61,23 @@ public class DriveLimelightCommand extends CommandBase {
                 else{
                     m_rotation = -Constants.LIMELIGHT_SEARCH_SPEED;
                 }
+                m_rotation = m_translationZSupplier.getAsDouble();
                 break;
             case "FASTLEFT":
                 //The reflective tape is too far to the left so a CCW (Counterclockwise) rotation will be needed to center the shooter.
-                m_rotation = -Constants.LIMELIGHT_FAST_SPEED;
+                m_rotation = Constants.LIMELIGHT_FAST_SPEED;
                 lastStateWhenNotFound = "FASTLEFT";
                 break;
             case "SLOWLEFT":
-                m_rotation = -Constants.LIMELIGHT_SLOW_SPEED;
+                m_rotation = Constants.LIMELIGHT_SLOW_SPEED;
                 break;
             case "FASTRIGHT":
                 //The reflective tape is too far to the right so a CCW (Clockwise) rotation will be needed to center the shooter.
-                m_rotation = Constants.LIMELIGHT_FAST_SPEED;
+                m_rotation = -Constants.LIMELIGHT_FAST_SPEED;
                 lastStateWhenNotFound = "FASTRIGHT";
                 break;
             case "SLOWRIGHT":
-                m_rotation = Constants.LIMELIGHT_SLOW_SPEED;
+                m_rotation = -Constants.LIMELIGHT_SLOW_SPEED;
                 break;
             case "STOP":
                 m_rotation = 0.0;

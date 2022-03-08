@@ -69,7 +69,7 @@ public class DriveSubsystem extends SubsystemBase {
   private final Pigeon2 m_pigeon = new Pigeon2(DRIVETRAIN_PIGEON_ID);
   
 
-  private final SwerveDriveOdometry odometer = new SwerveDriveOdometry(m_kinematics, getGyroscopeRotation(), new Pose2d(0.0, 0.0, new Rotation2d(-90)));
+  private final SwerveDriveOdometry odometer = new SwerveDriveOdometry(m_kinematics, getGyroscopeRotation(), new Pose2d(0.0, 0.0, new Rotation2d(270)));
 
   // These are our modules. We initialize them in the constructor.
   private final SwerveModule m_frontLeftModule;
@@ -92,7 +92,7 @@ public class DriveSubsystem extends SubsystemBase {
 
         m_backRightModule = Mk3SwerveModuleHelper.createFalcon500(tab.getLayout("Back Right Module", BuiltInLayouts.kList).withSize(2, 4).withPosition(6, 0),Mk3SwerveModuleHelper.GearRatio.STANDARD, BACK_RIGHT_MODULE_DRIVE_MOTOR, BACK_RIGHT_MODULE_STEER_MOTOR, BACK_RIGHT_MODULE_STEER_ENCODER, BACK_RIGHT_MODULE_STEER_OFFSET);
   
-        m_pigeon.setYaw(-90);
+        m_pigeon.setYaw(270);
 }
 
   /**
@@ -100,7 +100,7 @@ public class DriveSubsystem extends SubsystemBase {
    * 'forwards' direction.
    */
         public void zeroGyroscope() {
-                m_pigeon.setYaw(-90);
+                m_pigeon.setYaw(270);
         }
 
         public Rotation2d getGyroscopeRotation() {
@@ -113,7 +113,7 @@ public class DriveSubsystem extends SubsystemBase {
         }
 
         public double getHeading(){
-                return Math.IEEEremainder(m_pigeon.getYaw(), 360);
+                return Math.IEEEremainder(m_pigeon.getYaw(), 270);
         }
 
         public Rotation2d getRotation2d(){
