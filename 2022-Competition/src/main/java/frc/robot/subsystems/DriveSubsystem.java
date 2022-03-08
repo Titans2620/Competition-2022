@@ -209,12 +209,6 @@ public class DriveSubsystem extends SubsystemBase {
                 odometer.update(getRotation2d(), m_kinematics.toSwerveModuleStates(m_chassisSpeeds));
                 states = m_kinematics.toSwerveModuleStates(m_chassisSpeeds);
                 setModuleStates(states);
-
-                SmartDashboard.putNumber("Robot Heading", getHeading());
-                SmartDashboard.putString("Robot Location", getPose().getTranslation().toString());
-                SmartDashboard.putNumber("X Direction Swerve", m_chassisSpeeds.vxMetersPerSecond);
-                SmartDashboard.putNumber("Y Direction Swerve", m_chassisSpeeds.vyMetersPerSecond);
-                SmartDashboard.putNumber("A Direction Swerve", m_chassisSpeeds.omegaRadiansPerSecond);
     
         }
 }

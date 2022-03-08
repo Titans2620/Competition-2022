@@ -15,7 +15,7 @@ public class AutonomousIntakeCommand extends CommandBase {
   IntakeSubsystem m_IntakeSubsystem;
   ArmSubsystem m_ArmSubsystem;
   double timerDuration;
-  Timer intakeTimer;
+  Timer intakeTimer = new Timer();
 
   public AutonomousIntakeCommand(double duration, IntakeSubsystem m_IntakeSubsystem, ArmSubsystem m_ArmSubsystem) {
       this.m_IntakeSubsystem = m_IntakeSubsystem;

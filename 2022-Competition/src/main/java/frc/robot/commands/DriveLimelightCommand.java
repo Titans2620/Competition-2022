@@ -27,7 +27,7 @@ public class DriveLimelightCommand extends CommandBase {
   public String allianceColor;
   public String lastStateWhenNotFound = "FASTLEFT";
 
-  public DriveLimelightCommand(DriveSubsystem drivetrainSubsystem, LimelightSubsystem limelightSubsystem, DoubleSupplier d, DoubleSupplier e, String allianceColor, DoubleSupplier z) {
+  public DriveLimelightCommand(DriveSubsystem drivetrainSubsystem, DoubleSupplier d, DoubleSupplier e, String allianceColor, DoubleSupplier z) {
       this.m_driveSubsystem = drivetrainSubsystem;
       this.m_translationXSupplier = d;
       this.m_translationYSupplier = e;
@@ -46,9 +46,6 @@ public class DriveLimelightCommand extends CommandBase {
   public void execute() {
         m_driveSubsystem.limelightDrive(m_translationXSupplier.getAsDouble(), m_translationYSupplier.getAsDouble(), m_translationZSupplier.getAsDouble(), allianceColor);
 
-        SmartDashboard.putNumber("TranslationX", m_translationXSupplier.getAsDouble());
-        SmartDashboard.putNumber("TranslationY", m_translationYSupplier.getAsDouble());
-        SmartDashboard.putNumber("TranslationR", m_rotation);
     }
 
   @Override

@@ -10,6 +10,7 @@ import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
 import frc.robot.subsystems.DriveSubsystem;
@@ -18,7 +19,7 @@ public class AutonomousBasicMovementCommand extends CommandBase {
 
   private double xSpeed, xSpeedInitial, ySpeed, ySpeedInitial, rotationSpeed, rotationTurnDegreesInitial, rotationVariance, desiredRotationAngle;
   private DriveSubsystem m_DriveSubsystem;
-  private Timer movementTimer;
+  private Timer movementTimer = new Timer();
   private double remainingTime, movementTimerLength;
   private boolean rotationIsCorrect;
   
@@ -79,6 +80,11 @@ public class AutonomousBasicMovementCommand extends CommandBase {
                         m_DriveSubsystem.getGyroscopeRotation()
                 )
       );
+
+      SmartDashboard.putNumber("Autonomous Timer", movementTimer.get());
+      SmartDashboard.putNumber("Rotation Variance", rotationVariance);
+      SmartDashboard.putNumber("xSpeed", xSpeed);
+      SmartDashboard.putNumber("ySpeed", ySpeed);
       
   }
 
@@ -86,6 +92,7 @@ public class AutonomousBasicMovementCommand extends CommandBase {
   @Override
   public void end(boolean interrupted) {
       movementTimer.stop();
+      m_DriveSubsystem.stopModules();
   }
 
   // Returns true when the command should end.

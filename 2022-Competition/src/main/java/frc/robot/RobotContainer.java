@@ -62,7 +62,7 @@ public class RobotContainer {
 
   SendableChooser<Command> m_chooser = new SendableChooser<>();
 
-  private final AutonomousBasicTaxiCommand taxiShoot = new AutonomousBasicTaxiCommand(m_driveSubsystem, m_ShooterSubsystem, m_intakeSubsystem, m_ArmSubsystem, getAlliance());
+  private final AutonomousBasicTaxiCommand taxiShoot = new AutonomousBasicTaxiCommand(m_driveSubsystem, m_intakeSubsystem, m_ShooterSubsystem, m_ArmSubsystem, getAlliance());
   
   NetworkTableEntry isRedAlliance;
 

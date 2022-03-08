@@ -31,9 +31,6 @@ public class ColorSensorSubsystem extends SubsystemBase {
       this.green = m_colorSensor.getGreen();
       updateColor();
       SmartDashboard.putString("Color", colorState);
-      SmartDashboard.putNumber("Red", red);
-      SmartDashboard.putNumber("Blue", blue);
-      SmartDashboard.putNumber("Green", green);
   }
 
   public void updateColor(){
