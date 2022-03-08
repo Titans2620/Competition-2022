@@ -18,14 +18,12 @@ public class IntakeShootCommand extends CommandBase {
   IntakeSubsystem m_IntakeSubsystem;
   ShooterSubsystem m_ShooterSubsystem;
   ColorSensorSubsystem m_ColorSensorSubsystem;
-  LimelightSubsystem m_LimelightSubsystem;
   String alliance;
-  public IntakeShootCommand(IntakeSubsystem m_IntakeSubsystem, ShooterSubsystem m_ShooterSubsystem, ColorSensorSubsystem m_ColorSensorSubsystem, LimelightSubsystem m_LimelightSubsystem, String alliance) {
+  public IntakeShootCommand(IntakeSubsystem m_IntakeSubsystem, ShooterSubsystem m_ShooterSubsystem, ColorSensorSubsystem m_ColorSensorSubsystem, String alliance) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.m_IntakeSubsystem = m_IntakeSubsystem;
     this.m_ShooterSubsystem = m_ShooterSubsystem;
     this.m_ColorSensorSubsystem = m_ColorSensorSubsystem;
-    this.m_LimelightSubsystem = m_LimelightSubsystem;
     this.alliance = alliance;
     addRequirements(m_IntakeSubsystem);
   }
@@ -40,7 +38,7 @@ public class IntakeShootCommand extends CommandBase {
 
     
     double variance = m_ShooterSubsystem.getTargetRPM() - m_ShooterSubsystem.getEncoderValue();
-    if((alliance != m_ColorSensorSubsystem.getColorState()) || (m_LimelightSubsystem.getLimelightState() == Constants.LIMELIGHT_STOP && Math.abs(variance) < 100)){
+    if((alliance != m_ColorSensorSubsystem.getColorState()) || (m_ShooterSubsystem.getLimelight().getLimelightState() == Constants.LIMELIGHT_STOP && Math.abs(variance) < 100)){
 
       m_IntakeSubsystem.setFeedWheel(Constants.FEEDSPEED);
     }

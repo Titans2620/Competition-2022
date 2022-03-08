@@ -92,6 +92,9 @@ public final class Constants {
                 new TrapezoidProfile.Constraints(
                         kMaxAngularSpeedRadiansPerSecond,
                         kMaxAngularAccelerationRadiansPerSecondSquared);
+
+        public static final double BASIC_ROTATION_FAST_SPEED = 0.5;
+        public static final double BASIC_ROTATION_SLOW_SPEED = 0.1;
     }
 }
 

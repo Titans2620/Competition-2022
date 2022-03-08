@@ -34,19 +34,22 @@ public class IntakeSubsystem extends SubsystemBase {
   Color detectedColor;
   double IR;
 
-  
-
   int red, blue, green;
+
+  ColorSensorSubsystem m_ColorSensor;
+  String colorState;
   
-  public IntakeSubsystem() {
+  public IntakeSubsystem(ColorSensorSubsystem m_ColorSensor) {
+    this.m_ColorSensor = m_ColorSensor;
     lineSensor = new DigitalInput(Constants.LINESENSOR);
+    colorState = this.m_ColorSensor.getColorState();
   }
 
   public void setIntakeRoller(double speed){
       intakeRoller.set(speed);
   }
 
-  public void setAutoFeedWheel(double speed, String colorState){
+  public void setAutoFeedWheel(double speed){
     if(colorState == "neither"){
       feedWheel.set(speed);
     }

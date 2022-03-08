@@ -25,6 +25,9 @@ public class ShooterSubsystem extends SubsystemBase {
   NetworkTableEntry isRedAlliance;
 
   private SparkMaxPIDController shooterPIDController;
+  private LimelightSubsystem m_limelightSubsystem;
+
+  double speedBoost;
 
    // PID coefficients
    double kP = 0.000100; //0.001000 
@@ -36,9 +39,11 @@ public class ShooterSubsystem extends SubsystemBase {
    double kMinOutput = -1;
 
    double rpmSetPoint;
+   double percentOfMaxRPM;
 
   /** Creates a new ShooterSubsystem. */
-  public ShooterSubsystem() {
+  public ShooterSubsystem(LimelightSubsystem m_limeLightSubsystem) {
+    this.m_limelightSubsystem = m_limeLightSubsystem;
     shooter = new CANSparkMax(Constants.SHOOTER_WHEEL, MotorType.kBrushless);
     shooter.restoreFactoryDefaults();
     encoder = shooter.getEncoder();
@@ -65,7 +70,8 @@ public class ShooterSubsystem extends SubsystemBase {
   }
 
   public void setShooter(double speed){
-
+    m_limelightSubsystem.setLimelightCamMode("Search");
+    m_limelightSubsystem.setLimelightLED("On");
     shooter.set(speed);
   }
 
@@ -73,7 +79,13 @@ public class ShooterSubsystem extends SubsystemBase {
     shooter.set(0);
   }
 
-  public void feedForwardPIDShooter(double percentOfMaxRPM){
+  public void feedForwardPIDShooter(){
+    
+    speedBoost = (m_limelightSubsystem.getLimelightDistanceFromGoal() - Constants.SHOOTER_MIN_DISTANCE_INCHES) / (Constants.SHOOTER_MAX_DISTANCE_INCHES - Constants.SHOOTER_MIN_DISTANCE_INCHES);
+    percentOfMaxRPM = Constants.SHOOTER_MIN_SPEED_PERCENT + (speedBoost * (Constants.SHOOTER_MAX_SPEED_PERCENT - Constants.SHOOTER_MIN_SPEED_PERCENT));
+
+    m_limelightSubsystem.setLimelightCamMode("Search");
+    m_limelightSubsystem.setLimelightLED("On");
     // read PID coefficients from SmartDashboard
     double p = SmartDashboard.getNumber("P Gain", 0);
     double i = SmartDashboard.getNumber("I Gain", 0);
@@ -94,8 +106,14 @@ public class ShooterSubsystem extends SubsystemBase {
       kMinOutput = min; kMaxOutput = max; 
     }
 
-    rpmSetPoint = percentOfMaxRPM * Constants.SHOOTER_MAX_RPM;
-    shooterPIDController.setReference(rpmSetPoint, CANSparkMax.ControlType.kVelocity);
+    if(m_limelightSubsystem.getLimelightDistanceFromGoal() > Constants.SHOOTER_MIN_DISTANCE_INCHES && m_limelightSubsystem.getLimelightDistanceFromGoal() < Constants.SHOOTER_MAX_DISTANCE_INCHES){
+        
+        rpmSetPoint = percentOfMaxRPM * Constants.SHOOTER_MAX_RPM;
+        shooterPIDController.setReference(rpmSetPoint, CANSparkMax.ControlType.kVelocity);
+    }
+    else{
+        stopShooter();
+    }
     SmartDashboard.putNumber("Target RPM", rpmSetPoint);
   }
 
@@ -107,6 +125,9 @@ public class ShooterSubsystem extends SubsystemBase {
     return rpmSetPoint;
   }
 
+  public LimelightSubsystem getLimelight(){
+    return m_limelightSubsystem;
+  }
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
