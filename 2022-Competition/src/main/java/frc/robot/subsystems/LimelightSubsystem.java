@@ -56,9 +56,6 @@ public class LimelightSubsystem extends SubsystemBase {
     public void periodic() {
         getLimelightState();
         SmartDashboard.putString("Limelight State: ", state);
-        SmartDashboard.putNumber("Limelight tx: ", tx);
-        SmartDashboard.putNumber("Limelight ty: ", ty);
-        SmartDashboard.putNumber("Limelight ta: ", ta);
         SmartDashboard.putNumber("Goal Distance", getLimelightDistanceFromGoal());
 
     }

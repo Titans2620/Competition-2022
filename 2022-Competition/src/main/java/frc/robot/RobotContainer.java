@@ -5,26 +5,14 @@ import java.util.List;
 import com.revrobotics.ColorSensorV3;
 
 import edu.wpi.first.cameraserver.CameraServer;
-import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.controller.ProfiledPIDController;
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.trajectory.Trajectory;
-import edu.wpi.first.math.trajectory.TrajectoryConfig;
-import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
-import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.ArmRotateDefaultCommand;
 import frc.robot.commands.ArmRotateIntakeCommand;
@@ -43,8 +31,7 @@ import frc.robot.commands.LimelightSearchCommand;
 import frc.robot.commands.ShooterDefaultCommand;
 import frc.robot.commands.ShooterManualShootCommand;
 import frc.robot.commands.ShooterShootCommand;
-import frc.robot.commands.Autonomous.AutonomousTaxiCommandGroup;
-import frc.robot.commands.Autonomous.AutonomousTaxiShootCommandGroup;
+import frc.robot.commands.Autonomous.AutonomousCommandGroups.AutonomousBasicTaxiCommand;
 import frc.robot.commands.DriveLimelightCommand;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
@@ -62,13 +49,14 @@ import frc.robot.subsystems.ColorSensorSubsystem;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
-  private final DriveSubsystem m_driveSubsystem = new DriveSubsystem();
-  private final IntakeSubsystem m_intakeSubsystem = new IntakeSubsystem();
+  private final ColorSensorSubsystem m_ColorSensorSubsystem = new ColorSensorSubsystem();
+  private final LimelightSubsystem m_limelightSubsystem = new LimelightSubsystem(); 
+
+  private final DriveSubsystem m_driveSubsystem = new DriveSubsystem(m_limelightSubsystem, m_ColorSensorSubsystem);
   //private final ClimbSubsystem m_climbSubsystem = new ClimbSubsystem();
-  private final ShooterSubsystem m_ShooterSubsystem = new ShooterSubsystem();
-  private final LimelightSubsystem m_limelightSubsystem = new LimelightSubsystem();
+  private final ShooterSubsystem m_ShooterSubsystem = new ShooterSubsystem(m_limelightSubsystem);
+  private final IntakeSubsystem m_intakeSubsystem = new IntakeSubsystem(m_ColorSensorSubsystem, getAlliance(), m_ShooterSubsystem);
   private final ArmSubsystem m_ArmSubsystem = new ArmSubsystem(); 
-  private final ColorSensorSubsystem m_ColorSensorSubsystem = new ColorSensorSubsystem(); 
 
   private final XboxController m_driveController = new XboxController(0);
   private final XboxController m_operatorController = new XboxController(1);
@@ -76,11 +64,13 @@ public class RobotContainer {
   private String manual;
 
   SendableChooser<Command> m_chooser = new SendableChooser<>();
+
   SendableChooser<String> m_manualChooser = new SendableChooser<>();
+
+  private final AutonomousBasicTaxiCommand taxiShoot = new AutonomousBasicTaxiCommand(m_driveSubsystem, m_intakeSubsystem, m_ShooterSubsystem, m_ArmSubsystem, m_limelightSubsystem, getAlliance());
+
   
   NetworkTableEntry isRedAlliance;
-  private final AutonomousTaxiCommandGroup taxi = new AutonomousTaxiCommandGroup(m_driveSubsystem);
-  private final AutonomousTaxiShootCommandGroup taxiShoot = new AutonomousTaxiShootCommandGroup(m_driveSubsystem, m_intakeSubsystem, m_ShooterSubsystem);
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -94,7 +84,7 @@ public class RobotContainer {
               m_driveSubsystem,
               () -> modifyAxis(m_driveController.getRawAxis(0)) * DriveSubsystem.MAX_VELOCITY_METERS_PER_SECOND,
               () -> -modifyAxis(m_driveController.getRawAxis(1)) * DriveSubsystem.MAX_VELOCITY_METERS_PER_SECOND,
-              () -> -modifyAxis(m_driveController.getRawAxis(4)) * DriveSubsystem.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND,
+              () -> modifyAxis(m_driveController.getRawAxis(4)) * DriveSubsystem.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND,
               () -> m_driveController.getRawButton(7)
       ));
 
@@ -115,6 +105,10 @@ public class RobotContainer {
 
       manual = m_manualChooser.getSelected();
 
+
+      m_chooser.setDefaultOption("Taxi and Shoot", taxiShoot);
+      //m_chooser.addOption("Taxi and Shoot", taxiShoot);
+     
       // Configure the button bindings
       configureButtonBindings();
 
@@ -125,6 +119,7 @@ public class RobotContainer {
   private void configureButtonBindings() {
 
     new JoystickButton(m_driveController, 8).whenPressed(()-> m_driveSubsystem.zeroGyroscope());
+
     if(manual == "off"){
       new JoystickButton(m_operatorController, 6).whenHeld(new ParallelCommandGroup(new DriveLimelightCommand(m_driveSubsystem, m_limelightSubsystem, () -> modifyAxis(m_driveController.getRawAxis(0)) * DriveSubsystem.MAX_VELOCITY_METERS_PER_SECOND, () -> -modifyAxis(m_driveController.getRawAxis(1)) * DriveSubsystem.MAX_VELOCITY_METERS_PER_SECOND, m_ColorSensorSubsystem, getAlliance(), () -> modifyAxis(m_driveController.getRawAxis(4)) * DriveSubsystem.MAX_VELOCITY_METERS_PER_SECOND),
         new ShooterShootCommand(m_ShooterSubsystem, m_limelightSubsystem),
@@ -182,7 +177,7 @@ public class RobotContainer {
   }
 
   public void putSmartdashboard(){
-    SmartDashboard.putBoolean("Is Red Alliance", isRedAlliance.getBoolean(true));
+    SmartDashboard.putString("Alliance", getAlliance());
     SmartDashboard.putData("Choose Autonomous Mode", m_chooser);
     SmartDashboard.putData("Manual", m_manualChooser);
   }

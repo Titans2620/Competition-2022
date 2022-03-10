@@ -22,12 +22,9 @@ public class IntakeInfeedCommand extends CommandBase {
   **************************************************/
   public IntakeSubsystem m_IntakeSubsystem;
 
-  ColorSensorSubsystem m_ColorSensorSubsystem;
-
-  public IntakeInfeedCommand(IntakeSubsystem m_IntakeSubsystem, ColorSensorSubsystem m_ColorSensorSubsystem) {
+  public IntakeInfeedCommand(IntakeSubsystem m_IntakeSubsystem) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.m_IntakeSubsystem = m_IntakeSubsystem;
-    this.m_ColorSensorSubsystem = m_ColorSensorSubsystem;
 
     addRequirements(m_IntakeSubsystem);
   }
@@ -41,19 +38,7 @@ public class IntakeInfeedCommand extends CommandBase {
   public void execute() {
 
     m_IntakeSubsystem.setIntakeRoller(Constants.INTAKESPEED);
-    if(m_ColorSensorSubsystem.getColorState() == "neither"){
-        if(m_IntakeSubsystem.isLineSensorObstructed()){
-          System.out.println("Test");
-            m_IntakeSubsystem.setFeedWheel(Constants.FEEDSPEED);
-        }
-        else{
-          
-            m_IntakeSubsystem.setFeedWheel(0);
-        }
-    }
-    else{
-      m_IntakeSubsystem.setFeedWheel(0);
-    }
+    m_IntakeSubsystem.setAutoFeedWheel(Constants.FEEDSPEED);
   }
 
   // Called once the command ends or is interrupted.

@@ -46,17 +46,7 @@ public class ShooterShootCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute(){
-    m_limeLightSubsystem.setLimelightCamMode("Search");
-    m_limeLightSubsystem.setLimelightLED("On");
-
-    if(m_limeLightSubsystem.getLimelightDistanceFromGoal() > Constants.SHOOTER_MIN_DISTANCE_INCHES && m_limeLightSubsystem.getLimelightDistanceFromGoal() < Constants.SHOOTER_MAX_DISTANCE_INCHES){
-      speedBoost = (m_limeLightSubsystem.getLimelightDistanceFromGoal() - Constants.SHOOTER_MIN_DISTANCE_INCHES) / (Constants.SHOOTER_MAX_DISTANCE_INCHES - Constants.SHOOTER_MIN_DISTANCE_INCHES);
-
-      m_ShooterSubsystem.feedForwardPIDShooter(Constants.SHOOTER_MIN_SPEED_PERCENT + (speedBoost * (Constants.SHOOTER_MAX_SPEED_PERCENT - Constants.SHOOTER_MIN_SPEED_PERCENT)));
-    }
-    else{
-      m_ShooterSubsystem.stopShooter();
-    }
+      m_ShooterSubsystem.feedForwardPIDShooter();
   }
 
   // Called once the command ends or is interrupted.

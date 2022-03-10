@@ -20,6 +20,7 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 
 public class DriveSubsystem extends SubsystemBase {
   /**********************************************
@@ -69,7 +70,7 @@ public class DriveSubsystem extends SubsystemBase {
   private final Pigeon2 m_pigeon = new Pigeon2(DRIVETRAIN_PIGEON_ID);
   
 
-  private final SwerveDriveOdometry odometer = new SwerveDriveOdometry(m_kinematics, new Rotation2d(0));
+  private final SwerveDriveOdometry odometer = new SwerveDriveOdometry(m_kinematics, getGyroscopeRotation(), new Pose2d(0.0, 0.0, new Rotation2d(270)));
 
   // These are our modules. We initialize them in the constructor.
   private final SwerveModule m_frontLeftModule;
@@ -81,7 +82,10 @@ public class DriveSubsystem extends SubsystemBase {
 
   public SwerveModuleState[] states = m_kinematics.toSwerveModuleStates(m_chassisSpeeds);
 
-  public DriveSubsystem() {
+  private LimelightSubsystem m_LimeLightSubsystem;
+  private ColorSensorSubsystem m_ColorSensorSubsystem;
+
+  public DriveSubsystem(LimelightSubsystem m_LimeLightSubsystem, ColorSensorSubsystem m_ColorSensorSubsystem) {
         ShuffleboardTab tab = Shuffleboard.getTab("Drivetrain");
 
         m_frontLeftModule = Mk3SwerveModuleHelper.createFalcon500(tab.getLayout("Front Left Module", BuiltInLayouts.kList).withSize(2, 4).withPosition(0, 0), Mk3SwerveModuleHelper.GearRatio.STANDARD, FRONT_LEFT_MODULE_DRIVE_MOTOR, FRONT_LEFT_MODULE_STEER_MOTOR, FRONT_LEFT_MODULE_STEER_ENCODER, FRONT_LEFT_MODULE_STEER_OFFSET);
@@ -93,6 +97,9 @@ public class DriveSubsystem extends SubsystemBase {
         m_backRightModule = Mk3SwerveModuleHelper.createFalcon500(tab.getLayout("Back Right Module", BuiltInLayouts.kList).withSize(2, 4).withPosition(6, 0),Mk3SwerveModuleHelper.GearRatio.STANDARD, BACK_RIGHT_MODULE_DRIVE_MOTOR, BACK_RIGHT_MODULE_STEER_MOTOR, BACK_RIGHT_MODULE_STEER_ENCODER, BACK_RIGHT_MODULE_STEER_OFFSET);
   
         m_pigeon.setYaw(270);
+
+        this.m_LimeLightSubsystem = m_LimeLightSubsystem;
+        this.m_ColorSensorSubsystem = m_ColorSensorSubsystem;
 }
 
   /**
@@ -100,7 +107,6 @@ public class DriveSubsystem extends SubsystemBase {
    * 'forwards' direction.
    */
         public void zeroGyroscope() {
-                m_pigeon.zeroGyroBiasNow();
                 m_pigeon.setYaw(270);
         }
 
@@ -114,7 +120,7 @@ public class DriveSubsystem extends SubsystemBase {
         }
 
         public double getHeading(){
-                return Math.IEEEremainder(m_pigeon.getYaw(), 360);
+                return Math.IEEEremainder(m_pigeon.getYaw(), 270);
         }
 
         public Rotation2d getRotation2d(){
@@ -145,15 +151,66 @@ public class DriveSubsystem extends SubsystemBase {
                 m_chassisSpeeds = chassisSpeeds;
         }
 
+        public void limelightDrive(double xSpeed, double ySpeed, double m_rotation, String allianceColor){
+                m_LimeLightSubsystem.setLimelightCamMode("Search");
+                m_LimeLightSubsystem.setLimelightLED("on");
+                String tableState = m_LimeLightSubsystem.getLimelightState();
+                String lastStateWhenNotFound = "FASTLEFT";
+                if(m_ColorSensorSubsystem.getColorState() == allianceColor){
+                        switch(tableState){
+                        case "NOT FOUND":
+                                //If the limelight does not find the reflective tape we will rotate to attempt to find it. 
+                                //Note: This will result in a spinning motion if there is an issue with the Limelight detecting the reflective tape.
+                                /*
+                                if(lastStateWhenNotFound == "FASTRIGHT"){
+                                m_rotation = Constants.LIMELIGHT_SEARCH_SPEED;
+                                }
+                                else{
+                                m_rotation = -Constants.LIMELIGHT_SEARCH_SPEED;
+                                }
+                                */
+                                break;
+                        case "FASTLEFT":
+                                //The reflective tape is too far to the left so a CCW (Counterclockwise) rotation will be needed to center the shooter.
+                                m_rotation = Constants.LIMELIGHT_FAST_SPEED;
+                                lastStateWhenNotFound = "FASTLEFT";
+                                break;
+                        case "SLOWLEFT":
+                                m_rotation = Constants.LIMELIGHT_SLOW_SPEED;
+                                break;
+                        case "FASTRIGHT":
+                                //The reflective tape is too far to the right so a CCW (Clockwise) rotation will be needed to center the shooter.
+                                m_rotation = -Constants.LIMELIGHT_FAST_SPEED;
+                                lastStateWhenNotFound = "FASTRIGHT";
+                                break;
+                        case "SLOWRIGHT":
+                                m_rotation = -Constants.LIMELIGHT_SLOW_SPEED;
+                                break;
+                        case "STOP":
+                                m_rotation = 0.0;
+                                break;
+                        default:
+                                m_rotation = 0.0;
+                                System.out.println("The Limelight State is an invalid value, Valid states are: NOT FOUND, FASTLEFT, FASTRIGHT, SLOWLEFT, SLOWRIGHT, and STOP. The current state is: " + tableState);
+                        }
+                }
+                
+                        this.drive(
+                                ChassisSpeeds.fromFieldRelativeSpeeds(
+                                        xSpeed,
+                                        ySpeed,
+                                        -m_rotation * DriveSubsystem.MAX_VELOCITY_METERS_PER_SECOND,
+                                        this.getGyroscopeRotation()
+                                )
+                        );
+                
+                        }
+
         @Override
         public void periodic() {
+                odometer.update(getRotation2d(), m_kinematics.toSwerveModuleStates(m_chassisSpeeds));
                 states = m_kinematics.toSwerveModuleStates(m_chassisSpeeds);
                 setModuleStates(states);
-                SmartDashboard.putNumber("Pigeon Pitch", m_pigeon.getPitch());
-                SmartDashboard.putNumber("Pigeon Roll", m_pigeon.getRoll());
-                SmartDashboard.putNumber("Pigeon Yaw", m_pigeon.getYaw());
-                SmartDashboard.putNumber("Robot Location X", getPose().getX());
-                SmartDashboard.putNumber("Robot Location Y", getPose().getY());
     
         }
 }

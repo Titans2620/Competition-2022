@@ -26,7 +26,7 @@ public final class Constants {
     public static final int FRONT_RIGHT_MODULE_DRIVE_MOTOR = 4; 
     public static final int FRONT_RIGHT_MODULE_STEER_ENCODER = 5;
     public static final int FRONT_RIGHT_MODULE_STEER_MOTOR = 6;
-    public static final double FRONT_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(8);
+    public static final double FRONT_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(6);
 
     public static final int BACK_LEFT_MODULE_DRIVE_MOTOR = 7;
     public static final int BACK_LEFT_MODULE_STEER_ENCODER = 8;
@@ -72,10 +72,12 @@ public final class Constants {
     public static final String LIMELIGHT_STOP = "STOP";
 
     public static final int SHOOTER_MAX_RPM = 5100;
-    public static final double SHOOTER_MIN_SPEED_PERCENT = 0.65;
-    public static final double SHOOTER_MAX_SPEED_PERCENT = 0.8;
+    public static final double SHOOTER_MIN_SPEED_PERCENT = 0.636;
+    public static final double SHOOTER_MAX_SPEED_PERCENT = 0.785;
     public static final int SHOOTER_MIN_DISTANCE_INCHES = 120;
     public static final int SHOOTER_MAX_DISTANCE_INCHES = 250;
+
+    public static final double BASIC_MOVEMENT_VARIANCE_THRESHOLD = 0.1; 
 
     public static final class AutoConstants {
         public static final double kMaxSpeedMetersPerSecond = 1.25;
@@ -90,6 +92,9 @@ public final class Constants {
                 new TrapezoidProfile.Constraints(
                         kMaxAngularSpeedRadiansPerSecond,
                         kMaxAngularAccelerationRadiansPerSecondSquared);
+
+        public static final double BASIC_ROTATION_FAST_SPEED = 0.9;
+        public static final double BASIC_ROTATION_SLOW_SPEED = 0.4;
     }
 }
 
