@@ -43,16 +43,19 @@ public final class Constants {
     public static final int INTAKE_ROTATE = 14;
     public static final int FEED_WHEEL = 15;
     public static final int SHOOTER_WHEEL = 16;
-    public static final int LEFT_CLIMB = 17;
-    public static final int RIGHT_CLIMB = 18;
+    public static final int RIGHT_CLIMB_EXTEND = 17;
+    public static final int LEFT_CLIMB_EXTEND = 18;
+
+    public static final int PWM_RIGHT_CLIMB_PIVOT = 0;
+    public static final int PWM_LEFT_CLIMB_PIVOT = 1;
 
     //Sensors//
 
 
     public static final int INTAKE_LOWER_ROTATE_LIMIT = 0;
     public static final int INTAKE_UPPER_ROTATE_LIMIT = 1;
-    public static final int CLIMB_LOW_LIMIT = 2;
-    public static final int CLIMB_HIGH_LIMIT = 3;
+    public static final int CLIMB_LEFT_LIMIT = 2;
+    public static final int CLIMB_RIGHT_LIMIT = 3;
     public static final int LINESENSOR = 4;
 
 
@@ -79,6 +82,8 @@ public final class Constants {
     public static final int SHOOTER_MAX_DISTANCE_INCHES = 250;
 
     public static final double BASIC_MOVEMENT_VARIANCE_THRESHOLD = 0.1; 
+
+    public static final double WRONG_BALL_AIM_VARIANCE_PIXELS = 100;
 
     public static final class AutoConstants {
         public static final double kMaxSpeedMetersPerSecond = 1.25;

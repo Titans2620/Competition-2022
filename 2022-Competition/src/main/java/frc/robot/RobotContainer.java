@@ -31,7 +31,8 @@ import frc.robot.commands.LimelightSearchCommand;
 import frc.robot.commands.ShooterDefaultCommand;
 import frc.robot.commands.ShooterManualShootCommand;
 import frc.robot.commands.ShooterShootCommand;
-import frc.robot.commands.Autonomous.AutonomousCommandGroups.AutonomousBasicTaxiCommand;
+import frc.robot.commands.Autonomous.AutonomousCommandGroups.AutonomousBasicTaxiPickupShootCommand;
+import frc.robot.commands.Autonomous.AutonomousCommandGroups.AutonomousBasicTaxiShootCommandGroup;
 import frc.robot.commands.DriveLimelightCommand;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
@@ -50,7 +51,7 @@ import frc.robot.subsystems.ColorSensorSubsystem;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final ColorSensorSubsystem m_ColorSensorSubsystem = new ColorSensorSubsystem();
-  private final LimelightSubsystem m_limelightSubsystem = new LimelightSubsystem(); 
+  private final LimelightSubsystem m_limelightSubsystem = new LimelightSubsystem(getAlliance(), m_ColorSensorSubsystem); 
 
   private final DriveSubsystem m_driveSubsystem = new DriveSubsystem(m_limelightSubsystem, m_ColorSensorSubsystem);
   //private final ClimbSubsystem m_climbSubsystem = new ClimbSubsystem();
@@ -67,7 +68,8 @@ public class RobotContainer {
 
   SendableChooser<String> m_manualChooser = new SendableChooser<>();
 
-  private final AutonomousBasicTaxiCommand taxiShoot = new AutonomousBasicTaxiCommand(m_driveSubsystem, m_intakeSubsystem, m_ShooterSubsystem, m_ArmSubsystem, m_limelightSubsystem, getAlliance());
+  private final AutonomousBasicTaxiPickupShootCommand taxiPickupShoot = new AutonomousBasicTaxiPickupShootCommand(m_driveSubsystem, m_intakeSubsystem, m_ShooterSubsystem, m_ArmSubsystem, m_limelightSubsystem, getAlliance());
+  private final AutonomousBasicTaxiShootCommandGroup taxiShoot = new AutonomousBasicTaxiShootCommandGroup(m_driveSubsystem, m_intakeSubsystem, m_ShooterSubsystem, m_ArmSubsystem, m_limelightSubsystem, getAlliance());
 
   
   NetworkTableEntry isRedAlliance;
@@ -102,7 +104,7 @@ public class RobotContainer {
       manual = m_manualChooser.getSelected();
 
 
-      m_chooser.setDefaultOption("Taxi and Shoot", taxiShoot);
+      m_chooser.setDefaultOption("Taxi, Pickup, and Shoot", taxiPickupShoot);
       //m_chooser.addOption("Taxi and Shoot", taxiShoot);
      
       // Configure the button bindings

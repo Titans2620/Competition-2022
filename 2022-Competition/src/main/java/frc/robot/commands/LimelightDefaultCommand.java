@@ -9,7 +9,7 @@ import frc.robot.subsystems.LimelightSubsystem;
 
 public class LimelightDefaultCommand extends CommandBase {
 
-  LimelightSubsystem m_limelightSubsystem = new LimelightSubsystem();
+  LimelightSubsystem m_limelightSubsystem;
   /** Creates a new LimelightDefaultCommand. */
   public LimelightDefaultCommand(LimelightSubsystem limelightSubsystem) {
     m_limelightSubsystem = limelightSubsystem;

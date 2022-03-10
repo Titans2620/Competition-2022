@@ -48,8 +48,14 @@ public class LimelightSubsystem extends SubsystemBase {
   
     private static double angleToGoalDegrees;
     private static double angleToGoalRadians;
+
+    private String alliance;
+    private ColorSensorSubsystem m_ColorSensorSubsystem;
   
-  public LimelightSubsystem() {
+  public LimelightSubsystem(String alliance, ColorSensorSubsystem m_ColorSensorSubsystem) {
+        this.alliance = alliance;
+        this.m_ColorSensorSubsystem = m_ColorSensorSubsystem;
+
   }
 
   @Override
@@ -74,6 +80,10 @@ public class LimelightSubsystem extends SubsystemBase {
         tx = table.getEntry("tx").getDouble(-10000);
         ty = table.getEntry("ty").getDouble(-10000);
         ta = table.getEntry("ta").getDouble(-10000);
+
+        if(m_ColorSensorSubsystem.getColorState() != alliance && m_ColorSensorSubsystem.getColorState() != "neither"){
+            tx += Constants.WRONG_BALL_AIM_VARIANCE_PIXELS;
+        }
 
         if(tx == 0.0 && ty == 0.0){
             state = "NOT FOUND";

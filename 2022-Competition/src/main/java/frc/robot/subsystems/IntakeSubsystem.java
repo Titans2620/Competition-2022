@@ -54,7 +54,7 @@ public class IntakeSubsystem extends SubsystemBase {
   }
 
   public void setAutoFeedWheel(double speed){
-    if(colorState == "neither"){
+    if(this.m_ColorSensor.getColorState() == "neither"){
       feedWheel.set(speed);
     }
     else{
@@ -70,6 +70,7 @@ public class IntakeSubsystem extends SubsystemBase {
     else{
       feedWheel.set(0);
      }
+     setIntakeRoller(Constants.INTAKESPEED);
   }
 
   public void setFeedWheel(double speed){

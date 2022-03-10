@@ -33,7 +33,7 @@ public class ArmSubsystem extends SubsystemBase {
   }
 
   public void autoRotateArm(Double speed){
-    if((!lowerLimit.get() && speed < 0) || speed > 0){
+    if((!lowerLimit.get() && speed < 0) || speed > 0 && upperlimit.get()){
       intakeRotate.set(speed);
     }
     else{
