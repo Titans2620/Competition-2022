@@ -44,7 +44,7 @@ public class AutonomousShootCommand extends CommandBase {
   @Override
   public void execute() {
       m_DriveSubsystem.limelightDrive(0, 0, 0, alliance);
-      m_IntakeSubsystem.setAutoFeedWheel(Constants.FEEDSPEED);
+      m_IntakeSubsystem.setAutoFeedWheelShoot(Constants.FEEDSPEED);
       m_ShooterSubsystem.feedForwardPIDShooter();
   }
 

@@ -52,9 +52,9 @@ public class RobotContainer {
   private final LimelightSubsystem m_limelightSubsystem = new LimelightSubsystem(); 
 
   private final DriveSubsystem m_driveSubsystem = new DriveSubsystem(m_limelightSubsystem, m_ColorSensorSubsystem);
-  private final IntakeSubsystem m_intakeSubsystem = new IntakeSubsystem(m_ColorSensorSubsystem);
   //private final ClimbSubsystem m_climbSubsystem = new ClimbSubsystem();
   private final ShooterSubsystem m_ShooterSubsystem = new ShooterSubsystem(m_limelightSubsystem);
+  private final IntakeSubsystem m_intakeSubsystem = new IntakeSubsystem(m_ColorSensorSubsystem, getAlliance(), m_ShooterSubsystem);
   private final ArmSubsystem m_ArmSubsystem = new ArmSubsystem(); 
 
   private final XboxController m_driveController = new XboxController(0);
@@ -62,7 +62,7 @@ public class RobotContainer {
 
   SendableChooser<Command> m_chooser = new SendableChooser<>();
 
-  private final AutonomousBasicTaxiCommand taxiShoot = new AutonomousBasicTaxiCommand(m_driveSubsystem, m_intakeSubsystem, m_ShooterSubsystem, m_ArmSubsystem, getAlliance());
+  private final AutonomousBasicTaxiCommand taxiShoot = new AutonomousBasicTaxiCommand(m_driveSubsystem, m_intakeSubsystem, m_ShooterSubsystem, m_ArmSubsystem, m_limelightSubsystem, getAlliance());
   
   NetworkTableEntry isRedAlliance;
 

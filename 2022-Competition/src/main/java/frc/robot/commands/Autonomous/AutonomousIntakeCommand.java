@@ -37,7 +37,6 @@ public class AutonomousIntakeCommand extends CommandBase {
   public void execute() {
       m_IntakeSubsystem.setIntakeRoller(Constants.INTAKE_ROLLER);
       m_ArmSubsystem.rotateArm(Constants.INTAKEROTATEDOWNSPEED);
-
       m_IntakeSubsystem.setAutoFeedWheel(Constants.FEEDSPEED);
   }
 

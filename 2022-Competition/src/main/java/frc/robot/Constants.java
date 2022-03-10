@@ -93,8 +93,8 @@ public final class Constants {
                         kMaxAngularSpeedRadiansPerSecond,
                         kMaxAngularAccelerationRadiansPerSecondSquared);
 
-        public static final double BASIC_ROTATION_FAST_SPEED = 0.5;
-        public static final double BASIC_ROTATION_SLOW_SPEED = 0.1;
+        public static final double BASIC_ROTATION_FAST_SPEED = 0.9;
+        public static final double BASIC_ROTATION_SLOW_SPEED = 0.4;
     }
 }
 

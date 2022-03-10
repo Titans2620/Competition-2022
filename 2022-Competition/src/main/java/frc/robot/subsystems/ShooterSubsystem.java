@@ -84,8 +84,6 @@ public class ShooterSubsystem extends SubsystemBase {
     speedBoost = (m_limelightSubsystem.getLimelightDistanceFromGoal() - Constants.SHOOTER_MIN_DISTANCE_INCHES) / (Constants.SHOOTER_MAX_DISTANCE_INCHES - Constants.SHOOTER_MIN_DISTANCE_INCHES);
     percentOfMaxRPM = Constants.SHOOTER_MIN_SPEED_PERCENT + (speedBoost * (Constants.SHOOTER_MAX_SPEED_PERCENT - Constants.SHOOTER_MIN_SPEED_PERCENT));
 
-    m_limelightSubsystem.setLimelightCamMode("Search");
-    m_limelightSubsystem.setLimelightLED("On");
     // read PID coefficients from SmartDashboard
     double p = SmartDashboard.getNumber("P Gain", 0);
     double i = SmartDashboard.getNumber("I Gain", 0);

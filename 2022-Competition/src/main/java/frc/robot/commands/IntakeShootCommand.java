@@ -36,16 +36,7 @@ public class IntakeShootCommand extends CommandBase {
   @Override
   public void execute() {
 
-    
-    double variance = m_ShooterSubsystem.getTargetRPM() - m_ShooterSubsystem.getEncoderValue();
-    if((alliance != m_ColorSensorSubsystem.getColorState()) || (m_ShooterSubsystem.getLimelight().getLimelightState() == Constants.LIMELIGHT_STOP && Math.abs(variance) < 100)){
-
-      m_IntakeSubsystem.setFeedWheel(Constants.FEEDSPEED);
-    }
-    else{
-      m_IntakeSubsystem.setFeedWheel(0);
-     }
-     SmartDashboard.putNumber("variance", variance);
+    m_IntakeSubsystem.setAutoFeedWheelShoot(Constants.FEEDSPEED);
     
   }
 

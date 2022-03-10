@@ -37,12 +37,16 @@ public class IntakeSubsystem extends SubsystemBase {
   int red, blue, green;
 
   ColorSensorSubsystem m_ColorSensor;
-  String colorState;
+  String colorState, alliance;
+
+  ShooterSubsystem m_ShooterSubsystem;
   
-  public IntakeSubsystem(ColorSensorSubsystem m_ColorSensor) {
+  public IntakeSubsystem(ColorSensorSubsystem m_ColorSensor, String alliance, ShooterSubsystem m_ShooterSubsystem) {
     this.m_ColorSensor = m_ColorSensor;
     lineSensor = new DigitalInput(Constants.LINESENSOR);
     colorState = this.m_ColorSensor.getColorState();
+    this.m_ShooterSubsystem = m_ShooterSubsystem;
+    this.alliance = alliance;
   }
 
   public void setIntakeRoller(double speed){
@@ -56,6 +60,16 @@ public class IntakeSubsystem extends SubsystemBase {
     else{
       feedWheel.set(0);
     }
+  }
+  public void setAutoFeedWheelShoot(double speed){
+    double variance = m_ShooterSubsystem.getTargetRPM() - m_ShooterSubsystem.getEncoderValue();
+    if((alliance != m_ColorSensor.getColorState()) || (m_ShooterSubsystem.getLimelight().getLimelightState() == Constants.LIMELIGHT_STOP && Math.abs(variance) < 100)){
+
+      feedWheel.set(speed);
+    }
+    else{
+      feedWheel.set(0);
+     }
   }
 
   public void setFeedWheel(double speed){

@@ -21,7 +21,7 @@ public class AutonomousBasicMovementCommand extends CommandBase {
   private DriveSubsystem m_DriveSubsystem;
   private Timer movementTimer = new Timer();
   private double remainingTime, movementTimerLength;
-  private boolean rotationIsCorrect;
+  private boolean rotationIsCorrect = false;
   
   /** Creates a new AutonomousBasicMovementCommand. */
   public AutonomousBasicMovementCommand(double xSpeedInitial, double ySpeedInitial, double rotationTurnDegreesInitial, double movementTimerLength, DriveSubsystem m_driveSubsystem) {
@@ -63,12 +63,13 @@ public class AutonomousBasicMovementCommand extends CommandBase {
           rotationSpeed = -Constants.AutoConstants.BASIC_ROTATION_FAST_SPEED;
       }
       else if(rotationVariance > 2){
-          rotationSpeed = Constants.AutoConstants.BASIC_ROTATION_SLOW_SPEED;
+          rotationSpeed = Constants.AutoConstants.BASIC_ROTATION_FAST_SPEED;
       }
       else if(rotationVariance < -2){
-          rotationSpeed = -Constants.AutoConstants.BASIC_ROTATION_SLOW_SPEED;
+          rotationSpeed = -Constants.AutoConstants.BASIC_ROTATION_FAST_SPEED;
       }
       else{
+          rotationIsCorrect = true;
           rotationSpeed = 0.0;
       }
       
