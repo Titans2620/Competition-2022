@@ -49,10 +49,11 @@ public final class Constants {
     //Sensors//
 
 
-    public static final int INTAKE_ROTATE_LIMIT = 0;
-    public static final int CLIMB_LOW_LIMIT = 1;
-    public static final int CLIMB_HIGH_LIMIT = 2;
-    public static final int LINESENSOR = 3;
+    public static final int INTAKE_LOWER_ROTATE_LIMIT = 0;
+    public static final int INTAKE_UPPER_ROTATE_LIMIT = 1;
+    public static final int CLIMB_LOW_LIMIT = 2;
+    public static final int CLIMB_HIGH_LIMIT = 3;
+    public static final int LINESENSOR = 4;
 
 
     //SPEEDS//

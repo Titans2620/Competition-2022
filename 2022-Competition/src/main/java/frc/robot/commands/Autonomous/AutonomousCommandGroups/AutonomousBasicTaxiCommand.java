@@ -37,8 +37,8 @@ public class AutonomousBasicTaxiCommand extends SequentialCommandGroup {
 
     addCommands(
         new ParallelCommandGroup(
-            new AutonomousBasicMovementCommand(0, 0.25, 0, 3, m_DriveSubsystem), 
-            new AutonomousIntakeCommand(3, m_IntakeSubsystem, m_ArmSubsystem)
+            new AutonomousBasicMovementCommand(0, 0.5, 0, 2, m_DriveSubsystem), 
+            new AutonomousIntakeCommand(2, m_IntakeSubsystem, m_ArmSubsystem)
         ),
         new AutonomousBasicMovementCommand(0, 0, 180, 3, m_DriveSubsystem),
         new ParallelCommandGroup(
