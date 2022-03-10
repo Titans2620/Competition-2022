@@ -16,6 +16,7 @@ import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.ArmRotateDefaultCommand;
 import frc.robot.commands.ArmRotateIntakeCommand;
+import frc.robot.commands.ArmRotateManualCommand;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.commands.ArmRotateCommand;
 import frc.robot.commands.ClimbDefaultCommand;
@@ -60,9 +61,14 @@ public class RobotContainer {
   private final XboxController m_driveController = new XboxController(0);
   private final XboxController m_operatorController = new XboxController(1);
 
+  private String manual;
+
   SendableChooser<Command> m_chooser = new SendableChooser<>();
 
+  SendableChooser<String> m_manualChooser = new SendableChooser<>();
+
   private final AutonomousBasicTaxiCommand taxiShoot = new AutonomousBasicTaxiCommand(m_driveSubsystem, m_intakeSubsystem, m_ShooterSubsystem, m_ArmSubsystem, m_limelightSubsystem, getAlliance());
+
   
   NetworkTableEntry isRedAlliance;
 
@@ -91,9 +97,18 @@ public class RobotContainer {
 
   
 
+      m_chooser.setDefaultOption("Taxi", taxi);
+      m_chooser.addOption("Taxi and Shoot", taxiShoot);
+
+      m_manualChooser.setDefaultOption("Off", "off");
+      m_manualChooser.addOption("On", "on");
+
+      manual = m_manualChooser.getSelected();
+
+
       m_chooser.setDefaultOption("Taxi and Shoot", taxiShoot);
       //m_chooser.addOption("Taxi and Shoot", taxiShoot);
-      
+     
       // Configure the button bindings
       configureButtonBindings();
 
@@ -104,17 +119,28 @@ public class RobotContainer {
   private void configureButtonBindings() {
 
     new JoystickButton(m_driveController, 8).whenPressed(()-> m_driveSubsystem.zeroGyroscope());
-    new JoystickButton(m_operatorController, 6).whenHeld(
-      new ParallelCommandGroup(
-          new DriveLimelightCommand(m_driveSubsystem, () -> modifyAxis(m_driveController.getRawAxis(0)) * DriveSubsystem.MAX_VELOCITY_METERS_PER_SECOND, () -> -modifyAxis(m_driveController.getRawAxis(1)) * DriveSubsystem.MAX_VELOCITY_METERS_PER_SECOND, getAlliance(), () -> modifyAxis(m_driveController.getRawAxis(4)) * DriveSubsystem.MAX_VELOCITY_METERS_PER_SECOND),
-          new ShooterShootCommand(m_ShooterSubsystem, m_limelightSubsystem),
-          new IntakeShootCommand(m_intakeSubsystem, m_ShooterSubsystem, m_ColorSensorSubsystem, getAlliance())));
-    if(!m_operatorController.getRawButton(2) || !m_operatorController.getRawButton(3))
-        new JoystickButton(m_operatorController, 1).whenHeld(new ParallelCommandGroup(new IntakeInfeedCommand(m_intakeSubsystem), new ArmRotateIntakeCommand(m_ArmSubsystem)));
-    new JoystickButton(m_operatorController, 2).whenHeld(new ArmRotateCommand(m_ArmSubsystem, true));
-    new JoystickButton(m_operatorController, 3).whenHeld(new ArmRotateCommand(m_ArmSubsystem, false));
 
+    if(manual == "off"){
+      new JoystickButton(m_operatorController, 6).whenHeld(new ParallelCommandGroup(new DriveLimelightCommand(m_driveSubsystem, m_limelightSubsystem, () -> modifyAxis(m_driveController.getRawAxis(0)) * DriveSubsystem.MAX_VELOCITY_METERS_PER_SECOND, () -> -modifyAxis(m_driveController.getRawAxis(1)) * DriveSubsystem.MAX_VELOCITY_METERS_PER_SECOND, m_ColorSensorSubsystem, getAlliance(), () -> modifyAxis(m_driveController.getRawAxis(4)) * DriveSubsystem.MAX_VELOCITY_METERS_PER_SECOND),
+        new ShooterShootCommand(m_ShooterSubsystem, m_limelightSubsystem),
+          new LimelightSearchCommand(m_limelightSubsystem),
+            new IntakeShootCommand(m_intakeSubsystem, m_ShooterSubsystem, m_ColorSensorSubsystem, m_limelightSubsystem, getAlliance())));
+      if(!m_operatorController.getRawButton(2) || !m_operatorController.getRawButton(3))
+          new JoystickButton(m_operatorController, 1).whenHeld(new ParallelCommandGroup(new IntakeInfeedCommand(m_intakeSubsystem, m_ColorSensorSubsystem), new ArmRotateIntakeCommand(m_ArmSubsystem)));
+      new JoystickButton(m_operatorController, 2).whenHeld(new ArmRotateCommand(m_ArmSubsystem, true));
+      new JoystickButton(m_operatorController, 3).whenHeld(new ArmRotateCommand(m_ArmSubsystem, false));
+    }
+    else{
 
+      new JoystickButton(m_operatorController, 6).whenHeld(new ShooterManualShootCommand(m_ShooterSubsystem, m_intakeSubsystem));
+      if(!m_operatorController.getRawButton(6)){
+        new JoystickButton(m_operatorController, 1).whenHeld(new IntakeManualCommand(m_intakeSubsystem));
+      }
+      new JoystickButton(m_operatorController, 2).whenHeld(new ArmRotateManualCommand(m_ArmSubsystem, true));
+
+      new JoystickButton(m_operatorController, 3).whenHeld(new ArmRotateManualCommand(m_ArmSubsystem, false));
+
+    }
   }
 
   /**
@@ -153,6 +179,7 @@ public class RobotContainer {
   public void putSmartdashboard(){
     SmartDashboard.putString("Alliance", getAlliance());
     SmartDashboard.putData("Choose Autonomous Mode", m_chooser);
+    SmartDashboard.putData("Manual", m_manualChooser);
   }
 
   private static double modifyAxis(double value) {

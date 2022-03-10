@@ -18,11 +18,14 @@ public class ShooterManualShootCommand extends CommandBase {
     When the shoot button is pressed, we will still check for motor speed and as long as we are up to speed we will shoot without checking the Limelight
   ******************************************/
   ShooterSubsystem m_ShooterSubsystem;
+  IntakeSubsystem m_IntakeSubsystem;
   Timer timer = new Timer();
-  public ShooterManualShootCommand(ShooterSubsystem m_ShooterSubsystem) {
+  public ShooterManualShootCommand(ShooterSubsystem m_ShooterSubsystem, IntakeSubsystem m_IntakeSubsystem) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.m_ShooterSubsystem = m_ShooterSubsystem;
-    addRequirements(m_ShooterSubsystem);
+    this.m_IntakeSubsystem = m_IntakeSubsystem;
+    addRequirements(m_ShooterSubsystem, m_IntakeSubsystem);
+    timer.start();
   }
 
   // Called when the command is initially scheduled.
@@ -34,11 +37,16 @@ public class ShooterManualShootCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-      m_ShooterSubsystem.setShooter(Constants.SHOOTERSPEED);
+      m_ShooterSubsystem.setShooter(Constants.SHOOTER_MIN_SPEED_PERCENT);
+      if(timer.get() > 3){
+      m_IntakeSubsystem.setFeedWheel(Constants.FEEDSPEED);
+      }
   }
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    timer.stop();
+  }
 
   // Returns true when the command should end.
   @Override
