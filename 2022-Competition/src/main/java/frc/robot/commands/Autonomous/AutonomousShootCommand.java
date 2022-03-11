@@ -51,6 +51,9 @@ public class AutonomousShootCommand extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+      m_IntakeSubsystem.turnOffMotors();
+      m_ShooterSubsystem.stopShooter();
+      m_DriveSubsystem.stopModules();
       shootTimer.stop();
   }
 

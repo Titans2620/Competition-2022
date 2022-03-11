@@ -4,7 +4,9 @@
 
 package frc.robot.commands.Autonomous.AutonomousCommandGroups;
 
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.commands.LimelightSearchCommand;
 import frc.robot.commands.Autonomous.AutonomousBasicMovementCommand;
 import frc.robot.commands.Autonomous.AutonomousShootCommand;
 import frc.robot.subsystems.ArmSubsystem;
@@ -34,8 +36,11 @@ public class AutonomousBasicTaxiShootCommandGroup extends SequentialCommandGroup
 
 
     addCommands(
-      new AutonomousBasicMovementCommand(0, 0.3, 0, 5, m_DriveSubsystem),
-      new AutonomousShootCommand(m_DriveSubsystem, m_IntakeSubsystem, m_ShooterSubsystem, 5, alliance)
-    );
+      new AutonomousBasicMovementCommand(0, -0.4, 0, 5, m_DriveSubsystem),
+      new ParallelCommandGroup(
+            new AutonomousShootCommand(m_DriveSubsystem, m_IntakeSubsystem, m_ShooterSubsystem, 5, alliance), 
+            new LimelightSearchCommand(m_LimelightSubsystem)
+        )
+      );
   }
 }

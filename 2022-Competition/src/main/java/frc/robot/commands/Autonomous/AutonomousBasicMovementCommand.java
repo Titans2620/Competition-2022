@@ -62,10 +62,10 @@ public class AutonomousBasicMovementCommand extends CommandBase {
       else if(rotationVariance < -25){
           rotationSpeed = -Constants.AutoConstants.BASIC_ROTATION_FAST_SPEED;
       }
-      else if(rotationVariance > 2){
+      else if(rotationVariance > 10){
           rotationSpeed = Constants.AutoConstants.BASIC_ROTATION_FAST_SPEED;
       }
-      else if(rotationVariance < -2){
+      else if(rotationVariance < -10){
           rotationSpeed = -Constants.AutoConstants.BASIC_ROTATION_FAST_SPEED;
       }
       else{

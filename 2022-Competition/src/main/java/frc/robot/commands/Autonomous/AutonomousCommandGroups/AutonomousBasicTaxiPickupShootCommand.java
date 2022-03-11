@@ -37,7 +37,7 @@ public class AutonomousBasicTaxiPickupShootCommand extends SequentialCommandGrou
 
     addCommands(
         new ParallelCommandGroup(
-            new AutonomousBasicMovementCommand(0, 0.3, 0, 2, m_DriveSubsystem), 
+            new AutonomousBasicMovementCommand(0, 0.4, 0, 3, m_DriveSubsystem), 
             new AutonomousIntakeCommand(2, m_IntakeSubsystem, m_ArmSubsystem)
         ),
         new AutonomousBasicMovementCommand(0, 0, 180, 3, m_DriveSubsystem),
@@ -45,6 +45,7 @@ public class AutonomousBasicTaxiPickupShootCommand extends SequentialCommandGrou
             new AutonomousShootCommand(m_DriveSubsystem, m_IntakeSubsystem, m_ShooterSubsystem, 5, alliance), 
             new LimelightSearchCommand(m_LimelightSubsystem)
         )
+        
     );
   }
 }

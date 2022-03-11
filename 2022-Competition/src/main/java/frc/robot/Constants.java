@@ -51,13 +51,16 @@ public final class Constants {
 
     //Sensors//
 
-
     public static final int INTAKE_LOWER_ROTATE_LIMIT = 0;
     public static final int INTAKE_UPPER_ROTATE_LIMIT = 1;
     public static final int CLIMB_LEFT_LIMIT = 2;
     public static final int CLIMB_RIGHT_LIMIT = 3;
     public static final int LINESENSOR = 4;
 
+    //LEDS//
+
+    public static final int LED = 3;
+    public static final int LEDLENGTH = 200;
 
     //SPEEDS//
     public static final double INTAKESPEED = -1.0;
@@ -65,6 +68,8 @@ public final class Constants {
     public static final double INTAKEROTATEDOWNSPEED = -.25;
     public static final double FEEDSPEED = .25;
     public static final double SHOOTERSPEED = .72;
+    public static final double LOWGOALSHOOTERSPEEDCORRECT = .4;
+    public static final double LOWGOALSHOOTERSPEEDINCORRECT = .2;
 
     public static final double LIMELIGHT_SLOW_SPEED = 0.1;
     public static final double LIMELIGHT_FAST_SPEED = 0.25;
@@ -83,7 +88,7 @@ public final class Constants {
 
     public static final double BASIC_MOVEMENT_VARIANCE_THRESHOLD = 0.1; 
 
-    public static final double WRONG_BALL_AIM_VARIANCE_PIXELS = 100;
+    public static final double WRONG_BALL_AIM_VARIANCE_PIXELS = 15;
 
     public static final class AutoConstants {
         public static final double kMaxSpeedMetersPerSecond = 1.25;

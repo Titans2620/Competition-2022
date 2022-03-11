@@ -9,6 +9,7 @@ import com.revrobotics.ColorSensorV3;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.I2C;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -38,7 +39,7 @@ public class IntakeSubsystem extends SubsystemBase {
 
   ColorSensorSubsystem m_ColorSensor;
   String colorState, alliance;
-
+  Timer timer;
   ShooterSubsystem m_ShooterSubsystem;
   
   public IntakeSubsystem(ColorSensorSubsystem m_ColorSensor, String alliance, ShooterSubsystem m_ShooterSubsystem) {
@@ -47,6 +48,8 @@ public class IntakeSubsystem extends SubsystemBase {
     colorState = this.m_ColorSensor.getColorState();
     this.m_ShooterSubsystem = m_ShooterSubsystem;
     this.alliance = alliance;
+    timer = new Timer();
+    timer.start();
   }
 
   public void setIntakeRoller(double speed){
@@ -55,15 +58,23 @@ public class IntakeSubsystem extends SubsystemBase {
 
   public void setAutoFeedWheel(double speed){
     if(this.m_ColorSensor.getColorState() == "neither"){
-      feedWheel.set(speed);
+      if(isLineSensorObstructed()){
+        timer.reset();
+      }
+      if(timer.get() < 1){
+        feedWheel.set(Constants.FEEDSPEED);
+      }
+      else{
+        feedWheel.set(0);
+      }
     }
     else{
       feedWheel.set(0);
     }
   }
   public void setAutoFeedWheelShoot(double speed){
-    double variance = m_ShooterSubsystem.getTargetRPM() - m_ShooterSubsystem.getEncoderValue();
-    if((alliance != m_ColorSensor.getColorState()) || (m_ShooterSubsystem.getLimelight().getLimelightState() == Constants.LIMELIGHT_STOP && Math.abs(variance) < 100)){
+    double variance = (m_ShooterSubsystem.getTargetRPM() + 100) - m_ShooterSubsystem.getEncoderValue();
+    if((m_ColorSensor.getColorState() == "neither") || (m_ShooterSubsystem.getLimelight().getLimelightState() == Constants.LIMELIGHT_STOP && Math.abs(variance) < 100)){
 
       feedWheel.set(speed);
     }
@@ -89,5 +100,6 @@ public class IntakeSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
       SmartDashboard.putBoolean("Line Sensor", isLineSensorObstructed());
+      SmartDashboard.putNumber("Feed Timer", timer.get());
   }
 }

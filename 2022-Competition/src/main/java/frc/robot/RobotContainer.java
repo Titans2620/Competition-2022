@@ -29,6 +29,7 @@ import frc.robot.commands.LimelightDefaultCommand;
 import frc.robot.commands.LimelightGetStateCommand;
 import frc.robot.commands.LimelightSearchCommand;
 import frc.robot.commands.ShooterDefaultCommand;
+import frc.robot.commands.ShooterLowShootCommand;
 import frc.robot.commands.ShooterManualShootCommand;
 import frc.robot.commands.ShooterShootCommand;
 import frc.robot.commands.Autonomous.AutonomousCommandGroups.AutonomousBasicTaxiPickupShootCommand;
@@ -36,6 +37,7 @@ import frc.robot.commands.Autonomous.AutonomousCommandGroups.AutonomousBasicTaxi
 import frc.robot.commands.DriveLimelightCommand;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
+import frc.robot.subsystems.LEDSubsystem;
 import frc.robot.subsystems.LimelightSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.ArmSubsystem;
@@ -58,6 +60,7 @@ public class RobotContainer {
   private final ShooterSubsystem m_ShooterSubsystem = new ShooterSubsystem(m_limelightSubsystem);
   private final IntakeSubsystem m_intakeSubsystem = new IntakeSubsystem(m_ColorSensorSubsystem, getAlliance(), m_ShooterSubsystem);
   private final ArmSubsystem m_ArmSubsystem = new ArmSubsystem(); 
+  private final LEDSubsystem m_LedSubsystem = new LEDSubsystem();
 
   private final XboxController m_driveController = new XboxController(0);
   private final XboxController m_operatorController = new XboxController(1);
@@ -87,7 +90,7 @@ public class RobotContainer {
               () -> modifyAxis(m_driveController.getRawAxis(0)) * DriveSubsystem.MAX_VELOCITY_METERS_PER_SECOND,
               () -> -modifyAxis(m_driveController.getRawAxis(1)) * DriveSubsystem.MAX_VELOCITY_METERS_PER_SECOND,
               () -> modifyAxis(m_driveController.getRawAxis(4)) * DriveSubsystem.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND,
-              () -> m_driveController.getRawButton(7)
+              () -> m_driveController.getRawButton(5)
       ));
 
   
@@ -105,7 +108,7 @@ public class RobotContainer {
 
 
       m_chooser.setDefaultOption("Taxi, Pickup, and Shoot", taxiPickupShoot);
-      //m_chooser.addOption("Taxi and Shoot", taxiShoot);
+      m_chooser.addOption("Taxi and Shoot", taxiShoot);
      
       // Configure the button bindings
       configureButtonBindings();
@@ -127,6 +130,7 @@ public class RobotContainer {
           new JoystickButton(m_operatorController, 1).whenHeld(new ParallelCommandGroup(new IntakeInfeedCommand(m_intakeSubsystem), new ArmRotateIntakeCommand(m_ArmSubsystem)));
       new JoystickButton(m_operatorController, 2).whenHeld(new ArmRotateCommand(m_ArmSubsystem, true));
       new JoystickButton(m_operatorController, 3).whenHeld(new ArmRotateCommand(m_ArmSubsystem, false));
+      new JoystickButton(m_operatorController, 5).whenHeld(new ShooterLowShootCommand(m_ShooterSubsystem, m_ColorSensorSubsystem, getAlliance()));
     }
     else{
 
