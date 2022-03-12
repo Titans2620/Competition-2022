@@ -47,8 +47,8 @@ public class DriveDefaultCommand extends CommandBase {
         else{
             m_driveSubsystem.drive(
                 new ChassisSpeeds(
+                    -m_translationYSupplier.getAsDouble(),
                     m_translationXSupplier.getAsDouble(),
-                    m_translationYSupplier.getAsDouble(),
                     m_rotationSupplier.getAsDouble())
                 );
         }

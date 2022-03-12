@@ -156,7 +156,6 @@ public class DriveSubsystem extends SubsystemBase {
                 m_LimeLightSubsystem.setLimelightLED("on");
                 String tableState = m_LimeLightSubsystem.getLimelightState();
                 String lastStateWhenNotFound = "FASTLEFT";
-                if(m_ColorSensorSubsystem.getColorState() == allianceColor){
                         switch(tableState){
                         case "NOT FOUND":
                                 //If the limelight does not find the reflective tape we will rotate to attempt to find it. 
@@ -193,7 +192,7 @@ public class DriveSubsystem extends SubsystemBase {
                                 m_rotation = 0.0;
                                 System.out.println("The Limelight State is an invalid value, Valid states are: NOT FOUND, FASTLEFT, FASTRIGHT, SLOWLEFT, SLOWRIGHT, and STOP. The current state is: " + tableState);
                         }
-                }
+                
                 
                         this.drive(
                                 ChassisSpeeds.fromFieldRelativeSpeeds(
