@@ -63,10 +63,10 @@ public class AutonomousBasicMovementCommand extends CommandBase {
           rotationSpeed = -Constants.AutoConstants.BASIC_ROTATION_FAST_SPEED;
       }
       else if(rotationVariance > 10){
-          rotationSpeed = Constants.AutoConstants.BASIC_ROTATION_FAST_SPEED;
+          rotationSpeed = Constants.AutoConstants.BASIC_ROTATION_SLOW_SPEED;
       }
       else if(rotationVariance < -10){
-          rotationSpeed = -Constants.AutoConstants.BASIC_ROTATION_FAST_SPEED;
+          rotationSpeed = -Constants.AutoConstants.BASIC_ROTATION_SLOW_SPEED;
       }
       else{
           rotationIsCorrect = true;
@@ -74,11 +74,10 @@ public class AutonomousBasicMovementCommand extends CommandBase {
       }
       
       m_DriveSubsystem.drive(
-                ChassisSpeeds.fromFieldRelativeSpeeds(
-                        xSpeed,
-                        ySpeed,
-                        rotationSpeed,
-                        m_DriveSubsystem.getGyroscopeRotation()
+                new ChassisSpeeds(
+                        -xSpeed,
+                        -ySpeed,
+                        rotationSpeed * DriveSubsystem.MAX_VELOCITY_METERS_PER_SECOND
                 )
       );
 
