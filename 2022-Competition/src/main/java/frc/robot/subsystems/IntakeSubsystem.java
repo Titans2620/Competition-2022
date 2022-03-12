@@ -73,7 +73,7 @@ public class IntakeSubsystem extends SubsystemBase {
     }
   }
   public void setAutoFeedWheelShoot(double speed){
-    double variance = (m_ShooterSubsystem.getTargetRPM() + 100) - m_ShooterSubsystem.getEncoderValue();
+    double variance = (m_ShooterSubsystem.getTargetRPM() + 50) - m_ShooterSubsystem.getEncoderValue();
     if((m_ColorSensor.getColorState() == "neither") || (m_ShooterSubsystem.getLimelight().getLimelightState() == Constants.LIMELIGHT_STOP && Math.abs(variance) < 100)){
 
       feedWheel.set(speed);

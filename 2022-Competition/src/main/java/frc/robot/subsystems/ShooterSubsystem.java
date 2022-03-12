@@ -135,5 +135,6 @@ public class ShooterSubsystem extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
     SmartDashboard.putNumber("Shooter Encoder", encoder.getVelocity());
+    SmartDashboard.putNumber("Variance", encoder.getVelocity() - rpmSetPoint);
   }
 }

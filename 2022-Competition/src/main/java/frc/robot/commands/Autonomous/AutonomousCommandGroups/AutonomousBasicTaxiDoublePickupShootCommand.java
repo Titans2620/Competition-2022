@@ -19,15 +19,15 @@ import frc.robot.subsystems.ShooterSubsystem;
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class AutonomousBasicTaxiPickupShootCommand extends SequentialCommandGroup {
-  /** Creates a new AutonomousBasicTaxiCommand. */
+public class AutonomousBasicTaxiDoublePickupShootCommand extends SequentialCommandGroup {
+  
   DriveSubsystem m_DriveSubsystem;
   IntakeSubsystem m_IntakeSubsystem;
   ShooterSubsystem m_ShooterSubsystem;
   ArmSubsystem m_ArmSubsystem;
   LimelightSubsystem m_LimelightSubsystem;
-
-  public AutonomousBasicTaxiPickupShootCommand(DriveSubsystem m_DriveSubsystem, IntakeSubsystem m_IntakeSubsystem, ShooterSubsystem m_ShooterSubsystem, ArmSubsystem m_ArmSubsystem, LimelightSubsystem m_LimelightSubsystem, String alliance) {
+  
+  public AutonomousBasicTaxiDoublePickupShootCommand(DriveSubsystem m_DriveSubsystem, IntakeSubsystem m_IntakeSubsystem, ShooterSubsystem m_ShooterSubsystem, ArmSubsystem m_ArmSubsystem, LimelightSubsystem m_LimelightSubsystem, String alliance) {
     
     this.m_DriveSubsystem = m_DriveSubsystem;
     this.m_IntakeSubsystem = m_IntakeSubsystem;
@@ -36,16 +36,26 @@ public class AutonomousBasicTaxiPickupShootCommand extends SequentialCommandGrou
     this.m_LimelightSubsystem = m_LimelightSubsystem;
 
     addCommands(
-        new ParallelCommandGroup(
-            new AutonomousBasicMovementCommand(0, 0.4, 0, 5, m_DriveSubsystem), 
+      new ParallelCommandGroup(
+            new AutonomousBasicMovementCommand(0, 0.4, 0, 4, m_DriveSubsystem), 
             new AutonomousIntakeCommand(2, m_IntakeSubsystem, m_ArmSubsystem)
         ),
         new AutonomousBasicMovementCommand(0, 0, 180, 3, m_DriveSubsystem),
         new ParallelCommandGroup(
+            new AutonomousShootCommand(m_DriveSubsystem, m_IntakeSubsystem, m_ShooterSubsystem, 3, alliance), 
+            new LimelightSearchCommand(m_LimelightSubsystem)
+        ),
+        new AutonomousBasicMovementCommand(0, 0, -120, 3, m_DriveSubsystem),
+        new ParallelCommandGroup(
+          new AutonomousBasicMovementCommand(0, 0.4, 0, 3, m_DriveSubsystem),
+          new AutonomousIntakeCommand(2, m_IntakeSubsystem, m_ArmSubsystem)
+        ),
+        new AutonomousBasicMovementCommand(0, 0, 100, 3, m_DriveSubsystem),
+        new ParallelCommandGroup(
             new AutonomousShootCommand(m_DriveSubsystem, m_IntakeSubsystem, m_ShooterSubsystem, 5, alliance), 
             new LimelightSearchCommand(m_LimelightSubsystem)
         )
-        
+
     );
   }
 }
