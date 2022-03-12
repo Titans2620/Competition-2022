@@ -14,6 +14,7 @@ By default the climb motors will be off and no action will be taken by the subsy
 
   ClimbSubsystem m_ClimbSubsystem = new ClimbSubsystem();
   public ClimbDefaultCommand(ClimbSubsystem m_ClimbSubsystem) {
+    this.m_ClimbSubsystem = m_ClimbSubsystem;
     addRequirements(this.m_ClimbSubsystem);
   }
 
@@ -21,7 +22,9 @@ By default the climb motors will be off and no action will be taken by the subsy
   public void initialize() {}
 
   @Override
-  public void execute() {}
+  public void execute() {
+    m_ClimbSubsystem.stopAll();
+  }
   @Override
   public void end(boolean interrupted) {}
 

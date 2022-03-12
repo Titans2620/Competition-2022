@@ -17,9 +17,11 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.ArmRotateDefaultCommand;
 import frc.robot.commands.ArmRotateIntakeCommand;
 import frc.robot.commands.ArmRotateManualCommand;
+import frc.robot.commands.ClimbCommand;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.commands.ArmRotateCommand;
 import frc.robot.commands.ClimbDefaultCommand;
+import frc.robot.commands.ClimbRotateCommand;
 import frc.robot.commands.DriveDefaultCommand;
 import frc.robot.commands.IntakeDefaultCommand;
 import frc.robot.commands.IntakeInfeedCommand;
@@ -57,7 +59,7 @@ public class RobotContainer {
   private final LimelightSubsystem m_limelightSubsystem = new LimelightSubsystem(getAlliance(), m_ColorSensorSubsystem); 
 
   private final DriveSubsystem m_driveSubsystem = new DriveSubsystem(m_limelightSubsystem, m_ColorSensorSubsystem);
-  //private final ClimbSubsystem m_climbSubsystem = new ClimbSubsystem();
+  // private final ClimbSubsystem m_climbSubsystem = new ClimbSubsystem();
   private final ShooterSubsystem m_ShooterSubsystem = new ShooterSubsystem(m_limelightSubsystem);
   private final IntakeSubsystem m_intakeSubsystem = new IntakeSubsystem(m_ColorSensorSubsystem, getAlliance(), m_ShooterSubsystem);
   private final ArmSubsystem m_ArmSubsystem = new ArmSubsystem(); 
@@ -120,18 +122,38 @@ public class RobotContainer {
 
   private void configureButtonBindings() {
 
+    /////DRIVE CONTROLLER CODE/////
+
     new JoystickButton(m_driveController, 8).whenPressed(()-> m_driveSubsystem.zeroGyroscope());
+   /* 
+   if(!m_driveController.getRawButton(3)){
+      if(!m_driveController.getRawButton(1)){
+        new JoystickButton(m_driveController, 4).whenPressed(new ClimbCommand(m_climbSubsystem, true));
+      }
+      if(m_driveController.getRawButton(4)){
+        new JoystickButton(m_driveController, 1).whenPressed(new ClimbCommand(m_climbSubsystem, false));
+      }
+    }
+    if(!m_driveController.getRawButton(4) && !m_driveController.getRawButton(1)){
+      new JoystickButton(m_driveController, 3).whenHeld(new ClimbRotateCommand(m_climbSubsystem));
+    }
+    */
+    /////OPERATOR CONTROLLER CODE/////
 
     if(manual == "off"){
-      new JoystickButton(m_operatorController, 6).whenHeld(new ParallelCommandGroup(new DriveLimelightCommand(m_driveSubsystem, () -> modifyAxis(m_driveController.getRawAxis(0)) * DriveSubsystem.MAX_VELOCITY_METERS_PER_SECOND, () -> -modifyAxis(m_driveController.getRawAxis(1)) * DriveSubsystem.MAX_VELOCITY_METERS_PER_SECOND, getAlliance(), () -> modifyAxis(m_driveController.getRawAxis(4)) * DriveSubsystem.MAX_VELOCITY_METERS_PER_SECOND),
-        new ShooterShootCommand(m_ShooterSubsystem, m_limelightSubsystem),
-          new LimelightSearchCommand(m_limelightSubsystem),
-            new IntakeShootCommand(m_intakeSubsystem, m_ShooterSubsystem, m_ColorSensorSubsystem, getAlliance())));
+      if(!m_operatorController.getRawButton(6)){
+        new JoystickButton(m_operatorController, 5).whenHeld(new ShooterLowShootCommand(m_ShooterSubsystem, m_ColorSensorSubsystem, m_intakeSubsystem, getAlliance()));
+      }
+      if(!m_operatorController.getRawButton(5)){
+        new JoystickButton(m_operatorController, 6).whenHeld(new ParallelCommandGroup(new DriveLimelightCommand(m_driveSubsystem, () -> modifyAxis(m_driveController.getRawAxis(0)) * DriveSubsystem.MAX_VELOCITY_METERS_PER_SECOND, () -> -modifyAxis(m_driveController.getRawAxis(1)) * DriveSubsystem.MAX_VELOCITY_METERS_PER_SECOND, getAlliance(), () -> modifyAxis(m_driveController.getRawAxis(4)) * DriveSubsystem.MAX_VELOCITY_METERS_PER_SECOND),
+          new ShooterShootCommand(m_ShooterSubsystem, m_limelightSubsystem),
+            new LimelightSearchCommand(m_limelightSubsystem),
+              new IntakeShootCommand(m_intakeSubsystem, m_ShooterSubsystem, m_ColorSensorSubsystem, getAlliance())));
+      }     
       if(!m_operatorController.getRawButton(2) || !m_operatorController.getRawButton(3))
           new JoystickButton(m_operatorController, 1).whenHeld(new ParallelCommandGroup(new IntakeInfeedCommand(m_intakeSubsystem), new ArmRotateIntakeCommand(m_ArmSubsystem)));
       new JoystickButton(m_operatorController, 2).whenHeld(new ArmRotateCommand(m_ArmSubsystem, true));
       new JoystickButton(m_operatorController, 3).whenHeld(new ArmRotateCommand(m_ArmSubsystem, false));
-      new JoystickButton(m_operatorController, 5).whenHeld(new ShooterLowShootCommand(m_ShooterSubsystem, m_ColorSensorSubsystem, getAlliance()));
     }
     else{
 

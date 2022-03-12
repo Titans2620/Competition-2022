@@ -68,8 +68,8 @@ public final class Constants {
     public static final double INTAKEROTATEDOWNSPEED = -.25;
     public static final double FEEDSPEED = .35; //Originally .25
     public static final double SHOOTERSPEED = .72;
-    public static final double LOWGOALSHOOTERSPEEDCORRECT = .4;
-    public static final double LOWGOALSHOOTERSPEEDINCORRECT = .2;
+    public static final double LOWGOALSHOOTERSPEEDCORRECT = .5;
+    public static final double LOWGOALSHOOTERSPEEDINCORRECT = .35;
 
     public static final double LIMELIGHT_SLOW_SPEED = 0.1;
     public static final double LIMELIGHT_FAST_SPEED = 0.25;
@@ -85,6 +85,10 @@ public final class Constants {
     public static final double SHOOTER_MAX_SPEED_PERCENT = 0.785;
     public static final int SHOOTER_MIN_DISTANCE_INCHES = 120;
     public static final int SHOOTER_MAX_DISTANCE_INCHES = 250;
+
+    public static final double UPCLIMBSPEED = .25;
+    public static final double DOWBNCLIMBSPEED = -.25;
+    public static final double PIVOTSPEED = .25;
 
     public static final double BASIC_MOVEMENT_VARIANCE_THRESHOLD = 0.1; 
 

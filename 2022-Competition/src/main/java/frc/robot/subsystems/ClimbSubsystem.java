@@ -29,14 +29,40 @@ public class ClimbSubsystem extends SubsystemBase {
 
   public ClimbSubsystem() {}
 
-  public void climbExtend(){
-
+  public void doubleClimbExtend(double speed){
+    leftClimbExtend.set(speed);
+    rightClimbExtend.set(speed);
   }
 
-  public void climbPivot(){
-
+  public void doubleClimbPivot(double speed){
+    leftClimbPivot.set(speed);
+    rightClimbPivot.set(speed);
   }
 
+  public void singleClimbExtend(double speed, String side){
+    if(side == "left"){
+      leftClimbExtend.set(speed);
+    }
+    else if(side == "right"){
+      rightClimbExtend.set(speed);
+    }
+  }
+
+  public void singleClimbPivot(double speed, String side){
+    if(side == "left"){
+      leftClimbPivot.set(speed);
+    }
+    else if(side == "right"){
+      rightClimbPivot.set(speed);
+    }
+  }
+
+  public void stopAll(){
+    leftClimbExtend.set(0);
+    rightClimbExtend.set(0);
+    leftClimbPivot.set(0);
+    rightClimbPivot.set(0);
+  }
   @Override
   public void periodic() {
 

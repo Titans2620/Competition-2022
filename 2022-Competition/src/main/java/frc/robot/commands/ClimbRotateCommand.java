@@ -8,17 +8,11 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
 import frc.robot.subsystems.ClimbSubsystem;
 
-public class ClimbCommand extends CommandBase {
-  /**********************************************
-    This command will turn on the climber. It just turns on the climb motor unless its hitting its associated limit switch.
-
-    Its based on an input in the constructor. Thats it. 
-  **********************************************/
+public class ClimbRotateCommand extends CommandBase {
+  /** Creates a new ClimbRotateCommand. */
   ClimbSubsystem m_ClimbSubsystem;
-  private boolean directionUp;
-  public ClimbCommand(ClimbSubsystem m_ClimbSubsystem, boolean directionUp) {
+  public ClimbRotateCommand(ClimbSubsystem m_ClimbSubsystem){
     // Use addRequirements() here to declare subsystem dependencies.
-    this.directionUp = directionUp;
     this.m_ClimbSubsystem = m_ClimbSubsystem;
     addRequirements(m_ClimbSubsystem);
   }
@@ -30,14 +24,9 @@ public class ClimbCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if(directionUp){
-      m_ClimbSubsystem.doubleClimbExtend(Constants.UPCLIMBSPEED);
-    }
-    else if(!directionUp){
-      m_ClimbSubsystem.doubleClimbExtend(Constants.DOWBNCLIMBSPEED);
-    }
-    m_ClimbSubsystem.doubleClimbPivot(0);
-  } 
+    m_ClimbSubsystem.doubleClimbPivot(Constants.PIVOTSPEED);
+    m_ClimbSubsystem.doubleClimbExtend(0);
+  }
 
   // Called once the command ends or is interrupted.
   @Override
