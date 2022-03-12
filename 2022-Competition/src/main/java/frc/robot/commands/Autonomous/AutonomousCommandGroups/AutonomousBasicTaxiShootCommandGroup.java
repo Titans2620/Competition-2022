@@ -36,7 +36,7 @@ public class AutonomousBasicTaxiShootCommandGroup extends SequentialCommandGroup
 
 
     addCommands(
-      new AutonomousBasicMovementCommand(0, -0.4, 0, 5, m_DriveSubsystem),
+      new AutonomousBasicMovementCommand(-0.4, 0, 0, 5, m_DriveSubsystem),
       new ParallelCommandGroup(
             new AutonomousShootCommand(m_DriveSubsystem, m_IntakeSubsystem, m_ShooterSubsystem, 5, alliance), 
             new LimelightSearchCommand(m_LimelightSubsystem)

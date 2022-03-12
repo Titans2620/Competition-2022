@@ -37,8 +37,8 @@ public class AutonomousBasicTaxiPickupShootCommand extends SequentialCommandGrou
 
     addCommands(
         new ParallelCommandGroup(
-            new AutonomousBasicMovementCommand(0, 0.4, 0, 5, m_DriveSubsystem), 
-            new AutonomousIntakeCommand(2, m_IntakeSubsystem, m_ArmSubsystem)
+            new AutonomousBasicMovementCommand(0.4, 0, 0, 5, m_DriveSubsystem), 
+            new AutonomousIntakeCommand(5, m_IntakeSubsystem, m_ArmSubsystem)
         ),
         new AutonomousBasicMovementCommand(0, 0, 180, 3, m_DriveSubsystem),
         new ParallelCommandGroup(

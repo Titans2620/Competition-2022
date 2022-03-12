@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.LimelightSearchCommand;
 import frc.robot.commands.Autonomous.AutonomousBasicMovementCommand;
 import frc.robot.commands.Autonomous.AutonomousIntakeCommand;
+import frc.robot.commands.Autonomous.AutonomousLimelightSearchCommand;
 import frc.robot.commands.Autonomous.AutonomousShootCommand;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
@@ -36,24 +37,23 @@ public class AutonomousBasicTaxiDoublePickupShootCommand extends SequentialComma
     this.m_LimelightSubsystem = m_LimelightSubsystem;
 
     addCommands(
-      new ParallelCommandGroup(
-            new AutonomousBasicMovementCommand(0, 0.4, 0, 4, m_DriveSubsystem), 
-            new AutonomousIntakeCommand(2, m_IntakeSubsystem, m_ArmSubsystem)
+      new ParallelCommandGroup(   //4
+            new AutonomousBasicMovementCommand(0.4, 0, 0, 4, m_DriveSubsystem), 
+            new AutonomousIntakeCommand(4, m_IntakeSubsystem, m_ArmSubsystem)
         ),
         new AutonomousBasicMovementCommand(0, 0, 180, 3, m_DriveSubsystem),
         new ParallelCommandGroup(
             new AutonomousShootCommand(m_DriveSubsystem, m_IntakeSubsystem, m_ShooterSubsystem, 3, alliance), 
-            new LimelightSearchCommand(m_LimelightSubsystem)
+            new AutonomousLimelightSearchCommand(m_LimelightSubsystem, 3)
         ),
-        new AutonomousBasicMovementCommand(0, 0, -120, 3, m_DriveSubsystem),
         new ParallelCommandGroup(
-          new AutonomousBasicMovementCommand(0, 0.4, 0, 3, m_DriveSubsystem),
-          new AutonomousIntakeCommand(2, m_IntakeSubsystem, m_ArmSubsystem)
+          new AutonomousBasicMovementCommand(0.4, 0, 100, 3, m_DriveSubsystem),
+          new AutonomousIntakeCommand(3, m_IntakeSubsystem, m_ArmSubsystem)
         ),
-        new AutonomousBasicMovementCommand(0, 0, 100, 3, m_DriveSubsystem),
+        new AutonomousBasicMovementCommand(0, 0, -80, 3, m_DriveSubsystem),
         new ParallelCommandGroup(
             new AutonomousShootCommand(m_DriveSubsystem, m_IntakeSubsystem, m_ShooterSubsystem, 5, alliance), 
-            new LimelightSearchCommand(m_LimelightSubsystem)
+            new AutonomousLimelightSearchCommand(m_LimelightSubsystem, 5)
         )
 
     );
