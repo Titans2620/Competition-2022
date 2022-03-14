@@ -44,7 +44,7 @@ public class DriveLimelightCommand extends CommandBase {
 
   @Override
   public void execute() {
-        m_driveSubsystem.limelightDrive(m_translationXSupplier.getAsDouble(), m_translationYSupplier.getAsDouble(), m_translationZSupplier.getAsDouble(), allianceColor);
+        m_driveSubsystem.limelightDrive( m_translationYSupplier.getAsDouble(), m_translationXSupplier.getAsDouble(), -m_translationZSupplier.getAsDouble(), allianceColor);
 
     }
 
