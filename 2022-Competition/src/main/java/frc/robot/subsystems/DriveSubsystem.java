@@ -4,6 +4,7 @@ import static frc.robot.Constants.*;
 
 import com.ctre.phoenix.sensors.Pigeon2;
 import com.ctre.phoenix.sensors.PigeonIMU;
+import com.pathplanner.lib.PathPlannerTrajectory.PathPlannerState;
 import com.swervedrivespecialties.swervelib.Mk3SwerveModuleHelper;
 import com.swervedrivespecialties.swervelib.SdsModuleConfigurations;
 import com.swervedrivespecialties.swervelib.SwerveModule;
@@ -70,7 +71,7 @@ public class DriveSubsystem extends SubsystemBase {
   private final Pigeon2 m_pigeon = new Pigeon2(DRIVETRAIN_PIGEON_ID);
   
 
-  private final SwerveDriveOdometry odometer = new SwerveDriveOdometry(m_kinematics, getGyroscopeRotation(), new Pose2d(0.0, 0.0, new Rotation2d(270)));
+  private final SwerveDriveOdometry odometer = new SwerveDriveOdometry(m_kinematics, new Rotation2d(0));
 
   // These are our modules. We initialize them in the constructor.
   private final SwerveModule m_frontLeftModule;
@@ -96,7 +97,8 @@ public class DriveSubsystem extends SubsystemBase {
 
         m_backRightModule = Mk3SwerveModuleHelper.createFalcon500(tab.getLayout("Back Right Module", BuiltInLayouts.kList).withSize(2, 4).withPosition(6, 0),Mk3SwerveModuleHelper.GearRatio.STANDARD, BACK_RIGHT_MODULE_DRIVE_MOTOR, BACK_RIGHT_MODULE_STEER_MOTOR, BACK_RIGHT_MODULE_STEER_ENCODER, BACK_RIGHT_MODULE_STEER_OFFSET);
   
-        m_pigeon.setYaw(270);
+        m_pigeon.setYaw(0);
+        resetOdometry(new Pose2d());
 
         this.m_LimeLightSubsystem = m_LimeLightSubsystem;
         this.m_ColorSensorSubsystem = m_ColorSensorSubsystem;
@@ -107,7 +109,7 @@ public class DriveSubsystem extends SubsystemBase {
    * 'forwards' direction.
    */
         public void zeroGyroscope() {
-                m_pigeon.setYaw(270);
+                m_pigeon.setYaw(0);
         }
 
         public Rotation2d getGyroscopeRotation() {
@@ -120,7 +122,7 @@ public class DriveSubsystem extends SubsystemBase {
         }
 
         public double getHeading(){
-                return Math.IEEEremainder(m_pigeon.getYaw(), 270);
+                return Math.IEEEremainder(m_pigeon.getYaw(), 360);
         }
 
         public Rotation2d getRotation2d(){
@@ -140,11 +142,15 @@ public class DriveSubsystem extends SubsystemBase {
         public void setModuleStates(SwerveModuleState[] states){
                 SwerveDriveKinematics.desaturateWheelSpeeds(states, MAX_VELOCITY_METERS_PER_SECOND);
 
-
                 m_frontLeftModule.set(states[0].speedMetersPerSecond / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE, states[0].angle.getRadians());
                 m_frontRightModule.set(states[1].speedMetersPerSecond / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE, states[1].angle.getRadians());
                 m_backLeftModule.set(states[2].speedMetersPerSecond / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE, states[2].angle.getRadians());
                 m_backRightModule.set(states[3].speedMetersPerSecond / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE, states[3].angle.getRadians());
+
+                this.drive(m_kinematics.toChassisSpeeds(states[0], states[1], states[2], states[3]));
+                states = m_kinematics.toSwerveModuleStates(m_chassisSpeeds);
+                odometer.update(getRotation2d(), states);
+
         }
 
         public void drive(ChassisSpeeds chassisSpeeds) {
@@ -198,18 +204,23 @@ public class DriveSubsystem extends SubsystemBase {
                                 ChassisSpeeds.fromFieldRelativeSpeeds(
                                         xSpeed,
                                         ySpeed,
-                                        -m_rotation * DriveSubsystem.MAX_VELOCITY_METERS_PER_SECOND,
+                                        m_rotation * DriveSubsystem.MAX_VELOCITY_METERS_PER_SECOND,
                                         this.getGyroscopeRotation()
                                 )
                         );
                 
                         }
 
+        public void setStartingPose(double xCoordinate, double yCoordinate, double degrees){
+                odometer.resetPosition(new Pose2d(xCoordinate, yCoordinate, new Rotation2d(Math.toRadians(degrees))), new Rotation2d(Math.toRadians(degrees)));
+                m_pigeon.setYaw(degrees);
+        }
         @Override
         public void periodic() {
-                odometer.update(getRotation2d(), m_kinematics.toSwerveModuleStates(m_chassisSpeeds));
                 states = m_kinematics.toSwerveModuleStates(m_chassisSpeeds);
+                odometer.update(getRotation2d(), states);
                 setModuleStates(states);
+                SmartDashboard.putString("Pose", getPose().toString());
     
         }
 }

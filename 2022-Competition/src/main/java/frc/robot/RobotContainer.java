@@ -35,6 +35,7 @@ import frc.robot.commands.ShooterShootCommand;
 import frc.robot.commands.Autonomous.AutonomousCommandGroups.AutonomousBasicTaxiPickupShootCommand;
 import frc.robot.commands.Autonomous.AutonomousCommandGroups.AutonomousBasicTaxiShootCommandGroup;
 import frc.robot.commands.Autonomous.AutonomousCommandGroups.AutonomousBasicTaxiDoublePickupShootCommand;
+import frc.robot.commands.Autonomous.AutonomousCommandGroups.AutonomousPathPlannerTestCommandGroup;
 import frc.robot.commands.DriveLimelightCommand;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
@@ -74,7 +75,8 @@ public class RobotContainer {
   private final AutonomousBasicTaxiPickupShootCommand taxiPickupShoot = new AutonomousBasicTaxiPickupShootCommand(m_driveSubsystem, m_intakeSubsystem, m_ShooterSubsystem, m_ArmSubsystem, m_limelightSubsystem, getAlliance());
   private final AutonomousBasicTaxiShootCommandGroup taxiShoot = new AutonomousBasicTaxiShootCommandGroup(m_driveSubsystem, m_intakeSubsystem, m_ShooterSubsystem, m_ArmSubsystem, m_limelightSubsystem, getAlliance());
   private final AutonomousBasicTaxiDoublePickupShootCommand taxiDoublePickupShoot = new AutonomousBasicTaxiDoublePickupShootCommand(m_driveSubsystem, m_intakeSubsystem, m_ShooterSubsystem, m_ArmSubsystem, m_limelightSubsystem, getAlliance());
-  
+  private final AutonomousPathPlannerTestCommandGroup pathPlannerTest = new AutonomousPathPlannerTestCommandGroup(m_driveSubsystem, m_intakeSubsystem, m_ArmSubsystem, m_ShooterSubsystem, m_limelightSubsystem);
+
   NetworkTableEntry isRedAlliance;
 
   /**
@@ -87,9 +89,9 @@ public class RobotContainer {
 
       m_driveSubsystem.setDefaultCommand(new DriveDefaultCommand( // Drive //
               m_driveSubsystem,
-              () -> modifyAxis(m_driveController.getRawAxis(0)) * DriveSubsystem.MAX_VELOCITY_METERS_PER_SECOND,
               () -> -modifyAxis(m_driveController.getRawAxis(1)) * DriveSubsystem.MAX_VELOCITY_METERS_PER_SECOND,
-              () -> modifyAxis(m_driveController.getRawAxis(4)) * DriveSubsystem.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND,
+              () -> -modifyAxis(m_driveController.getRawAxis(0)) * DriveSubsystem.MAX_VELOCITY_METERS_PER_SECOND,
+              () -> -modifyAxis(m_driveController.getRawAxis(4)) * DriveSubsystem.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND,
               () -> m_driveController.getRawButton(5)
       ));
 
@@ -110,6 +112,7 @@ public class RobotContainer {
       m_chooser.setDefaultOption("Taxi, Pickup, and Shoot", taxiPickupShoot);
       m_chooser.addOption("Taxi and Shoot", taxiShoot);
       m_chooser.addOption("Taxi, Pickup, Shoot, Pickup, Shoot", taxiDoublePickupShoot);
+      m_chooser.addOption("Path PlannerTest", pathPlannerTest);
      
       // Configure the button bindings
       configureButtonBindings();
@@ -123,7 +126,7 @@ public class RobotContainer {
     new JoystickButton(m_driveController, 8).whenPressed(()-> m_driveSubsystem.zeroGyroscope());
 
     if(manual == "off"){
-      new JoystickButton(m_operatorController, 6).whenHeld(new ParallelCommandGroup(new DriveLimelightCommand(m_driveSubsystem, () -> modifyAxis(m_driveController.getRawAxis(0)) * DriveSubsystem.MAX_VELOCITY_METERS_PER_SECOND, () -> -modifyAxis(m_driveController.getRawAxis(1)) * DriveSubsystem.MAX_VELOCITY_METERS_PER_SECOND, getAlliance(), () -> modifyAxis(m_driveController.getRawAxis(4)) * DriveSubsystem.MAX_VELOCITY_METERS_PER_SECOND),
+      new JoystickButton(m_operatorController, 6).whenHeld(new ParallelCommandGroup(new DriveLimelightCommand(m_driveSubsystem, () -> -modifyAxis(m_driveController.getRawAxis(0)) * DriveSubsystem.MAX_VELOCITY_METERS_PER_SECOND, () -> -modifyAxis(m_driveController.getRawAxis(1)) * DriveSubsystem.MAX_VELOCITY_METERS_PER_SECOND, getAlliance(), () -> -modifyAxis(m_driveController.getRawAxis(4)) * DriveSubsystem.MAX_VELOCITY_METERS_PER_SECOND),
         new ShooterShootCommand(m_ShooterSubsystem, m_limelightSubsystem),
           new LimelightSearchCommand(m_limelightSubsystem),
             new IntakeShootCommand(m_intakeSubsystem, m_ShooterSubsystem, m_ColorSensorSubsystem, getAlliance())));
