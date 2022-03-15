@@ -97,6 +97,9 @@ public class IntakeSubsystem extends SubsystemBase {
       return !lineSensor.get();
   }
 
+  public String getColorSensorState(){
+      return m_ColorSensor.getColorState();
+  }
   @Override
   public void periodic() {
       SmartDashboard.putBoolean("Line Sensor", isLineSensorObstructed());

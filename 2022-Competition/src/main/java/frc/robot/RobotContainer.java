@@ -1,5 +1,6 @@
 package frc.robot;
 
+import java.nio.file.Path;
 import java.util.List;
 
 import com.revrobotics.ColorSensorV3;
@@ -36,6 +37,7 @@ import frc.robot.commands.Autonomous.AutonomousCommandGroups.AutonomousBasicTaxi
 import frc.robot.commands.Autonomous.AutonomousCommandGroups.AutonomousBasicTaxiShootCommandGroup;
 import frc.robot.commands.Autonomous.AutonomousCommandGroups.AutonomousBasicTaxiDoublePickupShootCommand;
 import frc.robot.commands.Autonomous.AutonomousCommandGroups.AutonomousPathPlannerTestCommandGroup;
+import frc.robot.commands.Autonomous.AutonomousCommandGroups.PathTest;
 import frc.robot.commands.DriveLimelightCommand;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
@@ -75,7 +77,8 @@ public class RobotContainer {
   private final AutonomousBasicTaxiPickupShootCommand taxiPickupShoot = new AutonomousBasicTaxiPickupShootCommand(m_driveSubsystem, m_intakeSubsystem, m_ShooterSubsystem, m_ArmSubsystem, m_limelightSubsystem, getAlliance());
   private final AutonomousBasicTaxiShootCommandGroup taxiShoot = new AutonomousBasicTaxiShootCommandGroup(m_driveSubsystem, m_intakeSubsystem, m_ShooterSubsystem, m_ArmSubsystem, m_limelightSubsystem, getAlliance());
   private final AutonomousBasicTaxiDoublePickupShootCommand taxiDoublePickupShoot = new AutonomousBasicTaxiDoublePickupShootCommand(m_driveSubsystem, m_intakeSubsystem, m_ShooterSubsystem, m_ArmSubsystem, m_limelightSubsystem, getAlliance());
-  private final AutonomousPathPlannerTestCommandGroup pathPlannerTest = new AutonomousPathPlannerTestCommandGroup(m_driveSubsystem, m_intakeSubsystem, m_ArmSubsystem, m_ShooterSubsystem, m_limelightSubsystem);
+  private final AutonomousPathPlannerTestCommandGroup pathPlannerTest = new AutonomousPathPlannerTestCommandGroup(m_driveSubsystem, m_intakeSubsystem, m_ArmSubsystem, m_ShooterSubsystem, m_limelightSubsystem, getAlliance());
+  private final PathTest pathTest = new PathTest(m_driveSubsystem);
 
   NetworkTableEntry isRedAlliance;
 
@@ -113,6 +116,7 @@ public class RobotContainer {
       m_chooser.addOption("Taxi and Shoot", taxiShoot);
       m_chooser.addOption("Taxi, Pickup, Shoot, Pickup, Shoot", taxiDoublePickupShoot);
       m_chooser.addOption("Path PlannerTest", pathPlannerTest);
+      m_chooser.addOption("PathTest", pathTest);
      
       // Configure the button bindings
       configureButtonBindings();
