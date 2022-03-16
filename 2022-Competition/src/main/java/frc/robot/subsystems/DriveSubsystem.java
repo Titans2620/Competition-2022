@@ -113,8 +113,12 @@ public class DriveSubsystem extends SubsystemBase {
         }
 
         public Rotation2d getGyroscopeRotation() {
-                
-                return Rotation2d.fromDegrees(m_pigeon.getYaw());
+                double angle = m_pigeon.getYaw() + 180;
+                if(angle > 180)
+                        angle -= 360;
+                else if(angle < -180)
+                        angle += 360;
+                return Rotation2d.fromDegrees(angle);
 
         }
 

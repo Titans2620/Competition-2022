@@ -36,7 +36,7 @@ import frc.robot.commands.ShooterShootCommand;
 import frc.robot.commands.Autonomous.AutonomousCommandGroups.AutonomousBasicTaxiPickupShootCommand;
 import frc.robot.commands.Autonomous.AutonomousCommandGroups.AutonomousBasicTaxiShootCommandGroup;
 import frc.robot.commands.Autonomous.AutonomousCommandGroups.AutonomousBasicTaxiDoublePickupShootCommand;
-import frc.robot.commands.Autonomous.AutonomousCommandGroups.AutonomousPathPlannerTestCommandGroup;
+import frc.robot.commands.Autonomous.AutonomousCommandGroups.AutoPathPlanner5Ball;
 import frc.robot.commands.Autonomous.AutonomousCommandGroups.PathTest;
 import frc.robot.commands.DriveLimelightCommand;
 import frc.robot.subsystems.DriveSubsystem;
@@ -77,7 +77,7 @@ public class RobotContainer {
   private final AutonomousBasicTaxiPickupShootCommand taxiPickupShoot = new AutonomousBasicTaxiPickupShootCommand(m_driveSubsystem, m_intakeSubsystem, m_ShooterSubsystem, m_ArmSubsystem, m_limelightSubsystem, getAlliance());
   private final AutonomousBasicTaxiShootCommandGroup taxiShoot = new AutonomousBasicTaxiShootCommandGroup(m_driveSubsystem, m_intakeSubsystem, m_ShooterSubsystem, m_ArmSubsystem, m_limelightSubsystem, getAlliance());
   private final AutonomousBasicTaxiDoublePickupShootCommand taxiDoublePickupShoot = new AutonomousBasicTaxiDoublePickupShootCommand(m_driveSubsystem, m_intakeSubsystem, m_ShooterSubsystem, m_ArmSubsystem, m_limelightSubsystem, getAlliance());
-  private final AutonomousPathPlannerTestCommandGroup pathPlannerTest = new AutonomousPathPlannerTestCommandGroup(m_driveSubsystem, m_intakeSubsystem, m_ArmSubsystem, m_ShooterSubsystem, m_limelightSubsystem, getAlliance());
+  private final AutoPathPlanner5Ball pathPlannerTest = new AutoPathPlanner5Ball(m_driveSubsystem, m_intakeSubsystem, m_ArmSubsystem, m_ShooterSubsystem, m_limelightSubsystem, getAlliance());
   private final PathTest pathTest = new PathTest(m_driveSubsystem);
 
   NetworkTableEntry isRedAlliance;

@@ -55,6 +55,7 @@ public class AutonomousIntakeUntilPickupCommand extends CommandBase {
   @Override
   public void end(boolean interrupted) {
     AutoIntakeTimeout.stop();
+    m_IntakeSubsystem.turnOffMotors();
   }
 
   // Returns true when the command should end.

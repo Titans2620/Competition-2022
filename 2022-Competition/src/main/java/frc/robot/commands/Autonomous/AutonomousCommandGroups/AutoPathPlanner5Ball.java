@@ -33,7 +33,7 @@ import frc.robot.subsystems.ShooterSubsystem;
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class AutonomousPathPlannerTestCommandGroup extends SequentialCommandGroup {
+public class AutoPathPlanner5Ball extends SequentialCommandGroup {
   /** Creates a new AutonomousPathPlannerTestCommandGroup. */
   DriveSubsystem m_driveSubsystem;
   IntakeSubsystem m_IntakeSubsystem;
@@ -42,7 +42,7 @@ public class AutonomousPathPlannerTestCommandGroup extends SequentialCommandGrou
   LimelightSubsystem m_LimelightSubsystem;
   String alliance;
 
-  public AutonomousPathPlannerTestCommandGroup(DriveSubsystem m_driveSubsystem, IntakeSubsystem m_IntakeSubsystem, ArmSubsystem m_ArmSubsystem, ShooterSubsystem m_ShooterSubsystem, LimelightSubsystem m_LimelightSubsystem, String alliance) {
+  public AutoPathPlanner5Ball(DriveSubsystem m_driveSubsystem, IntakeSubsystem m_IntakeSubsystem, ArmSubsystem m_ArmSubsystem, ShooterSubsystem m_ShooterSubsystem, LimelightSubsystem m_LimelightSubsystem, String alliance) {
     this.m_driveSubsystem = m_driveSubsystem;
     this.m_IntakeSubsystem = m_IntakeSubsystem;
     this.m_ArmSubsystem = m_ArmSubsystem;

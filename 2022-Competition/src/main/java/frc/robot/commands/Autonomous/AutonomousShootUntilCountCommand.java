@@ -63,6 +63,9 @@ public class AutonomousShootUntilCountCommand extends CommandBase {
   @Override
   public void end(boolean interrupted) {
       shooterTimeout.stop();
+      m_IntakeSubsystem.turnOffMotors();
+      m_ShooterSubsystem.stopShooter();
+      m_DriveSubsystem.stopModules();
   }
 
   // Returns true when the command should end.
