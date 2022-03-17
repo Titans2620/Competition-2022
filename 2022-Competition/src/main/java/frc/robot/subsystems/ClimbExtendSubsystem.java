@@ -27,7 +27,7 @@ public class ClimbExtendSubsystem extends SubsystemBase {
   public ClimbExtendSubsystem() {}
 
   public void climbExtend(double speed){
-      leftClimbExtend.set(speed);
+      leftClimbExtend.set(speed * 0.90);
       rightClimbExtend.set(-speed);
   }
 
