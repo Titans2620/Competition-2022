@@ -5,20 +5,18 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Constants;
 import frc.robot.subsystems.ClimbExtendSubsystem;
+import frc.robot.subsystems.ClimbPivotSubsystem;
 
-public class ClimbManualCommand extends CommandBase {
-  /**********************************************
-    This command will turn on the climber in manual mode. It just turns on the climb motor and disregards the limit switch
+public class ClimbPivotCommand extends CommandBase {
 
-    Its based on an input in the constructor. Thats it. 
-  **********************************************/
-
-  private boolean directionUp;
-  public ClimbManualCommand(ClimbExtendSubsystem m_ClimbSubsystem, boolean directionUp) {
-    // Use addRequirements() here to declare subsystem dependencies.
-    this.directionUp = directionUp;
-    addRequirements(m_ClimbSubsystem);
+  ClimbPivotSubsystem m_ClimbPivotSubsystem;
+  boolean isforward;
+  public ClimbPivotCommand(ClimbPivotSubsystem m_ClimbPivotSubsystem, boolean isforward) {
+    this.m_ClimbPivotSubsystem = m_ClimbPivotSubsystem;
+    this.isforward = isforward;
+    addRequirements(m_ClimbPivotSubsystem);
   }
 
   // Called when the command is initially scheduled.
@@ -27,7 +25,15 @@ public class ClimbManualCommand extends CommandBase {
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {}
+  public void execute() {
+      if(isforward){
+          m_ClimbPivotSubsystem.pivotClimb(Constants.CLIMB_PIVOT_FORWARD_SPEED);
+      }
+      else{
+          m_ClimbPivotSubsystem.pivotClimb(Constants.CLIMB_PIVOT_BACK_SPEED);
+      }
+    
+  }
 
   // Called once the command ends or is interrupted.
   @Override

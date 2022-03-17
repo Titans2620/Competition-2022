@@ -15,12 +15,17 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.button.POVButton;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.ArmRotateDefaultCommand;
 import frc.robot.commands.ArmRotateIntakeCommand;
 import frc.robot.commands.ArmRotateManualCommand;
+import frc.robot.commands.ClimbExtendCommand;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.commands.ArmRotateCommand;
-import frc.robot.commands.ClimbDefaultCommand;
+import frc.robot.commands.ClimbExtendDefaultCommand;
+import frc.robot.commands.ClimbPivotCommand;
+import frc.robot.commands.ClimbPivotDefaultCommand;
 import frc.robot.commands.DriveDefaultCommand;
 import frc.robot.commands.IntakeDefaultCommand;
 import frc.robot.commands.IntakeInfeedCommand;
@@ -45,7 +50,8 @@ import frc.robot.subsystems.LEDSubsystem;
 import frc.robot.subsystems.LimelightSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.ArmSubsystem;
-import frc.robot.subsystems.ClimbSubsystem;
+import frc.robot.subsystems.ClimbExtendSubsystem;
+import frc.robot.subsystems.ClimbPivotSubsystem;
 import frc.robot.subsystems.ColorSensorSubsystem;
 
 /**
@@ -60,7 +66,8 @@ public class RobotContainer {
   private final LimelightSubsystem m_limelightSubsystem = new LimelightSubsystem(getAlliance(), m_ColorSensorSubsystem); 
 
   private final DriveSubsystem m_driveSubsystem = new DriveSubsystem(m_limelightSubsystem, m_ColorSensorSubsystem);
-  //private final ClimbSubsystem m_climbSubsystem = new ClimbSubsystem();
+  private final ClimbExtendSubsystem m_ClimbExtendSubsystem = new ClimbExtendSubsystem();
+  private final ClimbPivotSubsystem m_ClimbPivotSubsystem = new ClimbPivotSubsystem();
   private final ShooterSubsystem m_ShooterSubsystem = new ShooterSubsystem(m_limelightSubsystem);
   private final IntakeSubsystem m_intakeSubsystem = new IntakeSubsystem(m_ColorSensorSubsystem, getAlliance(), m_ShooterSubsystem);
   private final ArmSubsystem m_ArmSubsystem = new ArmSubsystem(); 
@@ -100,7 +107,8 @@ public class RobotContainer {
 
   
       m_intakeSubsystem.setDefaultCommand(new IntakeDefaultCommand(m_intakeSubsystem));
-      //m_climbSubsystem.setDefaultCommand(new ClimbDefaultCommand(m_climbSubsystem));
+      m_ClimbExtendSubsystem.setDefaultCommand(new ClimbExtendDefaultCommand(m_ClimbExtendSubsystem));
+      m_ClimbPivotSubsystem.setDefaultCommand(new ClimbPivotDefaultCommand(m_ClimbPivotSubsystem));
       m_ShooterSubsystem.setDefaultCommand(new ShooterDefaultCommand(m_ShooterSubsystem));
       m_ArmSubsystem.setDefaultCommand(new ArmRotateDefaultCommand(m_ArmSubsystem, m_intakeSubsystem));
       m_limelightSubsystem.setDefaultCommand(new LimelightDefaultCommand(m_limelightSubsystem));
@@ -139,6 +147,11 @@ public class RobotContainer {
       new JoystickButton(m_operatorController, 2).whenHeld(new ArmRotateCommand(m_ArmSubsystem, true));
       new JoystickButton(m_operatorController, 3).whenHeld(new ArmRotateCommand(m_ArmSubsystem, false));
       new JoystickButton(m_operatorController, 5).whenHeld(new ShooterLowShootCommand(m_ShooterSubsystem, m_ColorSensorSubsystem, getAlliance()));
+      new JoystickButton(m_driveController, 4).whenHeld(new ClimbExtendCommand(m_ClimbExtendSubsystem, true));
+      new JoystickButton(m_driveController, 1).whenHeld(new ClimbExtendCommand(m_ClimbExtendSubsystem, false));
+      new JoystickButton(m_driveController, 3).whenHeld(new ClimbPivotCommand(m_ClimbPivotSubsystem, true));
+      new JoystickButton(m_driveController, 2).whenHeld(new ClimbPivotCommand(m_ClimbPivotSubsystem, false));
+      
     }
     else{
 
