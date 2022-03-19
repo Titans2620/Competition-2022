@@ -35,7 +35,7 @@ public class ShooterSubsystem extends SubsystemBase {
    double kI = -0.000002;
    double kD = 0.000001; 
    double kIz = 0; 
-   double kFF = 0.000195; 
+   double kFF = 0.000191; 
    double kMaxOutput = 1; 
    double kMinOutput = -1;
 
@@ -135,6 +135,5 @@ public class ShooterSubsystem extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
     SmartDashboard.putNumber("Shooter Encoder", encoder.getVelocity());
-    SmartDashboard.putNumber("Variance", encoder.getVelocity() - rpmSetPoint);
   }
 }

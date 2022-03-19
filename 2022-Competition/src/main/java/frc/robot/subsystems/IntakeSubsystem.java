@@ -33,7 +33,7 @@ public class IntakeSubsystem extends SubsystemBase {
   private DigitalInput lineSensor;
   
   Color detectedColor;
-  double IR;
+  double IR, variance;
 
   int red, blue, green;
 
@@ -73,8 +73,8 @@ public class IntakeSubsystem extends SubsystemBase {
     }
   }
   public void setAutoFeedWheelShoot(double speed){
-    double variance = (m_ShooterSubsystem.getTargetRPM() + 50) - m_ShooterSubsystem.getEncoderValue();
-    if((m_ColorSensor.getColorState() == "neither") || (m_ShooterSubsystem.getLimelight().getLimelightState() == Constants.LIMELIGHT_STOP && Math.abs(variance) < 100)){
+    variance = (m_ShooterSubsystem.getTargetRPM() + 75) - m_ShooterSubsystem.getEncoderValue();
+    if((m_ColorSensor.getColorState() == "neither") || (m_ShooterSubsystem.getLimelight().getLimelightState() == Constants.LIMELIGHT_STOP && Math.abs(variance) < 25)){
 
       feedWheel.set(speed);
     }
@@ -101,5 +101,6 @@ public class IntakeSubsystem extends SubsystemBase {
   public void periodic() {
       SmartDashboard.putBoolean("Line Sensor", isLineSensorObstructed());
       SmartDashboard.putNumber("Feed Timer", timer.get());
+      SmartDashboard.putNumber("Variance", variance);
   }
 }
