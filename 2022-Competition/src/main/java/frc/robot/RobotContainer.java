@@ -25,6 +25,7 @@ import frc.robot.commands.ClimbExtendCommand;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.commands.ArmRotateCommand;
 import frc.robot.commands.ClimbExtendDefaultCommand;
+import frc.robot.commands.ClimbExtendSingleCommand;
 import frc.robot.commands.ClimbPivotCommand;
 import frc.robot.commands.ClimbPivotDefaultCommand;
 import frc.robot.commands.DriveDefaultCommand;
@@ -154,12 +155,27 @@ public class RobotContainer {
       new JoystickButton(m_operatorController, 5).whenHeld(new ShooterLowShootCommand(m_ShooterSubsystem, m_IntakeSubsystem));
         //OUTFEED CODE
       new JoystickButton(m_operatorController, 4).whenHeld(new IntakeOutfeedCommand(m_IntakeSubsystem, m_ShooterSubsystem));
+        //CLIMB CODE
+      new Trigger(() -> m_operatorController.getPOV() == 90).whileActiveContinuous(new ClimbPivotCommand(m_ClimbPivotSubsystem, true));
+      new Trigger(() -> m_operatorController.getPOV() == 270).whileActiveContinuous(new ClimbPivotCommand(m_ClimbPivotSubsystem, false));
       //DRIVER CONTROLLER//
+      if(m_driveController.getRawButton(4) && m_driveController.getRawButton(3)){
+        new ClimbExtendCommand(m_ClimbExtendSubsystem, true);
+      }
+      else{
+        new JoystickButton(m_driveController, 3).whenHeld(new ClimbExtendSingleCommand(m_ClimbExtendSubsystem, true, true));
+        new JoystickButton(m_driveController, 4).whenHeld(new ClimbExtendSingleCommand(m_ClimbExtendSubsystem, true, false));
+      }
+      if(m_driveController.getRawButton(1) && m_driveController.getRawButton(2)){
+        new ClimbExtendCommand(m_ClimbExtendSubsystem, false);
+      }
+      else{
+        new JoystickButton(m_driveController, 1).whenHeld(new ClimbExtendSingleCommand(m_ClimbExtendSubsystem, false, true));
+        new JoystickButton(m_driveController, 2).whenHeld(new ClimbExtendSingleCommand(m_ClimbExtendSubsystem, false, false));
+      }
+
       new Trigger(() -> m_driveController.getPOV() == 0).whileActiveContinuous(new ClimbExtendCommand(m_ClimbExtendSubsystem, true));
       new Trigger(() -> m_driveController.getPOV() == 180).whileActiveContinuous(new ClimbExtendCommand(m_ClimbExtendSubsystem, false));
-      new Trigger(() -> m_driveController.getPOV() == 90).whileActiveContinuous(new ClimbPivotCommand(m_ClimbPivotSubsystem, true));
-      new Trigger(() -> m_driveController.getPOV() == 360).whileActiveContinuous(new ClimbPivotCommand(m_ClimbPivotSubsystem, false));
-      
     }
     else{
 
