@@ -10,6 +10,7 @@ import com.pathplanner.lib.commands.PPSwerveControllerCommand;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.commands.Autonomous.AutonomousShootUntilCountCommand;
@@ -38,7 +39,7 @@ public class AutoPathPlannerTaxiShoot extends SequentialCommandGroup {
 
     ProfiledPIDController thetaController = new ProfiledPIDController(AutoConstants.kPThetaController, 0, 0, AutoConstants.kThetaControllerConstraints);
     
-    PathPlannerTrajectory taxiShoot = PathPlanner.loadPath("Taxi Shoot", 4, 2);
+    PathPlannerTrajectory taxiShoot = PathPlanner.loadPath("Taxi Shoot", 1, 1);
 
     PPSwerveControllerCommand taxiShootCommand = new PPSwerveControllerCommand(
       taxiShoot,
@@ -52,6 +53,7 @@ public class AutoPathPlannerTaxiShoot extends SequentialCommandGroup {
     ); 
 
     addCommands(
+      new InstantCommand(() -> this.m_driveSubsystem.setStartingPose(10.5, 4, 165.0)),
       taxiShootCommand,
       new AutonomousShootUntilCountCommand(m_driveSubsystem, m_IntakeSubsystem, m_ShooterSubsystem, 1, 5, alliance)
     );

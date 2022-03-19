@@ -10,6 +10,7 @@ import com.pathplanner.lib.commands.PPSwerveControllerCommand;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants.AutoConstants;
@@ -47,8 +48,8 @@ public class AutoPathPlannerTaxiPickupShoot extends SequentialCommandGroup {
 
     ProfiledPIDController thetaController = new ProfiledPIDController(AutoConstants.kPThetaController, 0, 0, AutoConstants.kThetaControllerConstraints);
     
-    PathPlannerTrajectory taxiPickupShootS1 = PathPlanner.loadPath("Taxi Pickup Shoot Stage 1", 4, 2);
-    PathPlannerTrajectory taxiPickupShootS2 = PathPlanner.loadPath("Taxi Pickup Shoot Stage 2", 4, 2);
+    PathPlannerTrajectory taxiPickupShootS1 = PathPlanner.loadPath("Taxi Pickup Shoot Stage 1", 1, 1);
+    PathPlannerTrajectory taxiPickupShootS2 = PathPlanner.loadPath("Taxi Pickup Shoot Stage 2", 1, 1);
 
     PPSwerveControllerCommand taxiPickupShootS1Command = new PPSwerveControllerCommand(
       taxiPickupShootS1,
@@ -74,7 +75,8 @@ public class AutoPathPlannerTaxiPickupShoot extends SequentialCommandGroup {
 
     
     addCommands(
-        new ParallelCommandGroup(taxiPickupShootS1Command, new AutonomousIntakeUntilPickupCommand(m_IntakeSubsystem, 1, 4)),
+        new InstantCommand(() -> this.m_driveSubsystem.setStartingPose(10.37, 3.12, -45.0)),
+        new ParallelCommandGroup(taxiPickupShootS1Command, new AutonomousIntakeUntilPickupCommand(m_IntakeSubsystem, m_ArmSubsystem, 1, 4)),
         taxiPickupShootS2Command,
         new AutonomousShootUntilCountCommand(m_driveSubsystem, m_IntakeSubsystem, m_ShooterSubsystem, 2, 5, alliance)
     );

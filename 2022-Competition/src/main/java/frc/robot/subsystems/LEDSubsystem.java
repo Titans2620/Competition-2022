@@ -17,19 +17,21 @@ public class LEDSubsystem extends SubsystemBase {
   /** Creates a new LEDSubsystem. */
   public LEDSubsystem() {
     led = new AddressableLED(Constants.LED);
-    ledBuffer = new AddressableLEDBuffer(1);
-    led.setData(ledBuffer);
     led.setLength(Constants.LEDLENGTH);
-    timer.start();
+    ledBuffer = new AddressableLEDBuffer(32);
+    led.setData(ledBuffer);
+    led.start();
   }
 
-  public void setColor(Color color){
-    ledBuffer.setLED(1, color);
-    led.start();
+  public void setColor(){
+    
   }
 
   @Override
   public void periodic() {
-    // This method will be called once per scheduler run
+    for(int i = 0; i < ledBuffer.getLength(); i++){
+      ledBuffer.setRGB(i, 255, 0, 0);
+    }
+    led.setData(ledBuffer);
   }
 }

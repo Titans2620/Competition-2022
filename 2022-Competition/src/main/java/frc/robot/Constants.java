@@ -58,8 +58,8 @@ public final class Constants {
 
     //LEDS//
 
-    public static final int LED = 3;
-    public static final int LEDLENGTH = 200;
+    public static final int LED = 9;
+    public static final int LEDLENGTH = 32;
 
     //SPEEDS//
     public static final double INTAKESPEED = -1.0;
