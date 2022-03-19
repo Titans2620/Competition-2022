@@ -56,6 +56,7 @@ import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ClimbExtendSubsystem;
 import frc.robot.subsystems.ClimbPivotSubsystem;
 import frc.robot.subsystems.ColorSensorSubsystem;
+import frc.robot.Robot;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -128,12 +129,16 @@ public class RobotContainer {
       m_chooser.addOption("Taxi, Pickup, Shoot, Pickup, Shoot", taxiDoublePickupShoot);
       m_chooser.addOption("Path PlannerTest", pathPlannerTest);
       m_chooser.addOption("PathTest", pathTest);
+
+
      
       // Configure the button bindings
       configureButtonBindings();
 
       // Smart Dashboard
       putSmartdashboard();
+
+      //Led Code
   }
 
   private void configureButtonBindings() {
@@ -188,6 +193,7 @@ public class RobotContainer {
       new JoystickButton(m_operatorController, 3).whenHeld(new ArmRotateManualCommand(m_ArmSubsystem, false));
 
     }
+
   }
 
   /**
