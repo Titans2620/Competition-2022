@@ -138,7 +138,8 @@ public class RobotContainer {
     new JoystickButton(m_driveController, 8).whenPressed(()-> m_driveSubsystem.zeroGyroscope());
 
     if(manual == "off"){
-      new JoystickButton(m_operatorController, 6).whenHeld(new ParallelCommandGroup(new DriveLimelightCommand(m_driveSubsystem, () -> -modifyAxis(m_driveController.getRawAxis(0)) * DriveSubsystem.MAX_VELOCITY_METERS_PER_SECOND, () -> -modifyAxis(m_driveController.getRawAxis(1)) * DriveSubsystem.MAX_VELOCITY_METERS_PER_SECOND, getAlliance(), () -> -modifyAxis(m_driveController.getRawAxis(4)) * DriveSubsystem.MAX_VELOCITY_METERS_PER_SECOND),
+      //OPERATOR CONTROLLER//
+      new Trigger(() -> m_operatorController.getRightTriggerAxis() != 0).whenActive(new ParallelCommandGroup(new DriveLimelightCommand(m_driveSubsystem, () -> -modifyAxis(m_driveController.getRawAxis(0)) * DriveSubsystem.MAX_VELOCITY_METERS_PER_SECOND, () -> -modifyAxis(m_driveController.getRawAxis(1)) * DriveSubsystem.MAX_VELOCITY_METERS_PER_SECOND, getAlliance(), () -> -modifyAxis(m_driveController.getRawAxis(4)) * DriveSubsystem.MAX_VELOCITY_METERS_PER_SECOND),
         new ShooterShootCommand(m_ShooterSubsystem, m_limelightSubsystem),
           new LimelightSearchCommand(m_limelightSubsystem),
             new IntakeShootCommand(m_intakeSubsystem, m_ShooterSubsystem, m_ColorSensorSubsystem, getAlliance())));
@@ -146,16 +147,17 @@ public class RobotContainer {
           new JoystickButton(m_operatorController, 1).whenHeld(new ParallelCommandGroup(new IntakeInfeedCommand(m_intakeSubsystem), new ArmRotateIntakeCommand(m_ArmSubsystem)));
       new JoystickButton(m_operatorController, 2).whenHeld(new ArmRotateCommand(m_ArmSubsystem, true));
       new JoystickButton(m_operatorController, 3).whenHeld(new ArmRotateCommand(m_ArmSubsystem, false));
-      new JoystickButton(m_operatorController, 5).whenHeld(new ShooterLowShootCommand(m_ShooterSubsystem, m_ColorSensorSubsystem, getAlliance()));
-      new JoystickButton(m_driveController, 4).whenHeld(new ClimbExtendCommand(m_ClimbExtendSubsystem, true));
-      new JoystickButton(m_driveController, 1).whenHeld(new ClimbExtendCommand(m_ClimbExtendSubsystem, false));
-      new JoystickButton(m_driveController, 3).whenHeld(new ClimbPivotCommand(m_ClimbPivotSubsystem, true));
-      new JoystickButton(m_driveController, 2).whenHeld(new ClimbPivotCommand(m_ClimbPivotSubsystem, false));
+      new Trigger(() -> m_operatorController.getLeftTriggerAxis() != 0).whenActive(new ShooterLowShootCommand(m_ShooterSubsystem, m_ColorSensorSubsystem, getAlliance()));
+      //DRIVER CONTROLLER//
+      new Trigger(() -> m_driveController.getPOV() == 0).whileActiveContinuous(new ClimbExtendCommand(m_ClimbExtendSubsystem, true));
+      new Trigger(() -> m_driveController.getPOV() == 180).whileActiveContinuous(new ClimbExtendCommand(m_ClimbExtendSubsystem, false));
+      new Trigger(() -> m_driveController.getPOV() == 90).whileActiveContinuous(new ClimbPivotCommand(m_ClimbPivotSubsystem, true));
+      new Trigger(() -> m_driveController.getPOV() == 360).whileActiveContinuous(new ClimbPivotCommand(m_ClimbPivotSubsystem, false));
       
     }
     else{
 
-      new JoystickButton(m_operatorController, 6).whenHeld(new ShooterManualShootCommand(m_ShooterSubsystem, m_intakeSubsystem));
+      new Trigger(() -> m_operatorController.getRightTriggerAxis() != 0).whenActive(new ShooterManualShootCommand(m_ShooterSubsystem, m_intakeSubsystem));
       if(!m_operatorController.getRawButton(6)){
         new JoystickButton(m_operatorController, 1).whenHeld(new IntakeManualCommand(m_intakeSubsystem));
       }

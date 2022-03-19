@@ -13,6 +13,7 @@ public class ClimbPivotSubsystem extends SubsystemBase {
   
   PWMTalonSRX climbPivot = new PWMTalonSRX(Constants.PWM_CLIMB_PIVOT);
   
+  
   public ClimbPivotSubsystem() {
 
   }

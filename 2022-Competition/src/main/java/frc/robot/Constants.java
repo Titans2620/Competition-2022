@@ -88,8 +88,8 @@ public final class Constants {
     public static final double CLIMB_DOWN_SPEED = -1;
     public static final double CLIMB_UP_SPEED = 1;
 
-    public static final double CLIMB_PIVOT_FORWARD_SPEED = .25;
-    public static final double CLIMB_PIVOT_BACK_SPEED = -.25;
+    public static final double CLIMB_PIVOT_FORWARD_SPEED = .5;
+    public static final double CLIMB_PIVOT_BACK_SPEED = -.5;
 
     public static final double BASIC_MOVEMENT_VARIANCE_THRESHOLD = 0.1; 
 
