@@ -5,23 +5,26 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.ClimbSubsystem;
+import frc.robot.subsystems.ClimbExtendSubsystem;
 
-public class ClimbDefaultCommand extends CommandBase {
+public class ClimbExtendDefaultCommand extends CommandBase {
 /*******************************************************
 By default the climb motors will be off and no action will be taken by the subsystem.
 *******************************************************/
 
-  ClimbSubsystem m_ClimbSubsystem = new ClimbSubsystem();
-  public ClimbDefaultCommand(ClimbSubsystem m_ClimbSubsystem) {
-    addRequirements(this.m_ClimbSubsystem);
+  ClimbExtendSubsystem m_ClimbExtendSubsystem;
+  public ClimbExtendDefaultCommand(ClimbExtendSubsystem m_ClimbExtendSubsystem) {
+    this.m_ClimbExtendSubsystem = m_ClimbExtendSubsystem;
+    addRequirements(this.m_ClimbExtendSubsystem);
   }
 
   @Override
   public void initialize() {}
 
   @Override
-  public void execute() {}
+  public void execute() {
+    m_ClimbExtendSubsystem.stopMotors();
+  }
   @Override
   public void end(boolean interrupted) {}
 

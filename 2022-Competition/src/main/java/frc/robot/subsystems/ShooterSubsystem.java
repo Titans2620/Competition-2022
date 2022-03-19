@@ -82,10 +82,14 @@ public class ShooterSubsystem extends SubsystemBase {
 
   public void stopShooter(){
     shooter.set(0);
+    m_limelightSubsystem.setLimelightCamMode("Camera");
+    m_limelightSubsystem.setLimelightLED("Off");
   }
 
   public void feedForwardPIDShooter(){
-    
+    m_limelightSubsystem.setLimelightCamMode("Search");
+    m_limelightSubsystem.setLimelightLED("On");
+
     speedBoost = (m_limelightSubsystem.getLimelightDistanceFromGoal() - Constants.SHOOTER_MIN_DISTANCE_INCHES) / (Constants.SHOOTER_MAX_DISTANCE_INCHES - Constants.SHOOTER_MIN_DISTANCE_INCHES);
     percentOfMaxRPM = Constants.SHOOTER_MIN_SPEED_PERCENT + (speedBoost * (Constants.SHOOTER_MAX_SPEED_PERCENT - Constants.SHOOTER_MIN_SPEED_PERCENT));
 

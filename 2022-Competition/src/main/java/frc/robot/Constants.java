@@ -43,11 +43,10 @@ public final class Constants {
     public static final int INTAKE_ROTATE = 14;
     public static final int FEED_WHEEL = 15;
     public static final int SHOOTER_WHEEL = 16;
-    public static final int RIGHT_CLIMB_EXTEND = 17;
-    public static final int LEFT_CLIMB_EXTEND = 18;
+    public static final int LEFT_CLIMB_EXTEND = 17;
+    public static final int RIGHT_CLIMB_EXTEND = 18;
 
-    public static final int PWM_RIGHT_CLIMB_PIVOT = 0;
-    public static final int PWM_LEFT_CLIMB_PIVOT = 1;
+    public static final int PWM_CLIMB_PIVOT = 0;
 
     //Sensors//
 
@@ -86,6 +85,12 @@ public final class Constants {
     public static final int SHOOTER_MIN_DISTANCE_INCHES = 120;
     public static final int SHOOTER_MAX_DISTANCE_INCHES = 250;
 
+    public static final double CLIMB_DOWN_SPEED = -1;
+    public static final double CLIMB_UP_SPEED = 1;
+
+    public static final double CLIMB_PIVOT_FORWARD_SPEED = .5;
+    public static final double CLIMB_PIVOT_BACK_SPEED = -.5;
+
     public static final double BASIC_MOVEMENT_VARIANCE_THRESHOLD = 0.1; 
 
     public static final double WRONG_BALL_AIM_VARIANCE_PIXELS = 15;
@@ -94,10 +99,10 @@ public final class Constants {
         public static final double kMaxSpeedMetersPerSecond = 1.25;
         public static final double kMaxAngularSpeedRadiansPerSecond = (4 * Math.PI) / 10;
         public static final double kMaxAccelerationMetersPerSecondSquared = 3;
-        public static final double kMaxAngularAccelerationRadiansPerSecondSquared = Math.PI / 2;
+        public static final double kMaxAngularAccelerationRadiansPerSecondSquared = Math.PI / 3;
         public static final double kPXController = 1.5;
         public static final double kPYController = 1.5;
-        public static final double kPThetaController = 15;
+        public static final double kPThetaController = 7;
 
         public static final TrapezoidProfile.Constraints kThetaControllerConstraints = //
                 new TrapezoidProfile.Constraints(

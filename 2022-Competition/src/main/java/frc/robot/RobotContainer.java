@@ -1,5 +1,6 @@
 package frc.robot;
 
+import java.nio.file.Path;
 import java.util.List;
 
 import com.revrobotics.ColorSensorV3;
@@ -14,12 +15,17 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.button.POVButton;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.ArmRotateDefaultCommand;
 import frc.robot.commands.ArmRotateIntakeCommand;
 import frc.robot.commands.ArmRotateManualCommand;
+import frc.robot.commands.ClimbExtendCommand;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.commands.ArmRotateCommand;
-import frc.robot.commands.ClimbDefaultCommand;
+import frc.robot.commands.ClimbExtendDefaultCommand;
+import frc.robot.commands.ClimbPivotCommand;
+import frc.robot.commands.ClimbPivotDefaultCommand;
 import frc.robot.commands.DriveDefaultCommand;
 import frc.robot.commands.IntakeDefaultCommand;
 import frc.robot.commands.IntakeInfeedCommand;
@@ -35,7 +41,8 @@ import frc.robot.commands.ShooterShootCommand;
 import frc.robot.commands.Autonomous.AutonomousCommandGroups.AutonomousBasicTaxiPickupShootCommand;
 import frc.robot.commands.Autonomous.AutonomousCommandGroups.AutonomousBasicTaxiShootCommandGroup;
 import frc.robot.commands.Autonomous.AutonomousCommandGroups.AutonomousBasicTaxiDoublePickupShootCommand;
-import frc.robot.commands.Autonomous.AutonomousCommandGroups.AutonomousPathPlannerTestCommandGroup;
+import frc.robot.commands.Autonomous.AutonomousCommandGroups.AutoPathPlanner5Ball;
+import frc.robot.commands.Autonomous.AutonomousCommandGroups.PathTest;
 import frc.robot.commands.DriveLimelightCommand;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
@@ -43,7 +50,8 @@ import frc.robot.subsystems.LEDSubsystem;
 import frc.robot.subsystems.LimelightSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.ArmSubsystem;
-import frc.robot.subsystems.ClimbSubsystem;
+import frc.robot.subsystems.ClimbExtendSubsystem;
+import frc.robot.subsystems.ClimbPivotSubsystem;
 import frc.robot.subsystems.ColorSensorSubsystem;
 
 /**
@@ -58,7 +66,8 @@ public class RobotContainer {
   private final LimelightSubsystem m_limelightSubsystem = new LimelightSubsystem(getAlliance(), m_ColorSensorSubsystem); 
 
   private final DriveSubsystem m_driveSubsystem = new DriveSubsystem(m_limelightSubsystem, m_ColorSensorSubsystem);
-  //private final ClimbSubsystem m_climbSubsystem = new ClimbSubsystem();
+  private final ClimbExtendSubsystem m_ClimbExtendSubsystem = new ClimbExtendSubsystem();
+  private final ClimbPivotSubsystem m_ClimbPivotSubsystem = new ClimbPivotSubsystem();
   private final ShooterSubsystem m_ShooterSubsystem = new ShooterSubsystem(m_limelightSubsystem);
   private final IntakeSubsystem m_intakeSubsystem = new IntakeSubsystem(m_ColorSensorSubsystem, getAlliance(), m_ShooterSubsystem);
   private final ArmSubsystem m_ArmSubsystem = new ArmSubsystem(); 
@@ -75,7 +84,8 @@ public class RobotContainer {
   private final AutonomousBasicTaxiPickupShootCommand taxiPickupShoot = new AutonomousBasicTaxiPickupShootCommand(m_driveSubsystem, m_intakeSubsystem, m_ShooterSubsystem, m_ArmSubsystem, m_limelightSubsystem, getAlliance());
   private final AutonomousBasicTaxiShootCommandGroup taxiShoot = new AutonomousBasicTaxiShootCommandGroup(m_driveSubsystem, m_intakeSubsystem, m_ShooterSubsystem, m_ArmSubsystem, m_limelightSubsystem, getAlliance());
   private final AutonomousBasicTaxiDoublePickupShootCommand taxiDoublePickupShoot = new AutonomousBasicTaxiDoublePickupShootCommand(m_driveSubsystem, m_intakeSubsystem, m_ShooterSubsystem, m_ArmSubsystem, m_limelightSubsystem, getAlliance());
-  private final AutonomousPathPlannerTestCommandGroup pathPlannerTest = new AutonomousPathPlannerTestCommandGroup(m_driveSubsystem, m_intakeSubsystem, m_ArmSubsystem, m_ShooterSubsystem, m_limelightSubsystem);
+  private final AutoPathPlanner5Ball pathPlannerTest = new AutoPathPlanner5Ball(m_driveSubsystem, m_intakeSubsystem, m_ArmSubsystem, m_ShooterSubsystem, m_limelightSubsystem, getAlliance());
+  private final PathTest pathTest = new PathTest(m_driveSubsystem);
 
   NetworkTableEntry isRedAlliance;
 
@@ -97,7 +107,8 @@ public class RobotContainer {
 
   
       m_intakeSubsystem.setDefaultCommand(new IntakeDefaultCommand(m_intakeSubsystem));
-      //m_climbSubsystem.setDefaultCommand(new ClimbDefaultCommand(m_climbSubsystem));
+      m_ClimbExtendSubsystem.setDefaultCommand(new ClimbExtendDefaultCommand(m_ClimbExtendSubsystem));
+      m_ClimbPivotSubsystem.setDefaultCommand(new ClimbPivotDefaultCommand(m_ClimbPivotSubsystem));
       m_ShooterSubsystem.setDefaultCommand(new ShooterDefaultCommand(m_ShooterSubsystem));
       m_ArmSubsystem.setDefaultCommand(new ArmRotateDefaultCommand(m_ArmSubsystem, m_intakeSubsystem));
       m_limelightSubsystem.setDefaultCommand(new LimelightDefaultCommand(m_limelightSubsystem));
@@ -113,6 +124,7 @@ public class RobotContainer {
       m_chooser.addOption("Taxi and Shoot", taxiShoot);
       m_chooser.addOption("Taxi, Pickup, Shoot, Pickup, Shoot", taxiDoublePickupShoot);
       m_chooser.addOption("Path PlannerTest", pathPlannerTest);
+      m_chooser.addOption("PathTest", pathTest);
      
       // Configure the button bindings
       configureButtonBindings();
@@ -126,7 +138,8 @@ public class RobotContainer {
     new JoystickButton(m_driveController, 8).whenPressed(()-> m_driveSubsystem.zeroGyroscope());
 
     if(manual == "off"){
-      new JoystickButton(m_operatorController, 6).whenHeld(new ParallelCommandGroup(new DriveLimelightCommand(m_driveSubsystem, () -> -modifyAxis(m_driveController.getRawAxis(0)) * DriveSubsystem.MAX_VELOCITY_METERS_PER_SECOND, () -> -modifyAxis(m_driveController.getRawAxis(1)) * DriveSubsystem.MAX_VELOCITY_METERS_PER_SECOND, getAlliance(), () -> -modifyAxis(m_driveController.getRawAxis(4)) * DriveSubsystem.MAX_VELOCITY_METERS_PER_SECOND),
+      //OPERATOR CONTROLLER//
+      new Trigger(() -> m_operatorController.getRightTriggerAxis() != 0).whenActive(new ParallelCommandGroup(new DriveLimelightCommand(m_driveSubsystem, () -> -modifyAxis(m_driveController.getRawAxis(0)) * DriveSubsystem.MAX_VELOCITY_METERS_PER_SECOND, () -> -modifyAxis(m_driveController.getRawAxis(1)) * DriveSubsystem.MAX_VELOCITY_METERS_PER_SECOND, getAlliance(), () -> -modifyAxis(m_driveController.getRawAxis(4)) * DriveSubsystem.MAX_VELOCITY_METERS_PER_SECOND),
         new ShooterShootCommand(m_ShooterSubsystem, m_limelightSubsystem),
           new LimelightSearchCommand(m_limelightSubsystem),
             new IntakeShootCommand(m_intakeSubsystem, m_ShooterSubsystem, m_ColorSensorSubsystem, getAlliance())));
@@ -134,11 +147,17 @@ public class RobotContainer {
           new JoystickButton(m_operatorController, 1).whenHeld(new ParallelCommandGroup(new IntakeInfeedCommand(m_intakeSubsystem), new ArmRotateIntakeCommand(m_ArmSubsystem)));
       new JoystickButton(m_operatorController, 2).whenHeld(new ArmRotateCommand(m_ArmSubsystem, true));
       new JoystickButton(m_operatorController, 3).whenHeld(new ArmRotateCommand(m_ArmSubsystem, false));
-      new JoystickButton(m_operatorController, 5).whenHeld(new ShooterLowShootCommand(m_ShooterSubsystem, m_ColorSensorSubsystem, getAlliance()));
+      new Trigger(() -> m_operatorController.getLeftTriggerAxis() != 0).whenActive(new ShooterLowShootCommand(m_ShooterSubsystem, m_ColorSensorSubsystem, getAlliance()));
+      //DRIVER CONTROLLER//
+      new Trigger(() -> m_driveController.getPOV() == 0).whileActiveContinuous(new ClimbExtendCommand(m_ClimbExtendSubsystem, true));
+      new Trigger(() -> m_driveController.getPOV() == 180).whileActiveContinuous(new ClimbExtendCommand(m_ClimbExtendSubsystem, false));
+      new Trigger(() -> m_driveController.getPOV() == 90).whileActiveContinuous(new ClimbPivotCommand(m_ClimbPivotSubsystem, true));
+      new Trigger(() -> m_driveController.getPOV() == 360).whileActiveContinuous(new ClimbPivotCommand(m_ClimbPivotSubsystem, false));
+      
     }
     else{
 
-      new JoystickButton(m_operatorController, 6).whenHeld(new ShooterManualShootCommand(m_ShooterSubsystem, m_intakeSubsystem));
+      new Trigger(() -> m_operatorController.getRightTriggerAxis() != 0).whenActive(new ShooterManualShootCommand(m_ShooterSubsystem, m_intakeSubsystem));
       if(!m_operatorController.getRawButton(6)){
         new JoystickButton(m_operatorController, 1).whenHeld(new IntakeManualCommand(m_intakeSubsystem));
       }
