@@ -9,19 +9,20 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
 import frc.robot.subsystems.ColorSensorSubsystem;
+import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 
 public class ShooterLowShootCommand extends CommandBase {
   /** Creates a new ShooterLowShootCommand. */
   ShooterSubsystem m_ShooterSubsystem;
-  ColorSensorSubsystem m_ColorSensorSubsystem;
+  IntakeSubsystem m_IntakeSubsystem;
   Timer timer;
 
   String alliance;
-  public ShooterLowShootCommand(ShooterSubsystem m_ShooterSubsystem, ColorSensorSubsystem m_ColorSensorSubsystem, String alliance) {
-      this.m_ColorSensorSubsystem = m_ColorSensorSubsystem;
+  public ShooterLowShootCommand(ShooterSubsystem m_ShooterSubsystem, IntakeSubsystem m_IntakeSubsystem) {
       this.m_ShooterSubsystem = m_ShooterSubsystem;
-      addRequirements(m_ShooterSubsystem);
+      this.m_IntakeSubsystem = m_IntakeSubsystem;
+      addRequirements(m_ShooterSubsystem, m_IntakeSubsystem);
       timer = new Timer();
   }
 
@@ -29,19 +30,19 @@ public class ShooterLowShootCommand extends CommandBase {
   @Override
   public void initialize() {
     timer.start();
+    timer.reset();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-      if(m_ColorSensorSubsystem.getColorState() == alliance){
-        if(timer.get() < 2){
-          m_ShooterSubsystem.setShooterLow(Constants.LOWGOALSHOOTERSPEEDCORRECT);
-        }
-      }
-      else{
-          m_ShooterSubsystem.setShooterLow(Constants.LOWGOALSHOOTERSPEEDCORRECT);
-      }
+    if(timer.get() < 2){
+      m_ShooterSubsystem.setShooterLow(Constants.LOWGOALSHOOTERSPEED);
+    }
+    else{
+      m_ShooterSubsystem.setShooter(Constants.LOWGOALSHOOTERSPEED);
+        m_IntakeSubsystem.setFeedWheel(Constants.FEEDSPEED);
+    }
   }
 
   // Called once the command ends or is interrupted.

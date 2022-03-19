@@ -8,18 +8,19 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.util.Color;
-
 public class LEDSubsystem extends SubsystemBase {
   AddressableLED led;
   AddressableLEDBuffer ledBuffer;
+  Timer timer;
   /** Creates a new LEDSubsystem. */
   public LEDSubsystem() {
     led = new AddressableLED(Constants.LED);
     ledBuffer = new AddressableLEDBuffer(1);
     led.setData(ledBuffer);
     led.setLength(Constants.LEDLENGTH);
-    setColor(Color.kRed);
+    timer.start();
   }
 
   public void setColor(Color color){

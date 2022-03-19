@@ -112,15 +112,9 @@ public class ShooterSubsystem extends SubsystemBase {
       shooterPIDController.setOutputRange(min, max); 
       kMinOutput = min; kMaxOutput = max; 
     }
-
-    if(m_limelightSubsystem.getLimelightDistanceFromGoal() > Constants.SHOOTER_MIN_DISTANCE_INCHES && m_limelightSubsystem.getLimelightDistanceFromGoal() < Constants.SHOOTER_MAX_DISTANCE_INCHES){
-        
         rpmSetPoint = percentOfMaxRPM * Constants.SHOOTER_MAX_RPM;
         shooterPIDController.setReference(rpmSetPoint, CANSparkMax.ControlType.kVelocity);
-    }
-    else{
-        stopShooter();
-    }
+    
     SmartDashboard.putNumber("Target RPM", rpmSetPoint);
   }
 
