@@ -26,14 +26,18 @@ public class ColorSensorSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-      //this.red = m_colorSensor.getRed();
-      //this.blue = m_colorSensor.getBlue();
-      //this.green = m_colorSensor.getGreen();
       updateColor();
-      //SmartDashboard.putString("Color", colorState);
+      
+      SmartDashboard.putString("Color", colorState);
+      SmartDashboard.putNumber("red", red);
+      SmartDashboard.putNumber("blue", blue);
+      SmartDashboard.putNumber("green", green);
   }
 
   public void updateColor(){
+    this.red = m_colorSensor.getRed();
+    this.blue = m_colorSensor.getBlue();
+    this.green = m_colorSensor.getGreen();
     if(red > blue && green > 600 ){
       colorState = "red";
     }

@@ -36,8 +36,8 @@ public class DriveDefaultCommand extends CommandBase {
         if(!fieldOrientation.getAsBoolean()){
             m_driveSubsystem.drive(
                 ChassisSpeeds.fromFieldRelativeSpeeds(
-                        m_translationXSupplier.getAsDouble(),
-                        m_translationYSupplier.getAsDouble(),
+                        -m_translationXSupplier.getAsDouble(),
+                        -m_translationYSupplier.getAsDouble(),
                         m_rotationSupplier.getAsDouble(),
                         m_driveSubsystem.getGyroscopeRotation()
                         
