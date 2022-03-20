@@ -103,6 +103,6 @@ public class IntakeSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
       SmartDashboard.putBoolean("Line Sensor", isLineSensorObstructed());
-      SmartDashboard.putNumber("Feed Timer", timer.get());
+      //SmartDashboard.putNumber("Feed Timer", timer.get());
   }
 }

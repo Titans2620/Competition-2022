@@ -55,11 +55,11 @@ public class AutoPathPlanner5Ball extends SequentialCommandGroup {
 
     ProfiledPIDController thetaController = new ProfiledPIDController(AutoConstants.kPThetaController, 0, 0, AutoConstants.kThetaControllerConstraints);
     
-    PathPlannerTrajectory red5BallS1 = PathPlanner.loadPath("Five Ball Stage 1", 1, 1);
-    PathPlannerTrajectory red5BallS2 = PathPlanner.loadPath("Five Ball Stage 2", 1, 1);
-    PathPlannerTrajectory red5BallS3 = PathPlanner.loadPath("Five Ball Stage 3", 1, 1);
-    PathPlannerTrajectory red5BallS4 = PathPlanner.loadPath("Five Ball Stage 4", 1, 1);
-    PathPlannerTrajectory red5BallS5 = PathPlanner.loadPath("Five Ball Stage 5", 1, 1);
+    PathPlannerTrajectory red5BallS1 = PathPlanner.loadPath("Five Ball Stage 1", 2, 1);
+    PathPlannerTrajectory red5BallS2 = PathPlanner.loadPath("Five Ball Stage 2", 5, 3);
+    PathPlannerTrajectory red5BallS3 = PathPlanner.loadPath("Five Ball Stage 3", 5, 3);
+    PathPlannerTrajectory red5BallS4 = PathPlanner.loadPath("Five Ball Stage 4", 5, 3);
+    PathPlannerTrajectory red5BallS5 = PathPlanner.loadPath("Five Ball Stage 5", 5, 3);
 
     PPSwerveControllerCommand red5BallS1Command = new PPSwerveControllerCommand(
         red5BallS1,
@@ -117,16 +117,16 @@ public class AutoPathPlanner5Ball extends SequentialCommandGroup {
     );
 
     addCommands(
-      new InstantCommand(() -> this.m_driveSubsystem.setStartingPose(8.92, 6.30, 90.00)), //Intialize 
+      new InstantCommand(() -> this.m_driveSubsystem.setStartingPose(9.70, 5.67, 26.57)), //Intialize 
       new ParallelCommandGroup(red5BallS1Command, new AutonomousIntakeCommand(2, m_IntakeSubsystem, m_ArmSubsystem)), //Drive up to first ball with intake on
-      new AutonomousIntakeUntilPickupCommand(m_IntakeSubsystem, m_ArmSubsystem, 1, 2), //Run intake until ball enters
+      //new AutonomousIntakeUntilPickupCommand(m_IntakeSubsystem, m_ArmSubsystem, 1, 2), //Run intake until ball enters
       red5BallS2Command, //Move and turn into shooting position
       new ParallelCommandGroup( //Shoot first two balls
-            new AutonomousShootUntilCountCommand(m_driveSubsystem, m_IntakeSubsystem, m_ShooterSubsystem, 2, 2, alliance), //Shoot until two balls have shot
-            new AutonomousLimelightSearchCommand(m_LimelightSubsystem, 2)
+            new AutonomousShootUntilCountCommand(m_driveSubsystem, m_IntakeSubsystem, m_ShooterSubsystem, 2, 3, alliance), //Shoot until two balls have shot
+            new AutonomousLimelightSearchCommand(m_LimelightSubsystem, 3)
       ),
-      new ParallelCommandGroup(red5BallS3Command, new AutonomousIntakeCommand(1, m_IntakeSubsystem, m_ArmSubsystem)), //Grab 3rd ball
-      new AutonomousIntakeUntilPickupCommand(m_IntakeSubsystem, m_ArmSubsystem, 1, 2), //Run intake until ball enters
+      new ParallelCommandGroup(red5BallS3Command, new AutonomousIntakeCommand(4, m_IntakeSubsystem, m_ArmSubsystem)), //Grab 3rd ball
+      //new AutonomousIntakeUntilPickupCommand(m_IntakeSubsystem, m_ArmSubsystem, 1, 2), //Run intake until ball enters
       new ParallelCommandGroup( //Shoot until ball is gone
         new AutonomousShootUntilCountCommand(m_driveSubsystem, m_IntakeSubsystem, m_ShooterSubsystem, 1, 2, alliance), //Shoot until a ball has shot
         new AutonomousLimelightSearchCommand(m_LimelightSubsystem, 2)
