@@ -6,9 +6,12 @@ package frc.robot.subsystems;
 
 import com.revrobotics.ColorSensorV3;
 
+
 import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.PicoColorSensor;
+import frc.robot.PicoColorSensor.RawColor;
 
 public class ColorSensorSubsystem extends SubsystemBase {
   private final I2C.Port i2cPort = I2C.Port.kOnboard;
@@ -18,6 +21,8 @@ public class ColorSensorSubsystem extends SubsystemBase {
   int blue;
   int green;
   String colorState;
+  //PicoColorSensor picoColor = new PicoColorSensor();
+  //RawColor picoRawColor;
   /** Creates a new ColorSensor. */
   public ColorSensorSubsystem() {
   
@@ -27,11 +32,10 @@ public class ColorSensorSubsystem extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
       updateColor();
+
+      //picoRawColor = picoColor.getRawColor0();
       
-      SmartDashboard.putString("Color", colorState);
-      SmartDashboard.putNumber("red", red);
-      SmartDashboard.putNumber("blue", blue);
-      SmartDashboard.putNumber("green", green);
+      SmartDashboard.putString("Color Sensor: ", colorState);
   }
 
   public void updateColor(){
