@@ -55,11 +55,11 @@ public class AutoPathPlanner5Ball extends SequentialCommandGroup {
 
     ProfiledPIDController thetaController = new ProfiledPIDController(AutoConstants.kPThetaController, 0, 0, AutoConstants.kThetaControllerConstraints);
     
-    PathPlannerTrajectory red5BallS1 = PathPlanner.loadPath("Red 5 Ball Stage 1", 4, 2);
-    PathPlannerTrajectory red5BallS2 = PathPlanner.loadPath("Red 5 Ball Stage 2", 4, 2);
-    PathPlannerTrajectory red5BallS3 = PathPlanner.loadPath("Red 5 Ball Stage 3", 4, 2);
-    PathPlannerTrajectory red5BallS4 = PathPlanner.loadPath("Red 5 Ball Stage 4", 4, 2);
-    PathPlannerTrajectory red5BallS5 = PathPlanner.loadPath("Red 5 Ball Stage 5", 4, 2);
+    PathPlannerTrajectory red5BallS1 = PathPlanner.loadPath("Five Ball Stage 1", 1, 1);
+    PathPlannerTrajectory red5BallS2 = PathPlanner.loadPath("Five Ball Stage 2", 1, 1);
+    PathPlannerTrajectory red5BallS3 = PathPlanner.loadPath("Five Ball Stage 3", 1, 1);
+    PathPlannerTrajectory red5BallS4 = PathPlanner.loadPath("Five Ball Stage 4", 1, 1);
+    PathPlannerTrajectory red5BallS5 = PathPlanner.loadPath("Five Ball Stage 5", 1, 1);
 
     PPSwerveControllerCommand red5BallS1Command = new PPSwerveControllerCommand(
         red5BallS1,
