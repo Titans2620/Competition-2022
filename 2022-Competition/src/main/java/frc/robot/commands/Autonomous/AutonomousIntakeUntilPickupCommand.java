@@ -7,12 +7,14 @@ package frc.robot.commands.Autonomous;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
+import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ColorSensorSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 
 public class AutonomousIntakeUntilPickupCommand extends CommandBase {
   /** Creates a new AutonomousIntakeUntilPickupCommand. */
   IntakeSubsystem m_IntakeSubsystem;
+  ArmSubsystem m_ArmSubsystem;
   ColorSensorSubsystem m_ColorSensorSubsystem;
 
   int currentCount, goalCount;
@@ -20,11 +22,12 @@ public class AutonomousIntakeUntilPickupCommand extends CommandBase {
   Timer AutoIntakeTimeout = new Timer();
   Boolean ballClear = true;
 
-  public AutonomousIntakeUntilPickupCommand(IntakeSubsystem m_IntakeSubsystem, int goalCount, double duration) {
+  public AutonomousIntakeUntilPickupCommand(IntakeSubsystem m_IntakeSubsystem, ArmSubsystem m_ArmSubsystem, int goalCount, double duration) {
       this.m_IntakeSubsystem = m_IntakeSubsystem;
+      this.m_ArmSubsystem = m_ArmSubsystem;
       this.goalCount = goalCount;
       this.duration = duration;
-      addRequirements(m_IntakeSubsystem);
+      addRequirements(m_IntakeSubsystem, m_ArmSubsystem);
   }
 
   // Called when the command is initially scheduled.
@@ -38,6 +41,8 @@ public class AutonomousIntakeUntilPickupCommand extends CommandBase {
   public void execute() {
 
       m_IntakeSubsystem.setAutoFeedWheel(Constants.FEEDSPEED);
+      m_IntakeSubsystem.setIntakeRoller(Constants.INTAKESPEED);
+      m_ArmSubsystem.rotateArm(Constants.INTAKEROTATEDOWNSPEED);
       if(m_IntakeSubsystem.isLineSensorObstructed()){
         if(ballClear){
           currentCount++;

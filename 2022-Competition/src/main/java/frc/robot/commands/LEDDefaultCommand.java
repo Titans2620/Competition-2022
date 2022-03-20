@@ -4,18 +4,18 @@
 
 package frc.robot.commands;
 
+import java.awt.Color;
+
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.LimelightSubsystem;
+import frc.robot.subsystems.LEDSubsystem;
 
-public class LimelightDefaultCommand extends CommandBase {
+public class LEDDefaultCommand extends CommandBase {
+  /** Creates a new LEDDefaultCommand. */
+  LEDSubsystem m_LedSubsystem;
 
-  LimelightSubsystem m_limelightSubsystem;
-  /** Creates a new LimelightDefaultCommand. */
-  public LimelightDefaultCommand(LimelightSubsystem limelightSubsystem) {
-    m_limelightSubsystem = limelightSubsystem;
-
-    addRequirements(limelightSubsystem);
-    // Use addRequirements() here to declare subsystem dependencies.
+  public LEDDefaultCommand(LEDSubsystem m_LedSubsystem) {
+      this.m_LedSubsystem = m_LedSubsystem;
+      addRequirements(m_LedSubsystem);
   }
 
   // Called when the command is initially scheduled.
@@ -25,6 +25,7 @@ public class LimelightDefaultCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    m_LedSubsystem.setColor();
   }
 
   // Called once the command ends or is interrupted.

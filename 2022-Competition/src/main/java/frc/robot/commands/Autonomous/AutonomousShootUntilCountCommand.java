@@ -40,6 +40,7 @@ public class AutonomousShootUntilCountCommand extends CommandBase {
   @Override
   public void initialize() {
       shooterTimeout.start();
+      System.out.println("Shoot Command Start");
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -66,6 +67,7 @@ public class AutonomousShootUntilCountCommand extends CommandBase {
       m_IntakeSubsystem.turnOffMotors();
       m_ShooterSubsystem.stopShooter();
       m_DriveSubsystem.stopModules();
+      System.out.println("Shoot Command end");
   }
 
   // Returns true when the command should end.
