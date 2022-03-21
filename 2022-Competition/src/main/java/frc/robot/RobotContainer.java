@@ -128,7 +128,7 @@ public class RobotContainer {
 
       manual = m_manualChooser.getSelected();
 
-
+      
       m_chooser.setDefaultOption("Taxi, Pickup, and Shoot", taxiPickupShoot);
       m_chooser.addOption("Taxi and Shoot", taxiShoot);
       m_chooser.addOption("Taxi, Pickup, Shoot, Pickup, Shoot", taxiDoublePickupShoot);
