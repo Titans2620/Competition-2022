@@ -208,8 +208,8 @@ public class DriveSubsystem extends SubsystemBase {
                 
                         this.drive(
                                 ChassisSpeeds.fromFieldRelativeSpeeds(
-                                        xSpeed,
-                                        ySpeed,
+                                        -xSpeed,
+                                        -ySpeed,
                                         m_rotation * DriveSubsystem.MAX_VELOCITY_METERS_PER_SECOND,
                                         this.getGyroscopeRotation()
                                 )

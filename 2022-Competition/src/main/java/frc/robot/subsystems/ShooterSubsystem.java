@@ -98,7 +98,7 @@ public class ShooterSubsystem extends SubsystemBase {
     //double i = SmartDashboard.getNumber("I Gain", 0);
     //double d = SmartDashboard.getNumber("D Gain", 0);
     //double iz = SmartDashboard.getNumber("I Zone", 0);
-    //double ff = SmartDashboard.getNumber("Feed Forward", 0);
+    double ff = SmartDashboard.getNumber("Feed Forward", 0);
     //double max = SmartDashboard.getNumber("Max Output", 0);
     //double min = SmartDashboard.getNumber("Min Output", 0);
 
@@ -108,7 +108,9 @@ public class ShooterSubsystem extends SubsystemBase {
     if((i != kI)) { shooterPIDController.setI(i); kI = i; }
     if((d != kD)) { shooterPIDController.setD(d); kD = d; }
     if((iz != kIz)) { shooterPIDController.setIZone(iz); kIz = iz; }
+    */
     if((ff != kFF)) { shooterPIDController.setFF(ff); kFF = ff; }
+    /*
     if((max != kMaxOutput) || (min != kMinOutput)) { 
       shooterPIDController.setOutputRange(min, max); 
       kMinOutput = min; kMaxOutput = max; 
@@ -135,6 +137,6 @@ public class ShooterSubsystem extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
     //SmartDashboard.putNumber("Shooter Encoder", encoder.getVelocity());
-    //SmartDashboard.putNumber("Variance", encoder.getVelocity() - rpmSetPoint);
+    SmartDashboard.putNumber("Variance", encoder.getVelocity() - rpmSetPoint);
   }
 }
