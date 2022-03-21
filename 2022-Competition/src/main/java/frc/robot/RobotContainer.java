@@ -124,6 +124,7 @@ public class RobotContainer {
 
       manual = m_manualChooser.getSelected();
 
+
       m_chooser.addOption("PathPlanner 5 Ball", autoPathPlanner5Ball);
       m_chooser.addOption("PathPlanner 4 Ball", autoPathPlanner4Ball);
       m_chooser.addOption("PathPlanner Taxi Shoot", autoPathPlannerTaxiShoot);
