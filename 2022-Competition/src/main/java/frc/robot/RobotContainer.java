@@ -45,6 +45,7 @@ import frc.robot.commands.ShooterShootCommand;
 import frc.robot.commands.Autonomous.AutonomousCommandGroups.AutonomousBasicTaxiPickupShootCommand;
 import frc.robot.commands.Autonomous.AutonomousCommandGroups.AutonomousBasicTaxiShootCommandGroup;
 import frc.robot.commands.Autonomous.AutonomousCommandGroups.AutonomousBasicTaxiDoublePickupShootCommand;
+import frc.robot.commands.Autonomous.AutonomousCommandGroups.AutoPathPlanner4Ball;
 import frc.robot.commands.Autonomous.AutonomousCommandGroups.AutoPathPlanner5Ball;
 import frc.robot.commands.Autonomous.AutonomousCommandGroups.AutoPathPlannerTaxiPickupShoot;
 import frc.robot.commands.Autonomous.AutonomousCommandGroups.AutoPathPlannerTaxiShoot;
@@ -88,13 +89,10 @@ public class RobotContainer {
 
   SendableChooser<String> m_manualChooser = new SendableChooser<>();
 
-  private final AutonomousBasicTaxiPickupShootCommand taxiPickupShoot = new AutonomousBasicTaxiPickupShootCommand(m_driveSubsystem, m_IntakeSubsystem, m_ShooterSubsystem, m_ArmSubsystem, m_limelightSubsystem, getAlliance());
-  private final AutonomousBasicTaxiShootCommandGroup taxiShoot = new AutonomousBasicTaxiShootCommandGroup(m_driveSubsystem, m_IntakeSubsystem, m_ShooterSubsystem, m_ArmSubsystem, m_limelightSubsystem, getAlliance());
-  private final AutonomousBasicTaxiDoublePickupShootCommand taxiDoublePickupShoot = new AutonomousBasicTaxiDoublePickupShootCommand(m_driveSubsystem, m_IntakeSubsystem, m_ShooterSubsystem, m_ArmSubsystem, m_limelightSubsystem, getAlliance());
   private final AutoPathPlanner5Ball autoPathPlanner5Ball = new AutoPathPlanner5Ball(m_driveSubsystem, m_IntakeSubsystem, m_ArmSubsystem, m_ShooterSubsystem, m_limelightSubsystem, getAlliance());
   private final AutoPathPlannerTaxiShoot autoPathPlannerTaxiShoot = new AutoPathPlannerTaxiShoot(m_driveSubsystem, m_ShooterSubsystem, m_IntakeSubsystem, getAlliance());
   private final AutoPathPlannerTaxiPickupShoot autoPathPlannerTaxiPickupShoot = new AutoPathPlannerTaxiPickupShoot(m_driveSubsystem, m_IntakeSubsystem, m_ArmSubsystem, m_ShooterSubsystem, m_limelightSubsystem, getAlliance());
-  private final PathTest pathTest = new PathTest(m_driveSubsystem);
+  private final AutoPathPlanner4Ball autoPathPlanner4Ball = new AutoPathPlanner4Ball(m_driveSubsystem, m_IntakeSubsystem, m_ArmSubsystem, m_ShooterSubsystem, m_limelightSubsystem, getAlliance());
 
   NetworkTableEntry isRedAlliance;
 
@@ -128,14 +126,10 @@ public class RobotContainer {
 
       manual = m_manualChooser.getSelected();
 
-
-      m_chooser.setDefaultOption("Taxi, Pickup, and Shoot", taxiPickupShoot);
-      m_chooser.addOption("Taxi and Shoot", taxiShoot);
-      m_chooser.addOption("Taxi, Pickup, Shoot, Pickup, Shoot", taxiDoublePickupShoot);
       m_chooser.addOption("PathPlanner 5 Ball", autoPathPlanner5Ball);
+      m_chooser.addOption("PathPlanner 4 Ball", autoPathPlanner4Ball);
       m_chooser.addOption("PathPlanner Taxi Shoot", autoPathPlannerTaxiShoot);
       m_chooser.addOption("PathPlanner Pickup Taxi Shoot", autoPathPlannerTaxiPickupShoot);
-      m_chooser.addOption("PathTest", pathTest);
 
 
      
