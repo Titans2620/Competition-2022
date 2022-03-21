@@ -13,25 +13,95 @@ import edu.wpi.first.wpilibj.util.Color;
 public class LEDSubsystem extends SubsystemBase {
   AddressableLED led;
   AddressableLEDBuffer ledBuffer;
-  Timer timer;
+  Timer timer = new Timer();
+  int blinkLength, blinkCount, fadeHueValue, fadeIncrementValue;
+  boolean blinkStateOn, fadeIncMode;
   /** Creates a new LEDSubsystem. */
   public LEDSubsystem() {
     led = new AddressableLED(Constants.LED);
-    led.setLength(Constants.LEDLENGTH);
     ledBuffer = new AddressableLEDBuffer(32);
     led.setData(ledBuffer);
+    led.setLength(Constants.LEDLENGTH);
+    timer.start();
     led.start();
+    blinkLength = 10;
+    blinkCount = 0;
+    blinkStateOn = false;
+    fadeHueValue = 0;
+    fadeIncMode = true;
+    fadeIncrementValue = 3;
   }
 
-  public void setColor(){
-    
+  public void setSolidColor(int red, int green, int blue){
+    for(int index = 0; index < 32; index++){
+      ledBuffer.setRGB(index, red, green, blue);
+    }
+  }
+
+  public void setBlink(int red, int green, int blue){
+    if(blinkCount > blinkLength){
+      if(blinkStateOn){
+        blinkStateOn = false;
+      }
+      else{
+        blinkStateOn = true;
+      }
+      blinkCount = 0;
+    }
+    if(blinkStateOn){
+      for(int index = 0; index < 32; index++){
+        ledBuffer.setRGB(index, red, green, blue);
+      }
+    }
+    else{
+      for(int index = 0; index < 32; index++){
+        ledBuffer.setRGB(index, 0, 0, 0);
+      }
+    }
+  }
+
+  public void setFade(int hue){
+      if(fadeIncMode){
+          fadeHueValue += fadeIncrementValue;
+          if(fadeHueValue > 255){
+              fadeHueValue = 255;
+              fadeIncMode = false;
+          }
+      }
+      else{
+          fadeHueValue -= fadeIncrementValue;
+          if(fadeHueValue < 0){
+              fadeHueValue = 0;
+              fadeIncMode = true;
+          }
+      }
+
+      for(int index = 0; index < ledBuffer.getLength(); index++){
+        ledBuffer.setHSV(index, hue, 255, fadeHueValue);
+      }
+  }
+
+  public void setDefaultState(String alliance){
+    if(timer.get() < 10){
+        if(alliance == "red"){
+            setFade(0);
+        }
+        else{
+            setFade(230);
+        }
+    }
+    else{
+        if(alliance == "red"){
+            setSolidColor(255, 0, 0);
+        }
+        else{
+            setSolidColor(0, 0, 255);
+        }
+    }
   }
 
   @Override
   public void periodic() {
-    for(int i = 0; i < ledBuffer.getLength(); i++){
-      ledBuffer.setRGB(i, 255, 0, 0);
-    }
     led.setData(ledBuffer);
   }
 }
