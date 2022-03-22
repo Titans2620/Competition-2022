@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.util.Color;
 public class LEDSubsystem extends SubsystemBase {
@@ -20,8 +21,8 @@ public class LEDSubsystem extends SubsystemBase {
   public LEDSubsystem() {
     led = new AddressableLED(Constants.LED);
     ledBuffer = new AddressableLEDBuffer(32);
-    led.setData(ledBuffer);
     led.setLength(Constants.LEDLENGTH);
+    led.setData(ledBuffer);
     timer.start();
     led.start();
     blinkLength = 10;
@@ -83,15 +84,15 @@ public class LEDSubsystem extends SubsystemBase {
 
   public void setDefaultState(String alliance){
     if(timer.get() < 10){
-        if(alliance == "red"){
+        if(alliance == "Red"){
             setFade(0);
         }
         else{
-            setFade(230);
+            setFade(240);
         }
     }
     else{
-        if(alliance == "red"){
+        if(alliance == "Red"){
             setSolidColor(255, 0, 0);
         }
         else{
@@ -102,6 +103,7 @@ public class LEDSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
+    setDefaultState(DriverStation.getAlliance().toString());
     led.setData(ledBuffer);
   }
 }
