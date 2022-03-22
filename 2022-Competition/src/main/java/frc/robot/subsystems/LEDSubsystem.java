@@ -88,7 +88,7 @@ public class LEDSubsystem extends SubsystemBase {
             setFade(0);
         }
         else{
-            setFade(240);
+            setFade(120);
         }
     }
     else{
@@ -103,7 +103,6 @@ public class LEDSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
-    setDefaultState(DriverStation.getAlliance().toString());
     led.setData(ledBuffer);
   }
 }
