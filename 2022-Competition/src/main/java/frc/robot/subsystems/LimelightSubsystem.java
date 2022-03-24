@@ -98,8 +98,10 @@ public class LimelightSubsystem extends SubsystemBase {
                 state = "SLOWLEFT";
             else if(tx > 0.5 && tx < -4.0)
                 state = "SLOWRIGHT";
-            else
+            else if(tx <= 0.5 && tx > -0.5)
                 state = Constants.LIMELIGHT_STOP;
+            else
+                state = "NOT FOUND";
             
         }
         return state;

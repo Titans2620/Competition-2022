@@ -61,7 +61,7 @@ public class IntakeSubsystem extends SubsystemBase {
       if(isLineSensorObstructed()){
         timer.reset();
       }
-      if(timer.get() < 1){
+      if(timer.get() < .5){
         feedWheel.set(Constants.FEEDSPEED);
       }
       else{

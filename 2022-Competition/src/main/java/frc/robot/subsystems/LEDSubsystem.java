@@ -30,7 +30,7 @@ public class LEDSubsystem extends SubsystemBase {
     blinkStateOn = false;
     fadeHueValue = 0;
     fadeIncMode = true;
-    fadeIncrementValue = 3;
+    fadeIncrementValue = 5;
   }
 
   public void setSolidColor(int red, int green, int blue){
@@ -88,7 +88,7 @@ public class LEDSubsystem extends SubsystemBase {
             setFade(0);
         }
         else{
-            setFade(240);
+            setFade(120);
         }
     }
     else{

@@ -12,14 +12,10 @@ public class ArmRotateCommand extends CommandBase {
   /** Creates a new ArmRotateManualCommand. */
   ArmSubsystem m_ArmSubsystem;
   char direction;
+  boolean directionUp;
   public ArmRotateCommand(ArmSubsystem m_ArmSubsystem, boolean directionUp){
     this.m_ArmSubsystem = m_ArmSubsystem;
-    if(directionUp){
-      direction = 'u';
-    }
-    else{
-      direction = 'd';
-    }
+    this.directionUp = directionUp;
     addRequirements(this.m_ArmSubsystem);
     // Use addRequirements() here to declare subsystem dependencies.
   }
@@ -31,6 +27,13 @@ public class ArmRotateCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+
+    if(directionUp){
+      direction = 'u';
+    }
+    else{
+      direction = 'd';
+    }
 
     if(direction == 'u'){
       m_ArmSubsystem.autoRotateArm(Constants.INTAKEROTATEUPSPEED);

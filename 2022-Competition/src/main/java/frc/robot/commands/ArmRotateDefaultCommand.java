@@ -16,6 +16,7 @@ public class ArmRotateDefaultCommand extends CommandBase {
   ArmSubsystem m_ArmSubsystem;
   IntakeSubsystem m_IntakeSubsystem;
   Timer timer = new Timer();
+  
   public ArmRotateDefaultCommand(ArmSubsystem m_ArmSubsystem, IntakeSubsystem m_IntakeSubsystem){
     // Use addRequirements() here to declare subsystem dependencies.
     this.m_ArmSubsystem = m_ArmSubsystem;
@@ -36,7 +37,7 @@ public class ArmRotateDefaultCommand extends CommandBase {
     if(m_IntakeSubsystem.isLineSensorObstructed()){
       timer.reset();
     }
-    if(timer.get() > 3.0 && !m_IntakeSubsystem.isLineSensorObstructed()){
+    if(timer.get() > 3.0){
       m_ArmSubsystem.rotateArm(Constants.INTAKEROTATEUPSPEED);
     }
     else{
