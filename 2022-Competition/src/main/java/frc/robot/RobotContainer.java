@@ -70,7 +70,8 @@ import frc.robot.Robot;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final ColorSensorSubsystem m_ColorSensorSubsystem = new ColorSensorSubsystem();
-  private final LimelightSubsystem m_limelightSubsystem = new LimelightSubsystem(getAlliance(), m_ColorSensorSubsystem); 
+  private final LEDSubsystem m_LedSubsystem = new LEDSubsystem();
+  private final LimelightSubsystem m_limelightSubsystem = new LimelightSubsystem(getAlliance(), m_ColorSensorSubsystem, m_LedSubsystem); 
 
   private final DriveSubsystem m_driveSubsystem = new DriveSubsystem(m_limelightSubsystem, m_ColorSensorSubsystem);
   private final ClimbExtendSubsystem m_ClimbExtendSubsystem = new ClimbExtendSubsystem();
@@ -78,7 +79,6 @@ public class RobotContainer {
   private final ShooterSubsystem m_ShooterSubsystem = new ShooterSubsystem(m_limelightSubsystem);
   private final IntakeSubsystem m_IntakeSubsystem = new IntakeSubsystem(m_ColorSensorSubsystem, getAlliance(), m_ShooterSubsystem);
   private final ArmSubsystem m_ArmSubsystem = new ArmSubsystem(); 
-  private static final LEDSubsystem m_LedSubsystem = new LEDSubsystem();
   private final XboxController m_driveController = new XboxController(0);
   private final XboxController m_operatorController = new XboxController(1);
 
@@ -100,7 +100,7 @@ public class RobotContainer {
    */
 
   public RobotContainer() {
-
+      
       CameraServer.startAutomaticCapture();
 
       m_driveSubsystem.setDefaultCommand(new DriveDefaultCommand( // Drive //
@@ -146,7 +146,6 @@ public class RobotContainer {
     new JoystickButton(m_driveController, 8).whenPressed(()-> m_driveSubsystem.zeroGyroscope());
 
     if(manual == "off"){
-      m_LedSubsystem.setSolidColor(255, 255, 0);
       //OPERATOR CONTROLLER//
         //SHOOTER CODE
       new JoystickButton(m_operatorController, 6).whenHeld(new ParallelCommandGroup(new DriveLimelightCommand(m_driveSubsystem, () -> -modifyAxis(m_driveController.getRawAxis(0)) * DriveSubsystem.MAX_VELOCITY_METERS_PER_SECOND, () -> -modifyAxis(m_driveController.getRawAxis(1)) * DriveSubsystem.MAX_VELOCITY_METERS_PER_SECOND, getAlliance(), () -> -modifyAxis(m_driveController.getRawAxis(4)) * DriveSubsystem.MAX_VELOCITY_METERS_PER_SECOND),
@@ -184,7 +183,7 @@ public class RobotContainer {
       new Trigger(() -> m_driveController.getPOV() == 180).whileActiveContinuous(new ClimbExtendCommand(m_ClimbExtendSubsystem, false));
     }
     else{
-
+      m_LedSubsystem.setSolidColor(255, 255, 0);
       new Trigger(() -> m_operatorController.getRightTriggerAxis() != 0).whenActive(new ShooterManualShootCommand(m_ShooterSubsystem, m_IntakeSubsystem));
       if(!m_operatorController.getRawButton(6)){
         new JoystickButton(m_operatorController, 1).whenHeld(new IntakeManualCommand(m_IntakeSubsystem));
