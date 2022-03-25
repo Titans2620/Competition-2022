@@ -7,6 +7,7 @@ package frc.robot.commands;
 import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.CommandBase;
@@ -44,7 +45,7 @@ public class DriveLimelightCommand extends CommandBase {
 
   @Override
   public void execute() {
-        m_driveSubsystem.limelightDrive( m_translationYSupplier.getAsDouble(), m_translationXSupplier.getAsDouble(), -m_translationZSupplier.getAsDouble(), allianceColor);
+        m_driveSubsystem.limelightDrive( m_translationYSupplier.getAsDouble(), m_translationXSupplier.getAsDouble(), -m_translationZSupplier.getAsDouble(), DriverStation.getAlliance().toString());
 
     }
 

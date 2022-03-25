@@ -9,6 +9,7 @@ import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -34,6 +35,7 @@ import frc.robot.commands.IntakeInfeedCommand;
 import frc.robot.commands.IntakeManualCommand;
 import frc.robot.commands.IntakeOutfeedCommand;
 import frc.robot.commands.IntakeShootCommand;
+import frc.robot.commands.LEDDefaultCommand;
 import frc.robot.commands.LimelightDefaultCommand;
 import frc.robot.commands.LimelightGetStateCommand;
 import frc.robot.commands.LimelightSearchCommand;
@@ -122,6 +124,7 @@ public class RobotContainer {
       m_ShooterSubsystem.setDefaultCommand(new ShooterDefaultCommand(m_ShooterSubsystem));
       m_ArmSubsystem.setDefaultCommand(new ArmRotateDefaultCommand(m_ArmSubsystem, m_IntakeSubsystem));
       m_limelightSubsystem.setDefaultCommand(new LimelightDefaultCommand(m_limelightSubsystem));
+      m_LedSubsystem.setDefaultCommand(new LEDDefaultCommand(m_LedSubsystem));
 
       m_manualChooser.setDefaultOption("Off", "off");
       m_manualChooser.addOption("On", "on");
@@ -224,7 +227,7 @@ public class RobotContainer {
   }
 
   public String getAlliance(){
-    NetworkTableInstance inst = NetworkTableInstance.getDefault();
+    /*NetworkTableInstance inst = NetworkTableInstance.getDefault();
     NetworkTable table = inst.getTable("FMSInfo");
     isRedAlliance = table.getEntry("IsRedAlliance");
     if(isRedAlliance.getBoolean(true)){
@@ -232,7 +235,8 @@ public class RobotContainer {
     }
     else{
       return "blue";
-    }
+    }*/
+    return DriverStation.getAlliance().toString().toLowerCase();
   }
 
   public void putSmartdashboard(){

@@ -164,6 +164,7 @@ public class DriveSubsystem extends SubsystemBase {
         }
 
         public void limelightDrive(double xSpeed, double ySpeed, double rSpeed, String allianceColor){
+                allianceColor = allianceColor.toLowerCase();
                 double m_rotation;
                 m_LimeLightSubsystem.setLimelightCamMode("Search");
                 m_LimeLightSubsystem.setLimelightLED("on");

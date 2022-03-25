@@ -16,6 +16,7 @@ public class LEDDefaultCommand extends CommandBase {
 
   public LEDDefaultCommand(LEDSubsystem m_LedSubsystem) {
     this.m_LedSubsystem = m_LedSubsystem;
+    addRequirements(m_LedSubsystem);
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
