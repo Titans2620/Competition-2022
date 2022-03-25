@@ -65,7 +65,7 @@ public final class Constants {
     public static final double INTAKESPEED = -1.0;
     public static final double INTAKEROTATEUPSPEED = .5;
     public static final double INTAKEROTATEDOWNSPEED = -.25;
-    public static final double FEEDSPEED = .35; //Originally .25
+    public static final double FEEDSPEED = .25; //Originally .25
     public static final double SHOOTERSPEED = .72;
     public static final double LOWGOALSHOOTERSPEED = .42;
 

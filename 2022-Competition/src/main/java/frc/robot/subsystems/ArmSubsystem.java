@@ -24,12 +24,7 @@ public class ArmSubsystem extends SubsystemBase {
   }
 
   public void rotateArm(double speed){
-    if(speed > 0 && !upperlimit.get()){
-      stopMotor();
-    }
-    else{
-      intakeRotate.set(speed);
-    }
+    intakeRotate.set(speed);
   }
 
   public void autoRotateArm(Double speed){

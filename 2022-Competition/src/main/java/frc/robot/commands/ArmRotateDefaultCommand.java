@@ -38,12 +38,11 @@ public class ArmRotateDefaultCommand extends CommandBase {
       timer.reset();
     }
     if(timer.get() > 3.0){
-      m_ArmSubsystem.rotateArm(Constants.INTAKEROTATEUPSPEED);
+      m_ArmSubsystem.autoRotateArm(Constants.INTAKEROTATEUPSPEED);
     }
     else{
       m_ArmSubsystem.stopMotor();
     }
-    SmartDashboard.putNumber("Arm Rotate Timer", timer.get());
   }
 
   // Called once the command ends or is interrupted.
