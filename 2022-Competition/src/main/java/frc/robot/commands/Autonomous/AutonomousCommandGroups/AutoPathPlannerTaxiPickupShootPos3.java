@@ -11,38 +11,46 @@ import com.pathplanner.lib.commands.PPSwerveControllerCommand;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants.AutoConstants;
-import frc.robot.commands.Autonomous.AutonomousShootUntilCountCommand;
+import frc.robot.commands.Autonomous.AutonomousIntakeCommand;
+import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
+import frc.robot.subsystems.LimelightSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
-
+import frc.robot.commands.Autonomous.AutonomousShootUntilCountCommand;
+import frc.robot.commands.Autonomous.AutonomousIntakeUntilPickupCommand;
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class AutoPathPlannerTaxiShoot extends SequentialCommandGroup {
-  DriveSubsystem m_driveSubsystem;
-  ShooterSubsystem m_ShooterSubsystem;
-  IntakeSubsystem m_IntakeSubsystem;
-  String alliance;
+public class AutoPathPlannerTaxiPickupShootPos3 extends SequentialCommandGroup {
+  /** Creates a new AutoPathPlannerTaxiPickupShootPos2. */
+    DriveSubsystem m_driveSubsystem;
+    IntakeSubsystem m_IntakeSubsystem;
+    ArmSubsystem m_ArmSubsystem;
+    ShooterSubsystem m_ShooterSubsystem;
+    LimelightSubsystem m_LimelightSubsystem;
+    String alliance;
 
-  public AutoPathPlannerTaxiShoot(DriveSubsystem m_driveSubsystem, ShooterSubsystem m_ShooterSubsystem, IntakeSubsystem m_IntakeSubsystem, String alliance) {
+  public AutoPathPlannerTaxiPickupShootPos3(DriveSubsystem m_driveSubsystem, IntakeSubsystem m_IntakeSubsystem, ArmSubsystem m_ArmSubsystem, ShooterSubsystem m_ShooterSubsystem, LimelightSubsystem m_LimelightSubsystem, String alliance) {
     this.m_driveSubsystem = m_driveSubsystem;
-    this.m_ShooterSubsystem = m_ShooterSubsystem;
     this.m_IntakeSubsystem = m_IntakeSubsystem;
+    this.m_ArmSubsystem = m_ArmSubsystem;
+    this.m_ShooterSubsystem = m_ShooterSubsystem;
     this.alliance = alliance;
-    addRequirements(m_driveSubsystem, m_ShooterSubsystem, m_IntakeSubsystem);
+    addRequirements(m_driveSubsystem, m_IntakeSubsystem, m_ArmSubsystem, m_ShooterSubsystem);
 
     PIDController xController = new PIDController(AutoConstants.kPXController, 0, 0);
     PIDController yController = new PIDController(AutoConstants.kPYController, 0, 0);
 
     ProfiledPIDController thetaController = new ProfiledPIDController(AutoConstants.kPThetaController, 0, 0, AutoConstants.kThetaControllerConstraints);
     
-    PathPlannerTrajectory taxiShoot = PathPlanner.loadPath("Taxi Shoot", 1, 1);
+    PathPlannerTrajectory taxiPickupShootS1 = PathPlanner.loadPath("Taxi Pickup Shoot Stage 1 Pos 2", 1, 1);
 
-    PPSwerveControllerCommand taxiShootCommand = new PPSwerveControllerCommand(
-      taxiShoot,
+    PPSwerveControllerCommand taxiPickupShootS1Command = new PPSwerveControllerCommand(
+      taxiPickupShootS1,
         this.m_driveSubsystem::getPose, 
         this.m_driveSubsystem.m_kinematics, 
         xController, 
@@ -52,10 +60,11 @@ public class AutoPathPlannerTaxiShoot extends SequentialCommandGroup {
         this.m_driveSubsystem
     ); 
 
+    
     addCommands(
-      new InstantCommand(() -> this.m_driveSubsystem.setStartingPose(10.36, 4.4, -156.5)),
-      taxiShootCommand,
-      new AutonomousShootUntilCountCommand(m_driveSubsystem, m_IntakeSubsystem, m_ShooterSubsystem, 1, 5, alliance)
+        new InstantCommand(() -> this.m_driveSubsystem.setStartingPose(8.95, 6.33, 90)),
+        new ParallelCommandGroup(taxiPickupShootS1Command, new AutonomousIntakeUntilPickupCommand(m_IntakeSubsystem, m_ArmSubsystem, 1, 5)),
+        new AutonomousShootUntilCountCommand(m_driveSubsystem, m_IntakeSubsystem, m_ShooterSubsystem, 2, 10, alliance)
     );
   }
 }
