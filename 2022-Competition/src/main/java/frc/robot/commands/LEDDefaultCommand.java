@@ -4,19 +4,18 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.Constants;
-import frc.robot.subsystems.ArmSubsystem;
+import java.sql.Driver;
 
-public class ArmRotateCommand extends CommandBase {
-  /** Creates a new ArmRotateManualCommand. */
-  ArmSubsystem m_ArmSubsystem;
-  char direction;
-  boolean directionUp;
-  public ArmRotateCommand(ArmSubsystem m_ArmSubsystem, boolean directionUp){
-    this.m_ArmSubsystem = m_ArmSubsystem;
-    this.directionUp = directionUp;
-    addRequirements(this.m_ArmSubsystem);
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.subsystems.LEDSubsystem;
+
+public class LEDDefaultCommand extends CommandBase {
+  /** Creates a new LEDDefaultCommand. */
+  LEDSubsystem m_LedSubsystem;
+
+  public LEDDefaultCommand(LEDSubsystem m_LedSubsystem) {
+    this.m_LedSubsystem = m_LedSubsystem;
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
@@ -27,21 +26,7 @@ public class ArmRotateCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-
-    if(directionUp){
-      direction = 'u';
-    }
-    else{
-      direction = 'd';
-    }
-
-    if(direction == 'u'){
-      m_ArmSubsystem.autoRotateArm(Constants.INTAKEROTATEUPSPEED);
-    }
-    else if(direction == 'd'){
-      m_ArmSubsystem.autoRotateArm(Constants.INTAKEROTATEDOWNSPEED);
-    }
-
+      m_LedSubsystem.setDefaultState(DriverStation.getAlliance().toString());
   }
 
   // Called once the command ends or is interrupted.

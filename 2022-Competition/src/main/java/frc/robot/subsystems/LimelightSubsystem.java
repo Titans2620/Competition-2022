@@ -51,10 +51,12 @@ public class LimelightSubsystem extends SubsystemBase {
 
     private String alliance;
     private ColorSensorSubsystem m_ColorSensorSubsystem;
+    private LEDSubsystem m_LedSubsystem;
   
-  public LimelightSubsystem(String alliance, ColorSensorSubsystem m_ColorSensorSubsystem) {
+  public LimelightSubsystem(String alliance, ColorSensorSubsystem m_ColorSensorSubsystem, LEDSubsystem m_LedSubsystem) {
         this.alliance = alliance;
         this.m_ColorSensorSubsystem = m_ColorSensorSubsystem;
+        this.m_LedSubsystem = m_LedSubsystem;
 
   }
 
@@ -83,13 +85,21 @@ public class LimelightSubsystem extends SubsystemBase {
 
         if(m_ColorSensorSubsystem.getColorState() != alliance && m_ColorSensorSubsystem.getColorState() != "neither"){
             tx += Constants.WRONG_BALL_AIM_VARIANCE_PIXELS;
+            if(m_ColorSensorSubsystem.getColorState() == "red"){
+                m_LedSubsystem.setBlink(255, 0, 0);
+            }
+            else{
+                m_LedSubsystem.setBlink(0, 0, 255);
+            }
         }
 
         if(tx == 0.0 && ty == 0.0){
             state = "NOT FOUND";
         }
         else{
-
+            if(m_ColorSensorSubsystem.getColorState() == alliance){
+                m_LedSubsystem.setSolidColor(0, 255, 0);
+            }
             if(tx < -4.0)
                 state = "FASTLEFT";
             else if(tx > 4.0)
@@ -98,8 +108,10 @@ public class LimelightSubsystem extends SubsystemBase {
                 state = "SLOWLEFT";
             else if(tx > 0.5 && tx < -4.0)
                 state = "SLOWRIGHT";
-            else
+            else if(tx <= 0.5 && tx > -0.5)
                 state = Constants.LIMELIGHT_STOP;
+            else
+                state = "NOT FOUND";
             
         }
         return state;

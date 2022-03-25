@@ -163,11 +163,11 @@ public class DriveSubsystem extends SubsystemBase {
                 m_chassisSpeeds = chassisSpeeds;
         }
 
-        public void limelightDrive(double xSpeed, double ySpeed, double m_rotation, String allianceColor){
+        public void limelightDrive(double xSpeed, double ySpeed, double rSpeed, String allianceColor){
+                double m_rotation;
                 m_LimeLightSubsystem.setLimelightCamMode("Search");
                 m_LimeLightSubsystem.setLimelightLED("on");
                 String tableState = m_LimeLightSubsystem.getLimelightState();
-                String lastStateWhenNotFound = "FASTLEFT";
                         switch(tableState){
                         case "NOT FOUND":
                                 //If the limelight does not find the reflective tape we will rotate to attempt to find it. 
@@ -180,11 +180,11 @@ public class DriveSubsystem extends SubsystemBase {
                                 m_rotation = -Constants.LIMELIGHT_SEARCH_SPEED;
                                 }
                                 */
+                                m_rotation = rSpeed;
                                 break;
                         case "FASTLEFT":
                                 //The reflective tape is too far to the left so a CCW (Counterclockwise) rotation will be needed to center the shooter.
                                 m_rotation = Constants.LIMELIGHT_FAST_SPEED;
-                                lastStateWhenNotFound = "FASTLEFT";
                                 break;
                         case "SLOWLEFT":
                                 m_rotation = Constants.LIMELIGHT_SLOW_SPEED;
@@ -192,7 +192,6 @@ public class DriveSubsystem extends SubsystemBase {
                         case "FASTRIGHT":
                                 //The reflective tape is too far to the right so a CCW (Clockwise) rotation will be needed to center the shooter.
                                 m_rotation = -Constants.LIMELIGHT_FAST_SPEED;
-                                lastStateWhenNotFound = "FASTRIGHT";
                                 break;
                         case "SLOWRIGHT":
                                 m_rotation = -Constants.LIMELIGHT_SLOW_SPEED;
