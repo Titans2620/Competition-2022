@@ -132,10 +132,10 @@ public class RobotContainer {
       manual = m_manualChooser.getSelected();
 
 
+      
       m_chooser.addOption("PathPlanner 5 Ball", autoPathPlanner5Ball);
       m_chooser.addOption("PathPlanner 4 Ball", autoPathPlanner4Ball);
       m_chooser.addOption("PathPlanner Taxi Shoot", autoPathPlannerTaxiShoot);
-      m_chooser.addOption("PathPlanner Pickup Taxi Shoot Position 1", autoPathPlannerTaxiPickupShoot);
       m_chooser.addOption("PathPlanner Pickup Taxi Shoot Position 2", autoPathPlannerTaxiPickupShootPos2);
       m_chooser.addOption("PathPlanner Pickup Taxi Shoot Position 3", autoPathPlannerTaxiPickupShootPos3);
 
@@ -211,7 +211,7 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-      return m_chooser.getSelected();
+      return autoPathPlannerTaxiPickupShoot;
   }
 
   private static double deadband(double value, double deadband) {
@@ -236,6 +236,7 @@ public class RobotContainer {
     else{
       return "blue";
     }*/
+    SmartDashboard.putString("Alliance", DriverStation.getAlliance().toString().toLowerCase());
     return DriverStation.getAlliance().toString().toLowerCase();
   }
 

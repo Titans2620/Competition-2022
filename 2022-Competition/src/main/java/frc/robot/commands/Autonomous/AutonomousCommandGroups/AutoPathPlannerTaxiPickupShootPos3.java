@@ -63,7 +63,7 @@ public class AutoPathPlannerTaxiPickupShootPos3 extends SequentialCommandGroup {
     
     addCommands(
         new InstantCommand(() -> this.m_driveSubsystem.setStartingPose(8.95, 6.33, 90)),
-        new ParallelCommandGroup(taxiPickupShootS1Command, new AutonomousIntakeUntilPickupCommand(m_IntakeSubsystem, m_ArmSubsystem, 1, 5)),
+        new ParallelCommandGroup(taxiPickupShootS1Command, new AutonomousIntakeUntilPickupCommand(m_IntakeSubsystem, m_ArmSubsystem, 2, 5)),
         new AutonomousShootUntilCountCommand(m_driveSubsystem, m_IntakeSubsystem, m_ShooterSubsystem, 2, 10, alliance)
     );
   }
