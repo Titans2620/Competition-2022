@@ -45,7 +45,7 @@ public class AutoPathPlanner4Ball extends SequentialCommandGroup {
 
       PathPlannerTrajectory red4BallS1 = PathPlanner.loadPath("Four Ball Stage 1", 2, 1);
       PathPlannerTrajectory red4BallS2 = PathPlanner.loadPath("Four Ball Stage 2", 2, 1);
-      PathPlannerTrajectory red4BallS3 = PathPlanner.loadPath("Four Ball Stage 3", 2, 1);
+      PathPlannerTrajectory red4BallS3 = PathPlanner.loadPath("Four Ball Stage 3", 4, 2);
 
       PPSwerveControllerCommand red4BallS1Command = new PPSwerveControllerCommand(
         red4BallS1,
@@ -81,11 +81,11 @@ public class AutoPathPlanner4Ball extends SequentialCommandGroup {
     ); 
 
     addCommands(
-      new InstantCommand(() -> this.m_driveSubsystem.setStartingPose(10.35, 3.13, -45)), //Intialize 
-      new ParallelCommandGroup(red4BallS1Command, new AutonomousIntakeUntilPickupCommand(m_IntakeSubsystem, m_ArmSubsystem, 1, 5)),
+      new InstantCommand(() -> this.m_driveSubsystem.setStartingPose(10.37, 3.13, -45)), //Intialize 
+      new ParallelCommandGroup(red4BallS1Command, new AutonomousIntakeUntilPickupCommand(m_IntakeSubsystem, m_ArmSubsystem, 1, 3)),
       new AutonomousShootUntilCountCommand(m_driveSubsystem, m_IntakeSubsystem, m_ShooterSubsystem, 2, 2, alliance),
       red4BallS2Command,
-      new AutonomousIntakeUntilPickupCommand(m_IntakeSubsystem, m_ArmSubsystem, 2, 5),
+      new AutonomousIntakeUntilPickupCommand(m_IntakeSubsystem, m_ArmSubsystem, 2, 4),
       red4BallS3Command,
       new AutonomousShootUntilCountCommand(m_driveSubsystem, m_IntakeSubsystem, m_ShooterSubsystem, 2, 2, alliance),
       new InstantCommand(() -> this.m_driveSubsystem.stopModules())

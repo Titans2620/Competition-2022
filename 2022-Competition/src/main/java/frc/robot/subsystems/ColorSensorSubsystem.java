@@ -59,6 +59,7 @@ public class ColorSensorSubsystem extends SubsystemBase {
     else{
       colorState = "neither";
     }
+    //SmartDashboard.putString("Color Sensor", colorState);
   }
   public String getColorState(){
     return colorState;

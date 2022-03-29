@@ -9,6 +9,7 @@ import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -34,6 +35,7 @@ import frc.robot.commands.IntakeInfeedCommand;
 import frc.robot.commands.IntakeManualCommand;
 import frc.robot.commands.IntakeOutfeedCommand;
 import frc.robot.commands.IntakeShootCommand;
+import frc.robot.commands.LEDDefaultCommand;
 import frc.robot.commands.LimelightDefaultCommand;
 import frc.robot.commands.LimelightGetStateCommand;
 import frc.robot.commands.LimelightSearchCommand;
@@ -47,6 +49,8 @@ import frc.robot.commands.Autonomous.AutonomousCommandGroups.AutonomousBasicTaxi
 import frc.robot.commands.Autonomous.AutonomousCommandGroups.AutoPathPlanner4Ball;
 import frc.robot.commands.Autonomous.AutonomousCommandGroups.AutoPathPlanner5Ball;
 import frc.robot.commands.Autonomous.AutonomousCommandGroups.AutoPathPlannerTaxiPickupShoot;
+import frc.robot.commands.Autonomous.AutonomousCommandGroups.AutoPathPlannerTaxiPickupShootPos2;
+import frc.robot.commands.Autonomous.AutonomousCommandGroups.AutoPathPlannerTaxiPickupShootPos3;
 import frc.robot.commands.Autonomous.AutonomousCommandGroups.AutoPathPlannerTaxiShoot;
 import frc.robot.commands.Autonomous.AutonomousCommandGroups.PathTest;
 import frc.robot.commands.DriveLimelightCommand;
@@ -92,6 +96,8 @@ public class RobotContainer {
   private final AutoPathPlannerTaxiShoot autoPathPlannerTaxiShoot = new AutoPathPlannerTaxiShoot(m_driveSubsystem, m_ShooterSubsystem, m_IntakeSubsystem, getAlliance());
   private final AutoPathPlannerTaxiPickupShoot autoPathPlannerTaxiPickupShoot = new AutoPathPlannerTaxiPickupShoot(m_driveSubsystem, m_IntakeSubsystem, m_ArmSubsystem, m_ShooterSubsystem, m_limelightSubsystem, getAlliance());
   private final AutoPathPlanner4Ball autoPathPlanner4Ball = new AutoPathPlanner4Ball(m_driveSubsystem, m_IntakeSubsystem, m_ArmSubsystem, m_ShooterSubsystem, m_limelightSubsystem, getAlliance());
+  private final AutoPathPlannerTaxiPickupShootPos2 autoPathPlannerTaxiPickupShootPos2 = new AutoPathPlannerTaxiPickupShootPos2(m_driveSubsystem, m_IntakeSubsystem, m_ArmSubsystem, m_ShooterSubsystem, m_limelightSubsystem, getAlliance());
+  private final AutoPathPlannerTaxiPickupShootPos3 autoPathPlannerTaxiPickupShootPos3 = new AutoPathPlannerTaxiPickupShootPos3(m_driveSubsystem, m_IntakeSubsystem, m_ArmSubsystem, m_ShooterSubsystem, m_limelightSubsystem, getAlliance());
 
   NetworkTableEntry isRedAlliance;
 
@@ -118,6 +124,7 @@ public class RobotContainer {
       m_ShooterSubsystem.setDefaultCommand(new ShooterDefaultCommand(m_ShooterSubsystem));
       m_ArmSubsystem.setDefaultCommand(new ArmRotateDefaultCommand(m_ArmSubsystem, m_IntakeSubsystem));
       m_limelightSubsystem.setDefaultCommand(new LimelightDefaultCommand(m_limelightSubsystem));
+      m_LedSubsystem.setDefaultCommand(new LEDDefaultCommand(m_LedSubsystem));
 
       m_manualChooser.setDefaultOption("Off", "off");
       m_manualChooser.addOption("On", "on");
@@ -125,10 +132,12 @@ public class RobotContainer {
       manual = m_manualChooser.getSelected();
 
 
+      
       m_chooser.addOption("PathPlanner 5 Ball", autoPathPlanner5Ball);
       m_chooser.addOption("PathPlanner 4 Ball", autoPathPlanner4Ball);
       m_chooser.addOption("PathPlanner Taxi Shoot", autoPathPlannerTaxiShoot);
-      m_chooser.addOption("PathPlanner Pickup Taxi Shoot", autoPathPlannerTaxiPickupShoot);
+      m_chooser.addOption("PathPlanner Pickup Taxi Shoot Position 2", autoPathPlannerTaxiPickupShootPos2);
+      m_chooser.addOption("PathPlanner Pickup Taxi Shoot Position 3", autoPathPlannerTaxiPickupShootPos3);
 
 
      
@@ -202,7 +211,7 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-      return m_chooser.getSelected();
+      return autoPathPlannerTaxiPickupShoot;
   }
 
   private static double deadband(double value, double deadband) {
@@ -218,7 +227,7 @@ public class RobotContainer {
   }
 
   public String getAlliance(){
-    NetworkTableInstance inst = NetworkTableInstance.getDefault();
+    /*NetworkTableInstance inst = NetworkTableInstance.getDefault();
     NetworkTable table = inst.getTable("FMSInfo");
     isRedAlliance = table.getEntry("IsRedAlliance");
     if(isRedAlliance.getBoolean(true)){
@@ -226,7 +235,9 @@ public class RobotContainer {
     }
     else{
       return "blue";
-    }
+    }*/
+    SmartDashboard.putString("Alliance", DriverStation.getAlliance().toString().toLowerCase());
+    return DriverStation.getAlliance().toString().toLowerCase();
   }
 
   public void putSmartdashboard(){

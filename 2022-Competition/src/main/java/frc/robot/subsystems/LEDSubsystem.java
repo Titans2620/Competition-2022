@@ -103,6 +103,7 @@ public class LEDSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
+    setDefaultState(DriverStation.getAlliance().toString());
     led.setData(ledBuffer);
   }
 }
