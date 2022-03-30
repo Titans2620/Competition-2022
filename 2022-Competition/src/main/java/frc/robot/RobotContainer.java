@@ -35,7 +35,6 @@ import frc.robot.commands.IntakeInfeedCommand;
 import frc.robot.commands.IntakeManualCommand;
 import frc.robot.commands.IntakeOutfeedCommand;
 import frc.robot.commands.IntakeShootCommand;
-import frc.robot.commands.LEDDefaultCommand;
 import frc.robot.commands.LimelightDefaultCommand;
 import frc.robot.commands.LimelightGetStateCommand;
 import frc.robot.commands.LimelightSearchCommand;
@@ -43,10 +42,7 @@ import frc.robot.commands.ShooterDefaultCommand;
 import frc.robot.commands.ShooterLowShootCommand;
 import frc.robot.commands.ShooterManualShootCommand;
 import frc.robot.commands.ShooterShootCommand;
-import frc.robot.commands.Autonomous.AutonomousCommandGroups.AutonomousBasicTaxiPickupShootCommand;
-import frc.robot.commands.Autonomous.AutonomousCommandGroups.AutonomousBasicTaxiShootCommandGroup;
-import frc.robot.commands.Autonomous.AutonomousCommandGroups.AutonomousBasicTaxiDoublePickupShootCommand;
-import frc.robot.commands.Autonomous.AutonomousCommandGroups.AutoPathPlanner4Ball;
+import frc.robot.commands.Autonomous.AutonomousCommandGroups.AutoPathPlanner4BallP1;
 import frc.robot.commands.Autonomous.AutonomousCommandGroups.AutoPathPlanner5Ball;
 import frc.robot.commands.Autonomous.AutonomousCommandGroups.AutoPathPlannerTaxiPickupShoot;
 import frc.robot.commands.Autonomous.AutonomousCommandGroups.AutoPathPlannerTaxiPickupShootPos2;
@@ -95,7 +91,7 @@ public class RobotContainer {
   private final AutoPathPlanner5Ball autoPathPlanner5Ball = new AutoPathPlanner5Ball(m_driveSubsystem, m_IntakeSubsystem, m_ArmSubsystem, m_ShooterSubsystem, m_limelightSubsystem, getAlliance());
   private final AutoPathPlannerTaxiShoot autoPathPlannerTaxiShoot = new AutoPathPlannerTaxiShoot(m_driveSubsystem, m_ShooterSubsystem, m_IntakeSubsystem, getAlliance());
   private final AutoPathPlannerTaxiPickupShoot autoPathPlannerTaxiPickupShoot = new AutoPathPlannerTaxiPickupShoot(m_driveSubsystem, m_IntakeSubsystem, m_ArmSubsystem, m_ShooterSubsystem, m_limelightSubsystem, getAlliance());
-  private final AutoPathPlanner4Ball autoPathPlanner4Ball = new AutoPathPlanner4Ball(m_driveSubsystem, m_IntakeSubsystem, m_ArmSubsystem, m_ShooterSubsystem, m_limelightSubsystem, getAlliance());
+  private final AutoPathPlanner4BallP1 autoPathPlanner4Ball = new AutoPathPlanner4BallP1(m_driveSubsystem, m_IntakeSubsystem, m_ArmSubsystem, m_ShooterSubsystem, m_limelightSubsystem, getAlliance());
   private final AutoPathPlannerTaxiPickupShootPos2 autoPathPlannerTaxiPickupShootPos2 = new AutoPathPlannerTaxiPickupShootPos2(m_driveSubsystem, m_IntakeSubsystem, m_ArmSubsystem, m_ShooterSubsystem, m_limelightSubsystem, getAlliance());
   private final AutoPathPlannerTaxiPickupShootPos3 autoPathPlannerTaxiPickupShootPos3 = new AutoPathPlannerTaxiPickupShootPos3(m_driveSubsystem, m_IntakeSubsystem, m_ArmSubsystem, m_ShooterSubsystem, m_limelightSubsystem, getAlliance());
 
@@ -124,7 +120,6 @@ public class RobotContainer {
       m_ShooterSubsystem.setDefaultCommand(new ShooterDefaultCommand(m_ShooterSubsystem));
       m_ArmSubsystem.setDefaultCommand(new ArmRotateDefaultCommand(m_ArmSubsystem, m_IntakeSubsystem));
       m_limelightSubsystem.setDefaultCommand(new LimelightDefaultCommand(m_limelightSubsystem));
-      m_LedSubsystem.setDefaultCommand(new LEDDefaultCommand(m_LedSubsystem));
 
       m_manualChooser.setDefaultOption("Off", "off");
       m_manualChooser.addOption("On", "on");
@@ -152,6 +147,10 @@ public class RobotContainer {
   }
 
   private void configureButtonBindings() {
+
+    if(manual == "on"){
+        m_LedSubsystem.setState("SolidYellow", 5);
+    }
 
     new JoystickButton(m_driveController, 8).whenPressed(()-> m_driveSubsystem.zeroGyroscope());
 

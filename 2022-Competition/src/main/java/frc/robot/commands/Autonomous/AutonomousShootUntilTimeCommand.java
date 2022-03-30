@@ -12,13 +12,12 @@ import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 
-public class AutonomousShootUntilCountCommand extends CommandBase {
+public class AutonomousShootUntilTimeCommand extends CommandBase {
   /** Creates a new AutonomousShootUntilCountCommand. */
   ShooterSubsystem m_ShooterSubsystem;
   IntakeSubsystem m_IntakeSubsystem;
   DriveSubsystem m_DriveSubsystem;
   
-  int goalCount, currentCount;
   double duration;
   boolean ballClear;
 
@@ -26,11 +25,10 @@ public class AutonomousShootUntilCountCommand extends CommandBase {
 
   String alliance;
 
-  public AutonomousShootUntilCountCommand(DriveSubsystem m_DriveSubsystem, IntakeSubsystem m_IntakeSubsystem, ShooterSubsystem m_ShooterSubsystem, int goalCount, double duration, String alliance) {
+  public AutonomousShootUntilTimeCommand(DriveSubsystem m_DriveSubsystem, IntakeSubsystem m_IntakeSubsystem, ShooterSubsystem m_ShooterSubsystem, double duration, String alliance) {
     this.m_IntakeSubsystem = m_IntakeSubsystem;
     this.m_ShooterSubsystem = m_ShooterSubsystem;
     this.m_DriveSubsystem = m_DriveSubsystem;
-    this.goalCount = goalCount;
     this.duration = duration;
     this.alliance = alliance;
     addRequirements(m_IntakeSubsystem, m_ShooterSubsystem);
@@ -40,7 +38,6 @@ public class AutonomousShootUntilCountCommand extends CommandBase {
   @Override
   public void initialize() {
       shooterTimeout.start();
-      System.out.println("Shoot Command Start");
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -49,15 +46,6 @@ public class AutonomousShootUntilCountCommand extends CommandBase {
     m_IntakeSubsystem.setAutoFeedWheelShoot(Constants.FEEDSPEED);
     m_ShooterSubsystem.feedForwardPIDShooter();
     m_DriveSubsystem.limelightDrive(0, 0, 0, alliance);
-    if(m_IntakeSubsystem.getColorSensorState() != "neither"){
-      if(ballClear){
-        currentCount++;
-      }
-        ballClear = false;
-    }
-    else{
-        ballClear = true;
-    }
   }
 
   // Called once the command ends or is interrupted.
@@ -67,13 +55,12 @@ public class AutonomousShootUntilCountCommand extends CommandBase {
       m_IntakeSubsystem.turnOffMotors();
       m_ShooterSubsystem.stopShooter();
       m_DriveSubsystem.stopModules();
-      System.out.println("Shoot Command end");
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-      if(shooterTimeout.get() > duration || currentCount == goalCount)
+      if(shooterTimeout.get() > duration)
           return true;
     return false;
   }

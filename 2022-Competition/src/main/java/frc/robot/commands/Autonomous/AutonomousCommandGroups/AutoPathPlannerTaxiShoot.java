@@ -13,7 +13,7 @@ import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants.AutoConstants;
-import frc.robot.commands.Autonomous.AutonomousShootUntilCountCommand;
+import frc.robot.commands.Autonomous.AutonomousShootUntilTimeCommand;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
@@ -55,7 +55,7 @@ public class AutoPathPlannerTaxiShoot extends SequentialCommandGroup {
     addCommands(
       new InstantCommand(() -> this.m_driveSubsystem.setStartingPose(10.36, 4.4, -156.5)),
       taxiShootCommand,
-      new AutonomousShootUntilCountCommand(m_driveSubsystem, m_IntakeSubsystem, m_ShooterSubsystem, 1, 5, alliance)
+      new AutonomousShootUntilTimeCommand(m_driveSubsystem, m_IntakeSubsystem, m_ShooterSubsystem, 5, alliance)
     );
   }
 }

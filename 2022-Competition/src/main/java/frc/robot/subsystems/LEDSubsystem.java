@@ -17,6 +17,8 @@ public class LEDSubsystem extends SubsystemBase {
   Timer timer = new Timer();
   int blinkLength, blinkCount, fadeHueValue, fadeIncrementValue;
   boolean blinkStateOn, fadeIncMode;
+  String state;
+  int priority = 0;
   /** Creates a new LEDSubsystem. */
   public LEDSubsystem() {
     led = new AddressableLED(Constants.LED);
@@ -82,28 +84,71 @@ public class LEDSubsystem extends SubsystemBase {
       }
   }
 
-  public void setDefaultState(String alliance){
-    if(timer.get() < 10){
-        if(alliance == "Red"){
-            setFade(0);
-        }
-        else{
-            setFade(120);
-        }
-    }
-    else{
-        if(alliance == "Red"){
-            setSolidColor(255, 0, 0);
-        }
-        else{
-            setSolidColor(0, 0, 255);
-        }
+  public void setState(String state, int priority){
+
+    if(priority > this.priority){
+        this.state = state;
+        this.priority = priority;
     }
   }
 
   @Override
   public void periodic() {
-    setDefaultState(DriverStation.getAlliance().toString());
+    if(priority == 0){
+        if(DriverStation.getAlliance().toString() == "Red"){
+          if(timer.get() < 10)
+              state = "FadeRed";
+          else
+              state = "SolidRed";
+        }
+        if(DriverStation.getAlliance().toString() == "Blue"){
+          if(timer.get() < 10)
+              state = "FadeBlue";
+          else
+              state = "SolidBlue";
+        }
+        else
+            state = "SolidWhite";
+    }
+
+    switch(state){
+      case "SolidRed":
+          setSolidColor(255, 0, 0);
+          break;
+      case "SolidBlue":
+          setSolidColor(0, 0, 255);
+          break;
+      case "SolidGreen":
+          setSolidColor(0, 255, 0);
+          break;
+      case "SolidYellow":
+          setSolidColor(255, 255, 0);
+          break;
+      case "SolidWhite":
+          setSolidColor(255, 255, 255);
+          break;
+
+      case "FadeRed":
+          setFade(0);
+          break;
+      case "FadeBlue":
+          setFade(120);
+          break;
+
+      case "BlinkRed":
+          setBlink(255, 0, 0);
+          break;
+
+      case "Blinkblue":
+          setBlink(0, 0, 255);
+          break;
+
+      default:
+          setSolidColor(255, 255, 255);
+
+    }
     led.setData(ledBuffer);
+    state = "None";
+    priority = 0;
   }
 }

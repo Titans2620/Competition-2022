@@ -20,10 +20,10 @@ import frc.robot.Constants.AutoConstants;
 import frc.robot.commands.DriveLimelightCommand;
 import frc.robot.commands.LimelightSearchCommand;
 import frc.robot.commands.Autonomous.AutonomousIntakeCommand;
-import frc.robot.commands.Autonomous.AutonomousIntakeUntilPickupCommand;
+import frc.robot.commands.Autonomous.AutonomousIntakeUntilTimeCommand;
 import frc.robot.commands.Autonomous.AutonomousLimelightSearchCommand;
 import frc.robot.commands.Autonomous.AutonomousShootCommand;
-import frc.robot.commands.Autonomous.AutonomousShootUntilCountCommand;
+import frc.robot.commands.Autonomous.AutonomousShootUntilTimeCommand;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
@@ -122,20 +122,20 @@ public class AutoPathPlanner5Ball extends SequentialCommandGroup {
       //new AutonomousIntakeUntilPickupCommand(m_IntakeSubsystem, m_ArmSubsystem, 1, 2), //Run intake until ball enters
       red5BallS2Command, //Move and turn into shooting position
       new ParallelCommandGroup( //Shoot first two balls
-            new AutonomousShootUntilCountCommand(m_driveSubsystem, m_IntakeSubsystem, m_ShooterSubsystem, 2, 3, alliance), //Shoot until two balls have shot
+            new AutonomousShootUntilTimeCommand(m_driveSubsystem, m_IntakeSubsystem, m_ShooterSubsystem, 3, alliance), //Shoot until two balls have shot
             new AutonomousLimelightSearchCommand(m_LimelightSubsystem, 3)
       ),
       new ParallelCommandGroup(red5BallS3Command, new AutonomousIntakeCommand(4, m_IntakeSubsystem, m_ArmSubsystem)), //Grab 3rd ball
       //new AutonomousIntakeUntilPickupCommand(m_IntakeSubsystem, m_ArmSubsystem, 1, 2), //Run intake until ball enters
       new ParallelCommandGroup( //Shoot until ball is gone
-        new AutonomousShootUntilCountCommand(m_driveSubsystem, m_IntakeSubsystem, m_ShooterSubsystem, 1, 2, alliance), //Shoot until a ball has shot
+        new AutonomousShootUntilTimeCommand(m_driveSubsystem, m_IntakeSubsystem, m_ShooterSubsystem, 2, alliance), //Shoot until a ball has shot
         new AutonomousLimelightSearchCommand(m_LimelightSubsystem, 2)
       ),
       new ParallelCommandGroup(red5BallS4Command, new AutonomousIntakeCommand(1, m_IntakeSubsystem, m_ArmSubsystem)), //Drive up to driver station with intake on
-      new AutonomousIntakeUntilPickupCommand(m_IntakeSubsystem, m_ArmSubsystem, 2, 2), //Run intake until 2 balls enter
+      new AutonomousIntakeUntilTimeCommand(m_IntakeSubsystem, m_ArmSubsystem, 2), //Run intake until 2 balls enter
       red5BallS5Command,
       new ParallelCommandGroup( //Shoot until ball is gone
-          new AutonomousShootUntilCountCommand(m_driveSubsystem, m_IntakeSubsystem, m_ShooterSubsystem, 2, 2, alliance), //Shoot until two balls have shot
+          new AutonomousShootUntilTimeCommand(m_driveSubsystem, m_IntakeSubsystem, m_ShooterSubsystem, 2, alliance), //Shoot until two balls have shot
           new AutonomousLimelightSearchCommand(m_LimelightSubsystem, 2)
       ),
 

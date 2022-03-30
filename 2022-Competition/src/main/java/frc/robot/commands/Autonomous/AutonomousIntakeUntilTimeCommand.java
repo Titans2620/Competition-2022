@@ -11,7 +11,7 @@ import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ColorSensorSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 
-public class AutonomousIntakeUntilPickupCommand extends CommandBase {
+public class AutonomousIntakeUntilTimeCommand extends CommandBase {
   /** Creates a new AutonomousIntakeUntilPickupCommand. */
   IntakeSubsystem m_IntakeSubsystem;
   ArmSubsystem m_ArmSubsystem;
@@ -22,7 +22,7 @@ public class AutonomousIntakeUntilPickupCommand extends CommandBase {
   Timer AutoIntakeTimeout = new Timer();
   Boolean ballClear = true;
 
-  public AutonomousIntakeUntilPickupCommand(IntakeSubsystem m_IntakeSubsystem, ArmSubsystem m_ArmSubsystem, int goalCount, double duration) {
+  public AutonomousIntakeUntilTimeCommand(IntakeSubsystem m_IntakeSubsystem, ArmSubsystem m_ArmSubsystem, double duration) {
       this.m_IntakeSubsystem = m_IntakeSubsystem;
       this.m_ArmSubsystem = m_ArmSubsystem;
       this.goalCount = goalCount;

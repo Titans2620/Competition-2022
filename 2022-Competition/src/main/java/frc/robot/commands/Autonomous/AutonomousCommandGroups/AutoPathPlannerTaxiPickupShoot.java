@@ -20,8 +20,8 @@ import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.LimelightSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
-import frc.robot.commands.Autonomous.AutonomousShootUntilCountCommand;
-import frc.robot.commands.Autonomous.AutonomousIntakeUntilPickupCommand;
+import frc.robot.commands.Autonomous.AutonomousShootUntilTimeCommand;
+import frc.robot.commands.Autonomous.AutonomousIntakeUntilTimeCommand;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
@@ -76,9 +76,9 @@ public class AutoPathPlannerTaxiPickupShoot extends SequentialCommandGroup {
     
     addCommands(
         new InstantCommand(() -> this.m_driveSubsystem.setStartingPose(10.37, 3.12, -45.0)),
-        new ParallelCommandGroup(taxiPickupShootS1Command, new AutonomousIntakeUntilPickupCommand(m_IntakeSubsystem, m_ArmSubsystem, 2, 5)),
+        new ParallelCommandGroup(taxiPickupShootS1Command, new AutonomousIntakeUntilTimeCommand(m_IntakeSubsystem, m_ArmSubsystem, 5)),
         taxiPickupShootS2Command,
-        new AutonomousShootUntilCountCommand(m_driveSubsystem, m_IntakeSubsystem, m_ShooterSubsystem, 2, 10, alliance)
+        new AutonomousShootUntilTimeCommand(m_driveSubsystem, m_IntakeSubsystem, m_ShooterSubsystem, 5, alliance)
     );
   }
 }
