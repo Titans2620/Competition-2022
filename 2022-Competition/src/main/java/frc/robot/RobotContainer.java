@@ -43,6 +43,7 @@ import frc.robot.commands.ShooterLowShootCommand;
 import frc.robot.commands.ShooterManualShootCommand;
 import frc.robot.commands.ShooterShootCommand;
 import frc.robot.commands.Autonomous.AutonomousCommandGroups.AutoPathPlanner4BallP1;
+import frc.robot.commands.Autonomous.AutonomousCommandGroups.AutoPathPlanner4BallP2;
 import frc.robot.commands.Autonomous.AutonomousCommandGroups.AutoPathPlanner5Ball;
 import frc.robot.commands.Autonomous.AutonomousCommandGroups.AutoPathPlannerTaxiPickupShoot;
 import frc.robot.commands.Autonomous.AutonomousCommandGroups.AutoPathPlannerTaxiPickupShootPos2;
@@ -92,6 +93,7 @@ public class RobotContainer {
   private final AutoPathPlannerTaxiShoot autoPathPlannerTaxiShoot = new AutoPathPlannerTaxiShoot(m_driveSubsystem, m_ShooterSubsystem, m_IntakeSubsystem, getAlliance());
   private final AutoPathPlannerTaxiPickupShoot autoPathPlannerTaxiPickupShoot = new AutoPathPlannerTaxiPickupShoot(m_driveSubsystem, m_IntakeSubsystem, m_ArmSubsystem, m_ShooterSubsystem, m_limelightSubsystem, getAlliance());
   private final AutoPathPlanner4BallP1 autoPathPlanner4Ball = new AutoPathPlanner4BallP1(m_driveSubsystem, m_IntakeSubsystem, m_ArmSubsystem, m_ShooterSubsystem, m_limelightSubsystem, getAlliance());
+  private final AutoPathPlanner4BallP2 autoPathPlanner4BallP2 = new AutoPathPlanner4BallP2(m_driveSubsystem, m_IntakeSubsystem, m_ArmSubsystem, m_ShooterSubsystem, m_limelightSubsystem, getAlliance());
   private final AutoPathPlannerTaxiPickupShootPos2 autoPathPlannerTaxiPickupShootPos2 = new AutoPathPlannerTaxiPickupShootPos2(m_driveSubsystem, m_IntakeSubsystem, m_ArmSubsystem, m_ShooterSubsystem, m_limelightSubsystem, getAlliance());
   private final AutoPathPlannerTaxiPickupShootPos3 autoPathPlannerTaxiPickupShootPos3 = new AutoPathPlannerTaxiPickupShootPos3(m_driveSubsystem, m_IntakeSubsystem, m_ArmSubsystem, m_ShooterSubsystem, m_limelightSubsystem, getAlliance());
 
@@ -130,6 +132,7 @@ public class RobotContainer {
       
       m_chooser.addOption("5 Ball Auto", autoPathPlanner5Ball);
       m_chooser.addOption("4 Ball P1", autoPathPlanner4Ball);
+      m_chooser.addOption("4 Ball P2", autoPathPlanner4BallP2);
       m_chooser.setDefaultOption("2 Ball P1", autoPathPlannerTaxiPickupShoot);
       m_chooser.addOption("2 Ball P2", autoPathPlannerTaxiPickupShootPos2);
       m_chooser.addOption("2 Ball P3", autoPathPlannerTaxiPickupShootPos3);
