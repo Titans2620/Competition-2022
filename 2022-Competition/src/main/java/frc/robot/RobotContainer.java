@@ -133,11 +133,12 @@ public class RobotContainer {
 
 
       
-      m_chooser.addOption("PathPlanner 5 Ball", autoPathPlanner5Ball);
-      m_chooser.addOption("PathPlanner 4 Ball", autoPathPlanner4Ball);
-      m_chooser.addOption("PathPlanner Taxi Shoot", autoPathPlannerTaxiShoot);
-      m_chooser.addOption("PathPlanner Pickup Taxi Shoot Position 2", autoPathPlannerTaxiPickupShootPos2);
-      m_chooser.addOption("PathPlanner Pickup Taxi Shoot Position 3", autoPathPlannerTaxiPickupShootPos3);
+      m_chooser.addOption("5 Ball Auto", autoPathPlanner5Ball);
+      m_chooser.addOption("4 Ball P1", autoPathPlanner4Ball);
+      m_chooser.setDefaultOption("2 Ball P1", autoPathPlannerTaxiPickupShoot);
+      m_chooser.addOption("2 Ball P2", autoPathPlannerTaxiPickupShootPos2);
+      m_chooser.addOption("2 Ball P3", autoPathPlannerTaxiPickupShootPos3);
+      m_chooser.addOption("1 Ball", autoPathPlannerTaxiShoot);
 
 
      
@@ -211,7 +212,7 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-      return autoPathPlannerTaxiPickupShoot;
+      return m_chooser.getSelected();
   }
 
   private static double deadband(double value, double deadband) {
