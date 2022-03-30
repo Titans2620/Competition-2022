@@ -17,8 +17,8 @@ public class LEDSubsystem extends SubsystemBase {
   Timer timer = new Timer();
   int blinkLength, blinkCount, fadeHueValue, fadeIncrementValue;
   boolean blinkStateOn, fadeIncMode;
-  String state;
-  int priority = 0;
+  static String LEDstate;
+  static int LEDpriority = 0;
   /** Creates a new LEDSubsystem. */
   public LEDSubsystem() {
     led = new AddressableLED(Constants.LED);
@@ -84,34 +84,34 @@ public class LEDSubsystem extends SubsystemBase {
       }
   }
 
-  public void setState(String state, int priority){
+  public static void setState(String state, int priority){
 
-    if(priority > this.priority){
-        this.state = state;
-        this.priority = priority;
+    if(priority > LEDpriority){
+        LEDstate = state;
+        LEDpriority = priority;
     }
   }
 
   @Override
   public void periodic() {
-    if(priority == 0){
+    if(LEDpriority == 0){
         if(DriverStation.getAlliance().toString() == "Red"){
           if(timer.get() < 10)
-              state = "FadeRed";
+              LEDstate = "FadeRed";
           else
-              state = "SolidRed";
+              LEDstate = "SolidRed";
         }
         if(DriverStation.getAlliance().toString() == "Blue"){
           if(timer.get() < 10)
-              state = "FadeBlue";
+              LEDstate = "FadeBlue";
           else
-              state = "SolidBlue";
+              LEDstate = "SolidBlue";
         }
         else
-            state = "SolidWhite";
+            LEDstate = "SolidWhite";
     }
 
-    switch(state){
+    switch(LEDstate){
       case "SolidRed":
           setSolidColor(255, 0, 0);
           break;
@@ -148,7 +148,7 @@ public class LEDSubsystem extends SubsystemBase {
 
     }
     led.setData(ledBuffer);
-    state = "None";
-    priority = 0;
+    LEDstate = "None";
+    LEDpriority = 0;
   }
 }
