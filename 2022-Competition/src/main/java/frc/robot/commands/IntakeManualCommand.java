@@ -7,6 +7,7 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
 import frc.robot.subsystems.IntakeSubsystem;
+import frc.robot.subsystems.LEDSubsystem;
 
 public class IntakeManualCommand extends CommandBase {
   /**************************************************
@@ -28,7 +29,7 @@ public class IntakeManualCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-
+    LEDSubsystem.setState("SolidYellow", 5);
     m_IntakeSubsystem.setFeedWheel(Constants.FEEDSPEED);
     m_IntakeSubsystem.setIntakeRoller(Constants.INTAKESPEED);
 

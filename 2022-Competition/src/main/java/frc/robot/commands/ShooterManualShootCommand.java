@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
 import frc.robot.subsystems.IntakeSubsystem;
+import frc.robot.subsystems.LEDSubsystem;
 import frc.robot.subsystems.LimelightSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 
@@ -37,9 +38,10 @@ public class ShooterManualShootCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+      LEDSubsystem.setState("SolidYellow", 5);
       m_ShooterSubsystem.setShooter(Constants.SHOOTER_MIN_SPEED_PERCENT);
       if(timer.get() > 3){
-      m_IntakeSubsystem.setFeedWheel(Constants.FEEDSPEED);
+          m_IntakeSubsystem.setFeedWheel(Constants.FEEDSPEED);
       }
   }
   // Called once the command ends or is interrupted.

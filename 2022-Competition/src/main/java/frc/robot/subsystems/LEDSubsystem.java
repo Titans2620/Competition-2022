@@ -15,10 +15,11 @@ public class LEDSubsystem extends SubsystemBase {
   AddressableLED led;
   AddressableLEDBuffer ledBuffer;
   Timer timer = new Timer();
-  int blinkLength, blinkCount, fadeHueValue, fadeIncrementValue;
+  int blinkLength, blinkCount, fadeHueValue, fadeIncrementValue, runLength = 8, runIndex = 0, runCountLength = 5, runCountIndex = 0;
   boolean blinkStateOn, fadeIncMode;
   static String LEDstate;
   static int LEDpriority = 0;
+
   /** Creates a new LEDSubsystem. */
   public LEDSubsystem() {
     led = new AddressableLED(Constants.LED);
@@ -84,6 +85,25 @@ public class LEDSubsystem extends SubsystemBase {
       }
   }
 
+  public void setRun(int hue){
+
+    if(runCountIndex >= runCountLength){
+      for(int index = 0; index < ledBuffer.getLength(); index++){
+        ledBuffer.setHSV(index, hue, 255, 0);
+      }
+      if(runLength != 0){
+        for(int index = 0; index < runLength; index++){
+          ledBuffer.setHSV(runIndex, hue, 255, 255 * ((runLength - index) / runLength));
+        }
+      }
+      runIndex++;
+      runCountIndex = 0;
+    }
+    else{
+      runCountIndex++;
+    }
+  }
+
   public static void setState(String state, int priority){
 
     if(priority > LEDpriority){
@@ -98,12 +118,16 @@ public class LEDSubsystem extends SubsystemBase {
         if(DriverStation.getAlliance().toString() == "Red"){
           if(timer.get() < 10)
               LEDstate = "FadeRed";
+          else if(DriverStation.getMatchTime() < 30.0)
+              LEDstate = "RunRed";
           else
               LEDstate = "SolidRed";
         }
         if(DriverStation.getAlliance().toString() == "Blue"){
           if(timer.get() < 10)
               LEDstate = "FadeBlue";
+          else if(DriverStation.getMatchTime() < 30.0)
+              LEDstate = "RunBlue";
           else
               LEDstate = "SolidBlue";
         }
@@ -138,9 +162,15 @@ public class LEDSubsystem extends SubsystemBase {
       case "BlinkRed":
           setBlink(255, 0, 0);
           break;
-
       case "Blinkblue":
           setBlink(0, 0, 255);
+          break;
+      
+      case "RunRed":
+          setRun(0);
+          break;
+      case "RunBlue":
+          setRun(120);
           break;
 
       default:
