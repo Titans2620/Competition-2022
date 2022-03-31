@@ -42,18 +42,7 @@ public class AutonomousIntakeUntilTimeCommand extends CommandBase {
 
       m_IntakeSubsystem.setAutoFeedWheel(Constants.FEEDSPEED);
       m_IntakeSubsystem.setIntakeRoller(Constants.INTAKESPEED);
-      m_ArmSubsystem.rotateArm(Constants.INTAKEROTATEDOWNSPEED);
-      if(m_IntakeSubsystem.isLineSensorObstructed()){
-        if(ballClear){
-          currentCount++;
-        }
-          ballClear = false;
-      }
-      else{
-          ballClear = true;
-      }
-     
-      
+      m_ArmSubsystem.autoRotateArm(Constants.INTAKEROTATEDOWNSPEED);
   }
 
   // Called once the command ends or is interrupted.
@@ -66,7 +55,7 @@ public class AutonomousIntakeUntilTimeCommand extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if(AutoIntakeTimeout.get() > duration || goalCount == currentCount)
+    if(AutoIntakeTimeout.get() > duration)
         return true;
     return false;
   }

@@ -66,7 +66,9 @@ public final class Constants {
     public static final double INTAKEROTATEUPSPEED = .5;
     public static final double INTAKEROTATEDOWNSPEED = -.25;
     public static final double FEEDSPEED = .25; //Originally .25
+    public static final double OUTFEEDSPEED = -.5;
     public static final double SHOOTERSPEED = .72;
+    public static final double SHOOTEROUTFEEDSPEED = -.5;
     public static final double LOWGOALSHOOTERSPEED = .42;
 
     public static final double LIMELIGHT_SLOW_SPEED = 0.1;
