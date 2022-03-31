@@ -94,9 +94,15 @@ public class LEDSubsystem extends SubsystemBase {
       if(runLength != 0){
         for(int index = 0; index < runLength; index++){
           ledBuffer.setHSV(runIndex, hue, 255, 255 * ((runLength - index) / runLength));
+          ledBuffer.setHSV(runIndex + ledBuffer.getLength() / 2, hue, 255, 255 * ((runLength - index) / runLength));
         }
       }
-      runIndex++;
+      if(runIndex >= ledBuffer.getLength() / 2){
+        runIndex = 0;
+      }
+      else{
+        runIndex++;
+      }
       runCountIndex = 0;
     }
     else{
