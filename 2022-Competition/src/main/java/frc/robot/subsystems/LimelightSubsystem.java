@@ -64,7 +64,7 @@ public class LimelightSubsystem extends SubsystemBase {
     public void periodic() {
         getLimelightState();
         SmartDashboard.putString("Limelight State: ", state);
-        //SmartDashboard.putNumber("Goal Distance", getLimelightDistanceFromGoal());
+        SmartDashboard.putNumber("Goal Distance", getLimelightDistanceFromGoal());
 
     }
 
@@ -108,7 +108,7 @@ public class LimelightSubsystem extends SubsystemBase {
                 state = "SLOWLEFT";
             else if(tx > 0.5 && tx < -4.0)
                 state = "SLOWRIGHT";
-            else if(tx <= 0.5 && tx > -0.5)
+            else
                 state = Constants.LIMELIGHT_STOP;
             
         }

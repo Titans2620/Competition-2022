@@ -43,9 +43,9 @@ public class AutoPathPlanner4BallP1 extends SequentialCommandGroup {
   
       ProfiledPIDController thetaController = new ProfiledPIDController(AutoConstants.kPThetaController, 0, 0, AutoConstants.kThetaControllerConstraints);
 
-      PathPlannerTrajectory red4BallS1 = PathPlanner.loadPath("Four Ball P1 Stage 1", 2, 1);
-      PathPlannerTrajectory red4BallS2 = PathPlanner.loadPath("Four Ball P1 Stage 2", 2, 1);
-      PathPlannerTrajectory red4BallS3 = PathPlanner.loadPath("Four Ball P1 Stage 3", 4, 2);
+      PathPlannerTrajectory red4BallS1 = PathPlanner.loadPath("Four Ball P1 Stage 1", 1, 1);
+      PathPlannerTrajectory red4BallS2 = PathPlanner.loadPath("Four Ball P1 Stage 2", 1, 1);
+      PathPlannerTrajectory red4BallS3 = PathPlanner.loadPath("Four Ball P1 Stage 3", 1, 1);
 
       PPSwerveControllerCommand red4BallS1Command = new PPSwerveControllerCommand(
         red4BallS1,

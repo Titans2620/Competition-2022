@@ -37,7 +37,7 @@ public class LEDSubsystem extends SubsystemBase {
   }
 
   public void setSolidColor(int red, int green, int blue){
-    for(int index = 0; index < 32; index++){
+    for(int index = 0; index < ledBuffer.getLength(); index++){
       ledBuffer.setRGB(index, red, green, blue);
     }
   }
@@ -132,16 +132,16 @@ public class LEDSubsystem extends SubsystemBase {
         if(DriverStation.getAlliance().toString() == "Red"){
           if(timer.get() < 10)
               LEDstate = "FadeRed";
-          else if(DriverStation.getMatchTime() < 30.0)
-              LEDstate = "RunRed";
+          //else if(DriverStation.getMatchTime() < 30.0)
+              //LEDstate = "RunRed";
           else
               LEDstate = "SolidRed";
         }
-        if(DriverStation.getAlliance().toString() == "Blue"){
+        else if(DriverStation.getAlliance().toString() == "Blue"){
           if(timer.get() < 10)
               LEDstate = "FadeBlue";
-          else if(DriverStation.getMatchTime() < 30.0)
-              LEDstate = "RunBlue";
+          //else if(DriverStation.getMatchTime() < 30.0)
+              //LEDstate = "RunBlue";
           else
               LEDstate = "SolidBlue";
         }

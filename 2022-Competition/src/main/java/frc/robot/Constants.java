@@ -81,8 +81,8 @@ public final class Constants {
     public static final String LIMELIGHT_STOP = "STOP";
 
     public static final int SHOOTER_MAX_RPM = 5100;
-    public static final double SHOOTER_MIN_SPEED_PERCENT = 0.630;
-    public static final double SHOOTER_MAX_SPEED_PERCENT = 0.780;
+    public static final double SHOOTER_MIN_SPEED_PERCENT = 0.700;
+    public static final double SHOOTER_MAX_SPEED_PERCENT = 0.800;
     public static final int SHOOTER_MIN_DISTANCE_INCHES = 120;
     public static final int SHOOTER_MAX_DISTANCE_INCHES = 250;
 
