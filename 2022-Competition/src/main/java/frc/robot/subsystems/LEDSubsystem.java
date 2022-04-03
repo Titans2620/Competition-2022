@@ -15,7 +15,7 @@ public class LEDSubsystem extends SubsystemBase {
   AddressableLED led;
   AddressableLEDBuffer ledBuffer;
   Timer timer = new Timer();
-  int blinkLength, blinkCount, fadeHueValue, fadeIncrementValue, runLength = 8, runIndex = 0, runCountLength = 5, runCountIndex = 0;
+  int blinkLength, blinkCount, fadeHueValue, fadeIncrementValue, runLength = 1, runIndex = 0, runCountLength = 5, runCountIndex = 0;
   boolean blinkStateOn, fadeIncMode;
   static String LEDstate;
   static int LEDpriority = 0;
@@ -96,16 +96,16 @@ public class LEDSubsystem extends SubsystemBase {
           if(runIndex - index < 0){
               int overLoopIndex = runIndex - index;
               ledBuffer.setHSV(ledBuffer.getLength() / 2 - overLoopIndex, hue, 255, 255 * ((runLength - index) / runLength));
-              ledBuffer.setHSV(ledBuffer.getLength() / 2 - overLoopIndex + ledBuffer.getLength() / 2, hue, 255, 255 * ((runLength - index) / runLength));
+              ledBuffer.setHSV(ledBuffer.getLength() / 2 - overLoopIndex + 15, hue, 255, 255 * ((runLength - index) / runLength));
           }
           else{
             ledBuffer.setHSV(runIndex - index, hue, 255, 255 * ((runLength - index) / runLength));
-            ledBuffer.setHSV((runIndex - index)+ ledBuffer.getLength() / 2, hue, 255, 255 * ((runLength - index) / runLength));
+            ledBuffer.setHSV(runIndex - index + 15, hue, 255, 255 * ((runLength - index) / runLength));
           }
           
         }
       }
-      if(runIndex >= ledBuffer.getLength() / 2){
+      if(runIndex == ledBuffer.getLength() / 2){
         runIndex = 0;
       }
       else{

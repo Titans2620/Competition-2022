@@ -75,7 +75,9 @@ public class IntakeSubsystem extends SubsystemBase {
   public void setAutoFeedWheelShoot(double speed){
     double variance = (m_ShooterSubsystem.getTargetRPM()) - m_ShooterSubsystem.getEncoderValue();
     if((m_ColorSensor.getColorState() == "neither") || (m_ShooterSubsystem.getLimelight().getLimelightState() == Constants.LIMELIGHT_STOP && Math.abs(variance) < 100)){
-      LEDSubsystem.setState("SolidGreen", 4);
+      if(m_ShooterSubsystem.getLimelight().getLimelightState() == Constants.LIMELIGHT_STOP){
+          LEDSubsystem.setState("SolidGreen", 4);
+      }
       feedWheel.set(speed);
     }
     else{
