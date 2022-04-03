@@ -151,10 +151,6 @@ public class RobotContainer {
 
   private void configureButtonBindings() {
 
-    if(manual == "on"){
-        m_LedSubsystem.setState("SolidYellow", 5);
-    }
-
     new JoystickButton(m_driveController, 8).whenPressed(()-> m_driveSubsystem.zeroGyroscope());
 
     if(manual == "off"){
@@ -163,7 +159,7 @@ public class RobotContainer {
       new JoystickButton(m_operatorController, 6).whenHeld(new ParallelCommandGroup(new DriveLimelightCommand(m_driveSubsystem, () -> -modifyAxis(m_driveController.getRawAxis(0)) * DriveSubsystem.MAX_VELOCITY_METERS_PER_SECOND, () -> -modifyAxis(m_driveController.getRawAxis(1)) * DriveSubsystem.MAX_VELOCITY_METERS_PER_SECOND, getAlliance(), () -> -modifyAxis(m_driveController.getRawAxis(4)) * DriveSubsystem.MAX_VELOCITY_METERS_PER_SECOND),
         new ShooterShootCommand(m_ShooterSubsystem, m_limelightSubsystem),
           new LimelightSearchCommand(m_limelightSubsystem),
-            new IntakeShootCommand(m_IntakeSubsystem, m_ShooterSubsystem, m_ColorSensorSubsystem, getAlliance())));
+            new IntakeShootCommand(m_IntakeSubsystem, m_ShooterSubsystem, m_ColorSensorSubsystem, getAlliance(), () -> m_operatorController.getRawAxis(3))));
         //INTAKE CODE
       if(!m_operatorController.getRawButton(2) || !m_operatorController.getRawButton(3))
           new JoystickButton(m_operatorController, 1).whenHeld(new ParallelCommandGroup(new IntakeInfeedCommand(m_IntakeSubsystem), new ArmRotateIntakeCommand(m_ArmSubsystem)));

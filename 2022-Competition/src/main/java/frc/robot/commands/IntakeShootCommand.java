@@ -4,6 +4,8 @@
 
 package frc.robot.commands;
 
+import java.util.function.DoubleSupplier;
+
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
@@ -19,12 +21,15 @@ public class IntakeShootCommand extends CommandBase {
   ShooterSubsystem m_ShooterSubsystem;
   ColorSensorSubsystem m_ColorSensorSubsystem;
   String alliance;
-  public IntakeShootCommand(IntakeSubsystem m_IntakeSubsystem, ShooterSubsystem m_ShooterSubsystem, ColorSensorSubsystem m_ColorSensorSubsystem, String alliance) {
+  DoubleSupplier overrideTrigger;
+
+  public IntakeShootCommand(IntakeSubsystem m_IntakeSubsystem, ShooterSubsystem m_ShooterSubsystem, ColorSensorSubsystem m_ColorSensorSubsystem, String alliance, DoubleSupplier overrideTrigger) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.m_IntakeSubsystem = m_IntakeSubsystem;
     this.m_ShooterSubsystem = m_ShooterSubsystem;
     this.m_ColorSensorSubsystem = m_ColorSensorSubsystem;
     this.alliance = alliance;
+    this.overrideTrigger = overrideTrigger;
     addRequirements(m_IntakeSubsystem);
   }
 
@@ -36,7 +41,11 @@ public class IntakeShootCommand extends CommandBase {
   @Override
   public void execute() {
 
-    m_IntakeSubsystem.setAutoFeedWheelShoot(Constants.FEEDSPEED);
+    if(overrideTrigger.getAsDouble() > 0.90)
+        m_IntakeSubsystem.setFeedWheel(Constants.FEEDSPEED);
+    else{
+        m_IntakeSubsystem.setAutoFeedWheelShoot(Constants.FEEDSPEED);
+    }
     
   }
 

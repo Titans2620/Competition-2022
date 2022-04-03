@@ -16,9 +16,10 @@ public class LEDSubsystem extends SubsystemBase {
   AddressableLEDBuffer ledBuffer;
   Timer timer = new Timer();
   int blinkLength, blinkCount, fadeHueValue, fadeIncrementValue, runLength = 1, runIndex = 0, runCountLength = 5, runCountIndex = 0;
-  boolean blinkStateOn, fadeIncMode;
+  boolean blinkStateOn, fadeIncMode, altStateHigh;
   static String LEDstate;
   static int LEDpriority = 0;
+  int altLength = 25, altCount = 0;
 
   /** Creates a new LEDSubsystem. */
   public LEDSubsystem() {
@@ -118,6 +119,35 @@ public class LEDSubsystem extends SubsystemBase {
     }
   }
 
+  public void setalternate(int red, int green, int blue){
+      if(altCount < altLength){
+          altCount++;
+
+      }
+      else{
+          if(altStateHigh){
+            altStateHigh = false;
+            for(int index = 0; index < ledBuffer.getLength(); index+=2){
+              ledBuffer.setRGB(index, red, green, blue);
+            }
+            for(int index = 1; index < ledBuffer.getLength(); index+=2){
+              ledBuffer.setRGB(index, 0, 0, 0);
+            }
+          }
+          else{
+            altStateHigh = true;
+            for(int index = 1; index < ledBuffer.getLength(); index+=2){
+              ledBuffer.setRGB(index, red, green, blue);
+            }
+            for(int index = 0; index < ledBuffer.getLength(); index+=2){
+              ledBuffer.setRGB(index, 0, 0, 0);
+            }
+          }
+          altCount = 0;
+      }
+
+  }
+
   public static void setState(String state, int priority){
 
     if(priority > LEDpriority){
@@ -132,16 +162,16 @@ public class LEDSubsystem extends SubsystemBase {
         if(DriverStation.getAlliance().toString() == "Red"){
           if(timer.get() < 10)
               LEDstate = "FadeRed";
-          //else if(DriverStation.getMatchTime() < 30.0)
-              //LEDstate = "RunRed";
+          else if(DriverStation.getMatchTime() < 30.0 && DriverStation.getMatchTime() != -1.0)
+              LEDstate = "AltRed";
           else
               LEDstate = "SolidRed";
         }
         else if(DriverStation.getAlliance().toString() == "Blue"){
           if(timer.get() < 10)
               LEDstate = "FadeBlue";
-          //else if(DriverStation.getMatchTime() < 30.0)
-              //LEDstate = "RunBlue";
+          else if(DriverStation.getMatchTime() < 30.0 && DriverStation.getMatchTime() != -1.0)
+              LEDstate = "AltBlue";
           else
               LEDstate = "SolidBlue";
         }
@@ -185,6 +215,13 @@ public class LEDSubsystem extends SubsystemBase {
           break;
       case "RunBlue":
           setRun(120);
+          break;
+
+      case "AltRed":
+          setalternate(255, 0, 0);
+          break;
+      case "AltBlue":
+          setalternate(0, 0, 255);
           break;
 
       default:
