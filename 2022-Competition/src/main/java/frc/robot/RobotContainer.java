@@ -83,12 +83,12 @@ public class RobotContainer {
   private final XboxController m_driveController = new XboxController(0);
   private final XboxController m_operatorController = new XboxController(1);
 
-  private String manual;
 
+  //SENDABLE CHOOSERS//
   SendableChooser<Command> m_chooser = new SendableChooser<>();
-
   SendableChooser<String> m_manualChooser = new SendableChooser<>();
 
+  //AUTONOMOUS//
   private final AutoPathPlanner5Ball autoPathPlanner5Ball = new AutoPathPlanner5Ball(m_driveSubsystem, m_IntakeSubsystem, m_ArmSubsystem, m_ShooterSubsystem, m_limelightSubsystem, getAlliance());
   private final AutoPathPlannerTaxiShoot autoPathPlannerTaxiShoot = new AutoPathPlannerTaxiShoot(m_driveSubsystem, m_ShooterSubsystem, m_IntakeSubsystem, getAlliance());
   private final AutoPathPlannerTaxiPickupShoot autoPathPlannerTaxiPickupShoot = new AutoPathPlannerTaxiPickupShoot(m_driveSubsystem, m_IntakeSubsystem, m_ArmSubsystem, m_ShooterSubsystem, m_limelightSubsystem, getAlliance());
@@ -97,16 +97,19 @@ public class RobotContainer {
   private final AutoPathPlannerTaxiPickupShootPos2 autoPathPlannerTaxiPickupShootPos2 = new AutoPathPlannerTaxiPickupShootPos2(m_driveSubsystem, m_IntakeSubsystem, m_ArmSubsystem, m_ShooterSubsystem, m_limelightSubsystem, getAlliance());
   private final AutoPathPlannerTaxiPickupShootPos3 autoPathPlannerTaxiPickupShootPos3 = new AutoPathPlannerTaxiPickupShootPos3(m_driveSubsystem, m_IntakeSubsystem, m_ArmSubsystem, m_ShooterSubsystem, m_limelightSubsystem, getAlliance());
 
+  //MISC DECLARATIONS//
   NetworkTableEntry isRedAlliance;
-
+  private String manual;
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
 
   public RobotContainer() {
-      
+
+      //CAMERA//
       CameraServer.startAutomaticCapture();
 
+      //DEFAULT COMMANDS//
       m_driveSubsystem.setDefaultCommand(new DriveDefaultCommand( // Drive //
               m_driveSubsystem,
               () -> -modifyAxis(m_driveController.getRawAxis(1)) * DriveSubsystem.MAX_VELOCITY_METERS_PER_SECOND,
@@ -114,8 +117,6 @@ public class RobotContainer {
               () -> -modifyAxis(m_driveController.getRawAxis(4)) * DriveSubsystem.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND,
               () -> m_driveController.getRawButton(5)
       ));
-
-  
       m_IntakeSubsystem.setDefaultCommand(new IntakeDefaultCommand(m_IntakeSubsystem));
       m_ClimbExtendSubsystem.setDefaultCommand(new ClimbExtendDefaultCommand(m_ClimbExtendSubsystem));
       m_ClimbPivotSubsystem.setDefaultCommand(new ClimbPivotDefaultCommand(m_ClimbPivotSubsystem));
@@ -123,13 +124,13 @@ public class RobotContainer {
       m_ArmSubsystem.setDefaultCommand(new ArmRotateDefaultCommand(m_ArmSubsystem, m_IntakeSubsystem));
       m_limelightSubsystem.setDefaultCommand(new LimelightDefaultCommand(m_limelightSubsystem));
 
+      //MANUAL CHOOSER//
       m_manualChooser.setDefaultOption("Off", "off");
       m_manualChooser.addOption("On", "on");
-
       manual = m_manualChooser.getSelected();
 
 
-      
+      //AUTONOMOUS CHOOSER//
       m_chooser.addOption("5 Ball Auto", autoPathPlanner5Ball);
       m_chooser.addOption("4 Ball P1", autoPathPlanner4Ball);
       m_chooser.addOption("4 Ball P2", autoPathPlanner4BallP2);
@@ -150,7 +151,7 @@ public class RobotContainer {
   }
 
   private void configureButtonBindings() {
-
+    //REINITIALIZE ORIENTATION//
     new JoystickButton(m_driveController, 8).whenPressed(()-> m_driveSubsystem.zeroGyroscope());
 
     if(manual == "off"){
@@ -172,25 +173,32 @@ public class RobotContainer {
       new Trigger(() -> m_operatorController.getPOV() == 90).whileActiveContinuous(new ClimbPivotCommand(m_ClimbPivotSubsystem, true));
       new Trigger(() -> m_operatorController.getPOV() == 270).whileActiveContinuous(new ClimbPivotCommand(m_ClimbPivotSubsystem, false));
       //DRIVER CONTROLLER//
+      //Climb Code UP
       if(m_driveController.getRawButton(4) && m_driveController.getRawButton(3)){
+        //EXTEND BOTH UP//
         new ClimbExtendCommand(m_ClimbExtendSubsystem, true);
       }
       else{
+        //EXTEND EITHER UP//
         new JoystickButton(m_driveController, 3).whenHeld(new ClimbExtendSingleCommand(m_ClimbExtendSubsystem, true, true));
         new JoystickButton(m_driveController, 4).whenHeld(new ClimbExtendSingleCommand(m_ClimbExtendSubsystem, true, false));
       }
+      //Climb Code Down
       if(m_driveController.getRawButton(1) && m_driveController.getRawButton(2)){
+        //EXTEND BOTH DOWN//
         new ClimbExtendCommand(m_ClimbExtendSubsystem, false);
       }
       else{
+        //EXTEND EITHER DOWN//
         new JoystickButton(m_driveController, 1).whenHeld(new ClimbExtendSingleCommand(m_ClimbExtendSubsystem, false, true));
         new JoystickButton(m_driveController, 2).whenHeld(new ClimbExtendSingleCommand(m_ClimbExtendSubsystem, false, false));
       }
-
+      //EXTEND BOTH UP AND DOWN//
       new Trigger(() -> m_driveController.getPOV() == 0).whileActiveContinuous(new ClimbExtendCommand(m_ClimbExtendSubsystem, true));
       new Trigger(() -> m_driveController.getPOV() == 180).whileActiveContinuous(new ClimbExtendCommand(m_ClimbExtendSubsystem, false));
     }
     else{
+    //MANUAL MODE, W.I.P.//
       m_LedSubsystem.setSolidColor(255, 255, 0);
       new Trigger(() -> m_operatorController.getRightTriggerAxis() != 0).whenActive(new ShooterManualShootCommand(m_ShooterSubsystem, m_IntakeSubsystem));
       if(!m_operatorController.getRawButton(6)){
@@ -209,10 +217,13 @@ public class RobotContainer {
    *
    * @return the command to run in autonomous
    */
+
+  //Get Chosen Autonomous//
   public Command getAutonomousCommand() {
       return m_chooser.getSelected();
   }
 
+  //Deadband Code//
   private static double deadband(double value, double deadband) {
     if (Math.abs(value) > deadband) {
       if (value > 0.0) {
@@ -225,6 +236,7 @@ public class RobotContainer {
     }
   }
 
+  //Returns Current Alliance//
   public String getAlliance(){
     /*NetworkTableInstance inst = NetworkTableInstance.getDefault();
     NetworkTable table = inst.getTable("FMSInfo");
@@ -239,12 +251,14 @@ public class RobotContainer {
     return DriverStation.getAlliance().toString().toLowerCase();
   }
 
+  //Smartdashboard Code//
   public void putSmartdashboard(){
     SmartDashboard.putString("Alliance", getAlliance());
     SmartDashboard.putData("Choose Autonomous Mode", m_chooser);
     SmartDashboard.putData("Manual", m_manualChooser);
   }
 
+  //Modifies Controller Axis//
   private static double modifyAxis(double value) {
     // Deadband
     value = deadband(value, 0.1);

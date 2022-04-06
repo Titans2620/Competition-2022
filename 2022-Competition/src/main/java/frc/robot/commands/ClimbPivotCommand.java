@@ -27,10 +27,10 @@ public class ClimbPivotCommand extends CommandBase {
   @Override
   public void execute() {
       if(isforward){
-          m_ClimbPivotSubsystem.pivotClimb(Constants.CLIMB_PIVOT_FORWARD_SPEED);
+          m_ClimbPivotSubsystem.autoPivotClimb(Constants.CLIMB_PIVOT_FORWARD_SPEED);
       }
       else{
-          m_ClimbPivotSubsystem.pivotClimb(Constants.CLIMB_PIVOT_BACK_SPEED);
+          m_ClimbPivotSubsystem.autoPivotClimb(Constants.CLIMB_PIVOT_BACK_SPEED);
       }
     
   }

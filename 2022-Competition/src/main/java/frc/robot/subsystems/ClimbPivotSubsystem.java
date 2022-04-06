@@ -4,7 +4,9 @@
 
 package frc.robot.subsystems;
 
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.motorcontrol.PWMTalonSRX;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -12,14 +14,36 @@ public class ClimbPivotSubsystem extends SubsystemBase {
   /** Creates a new ClimbPivotSubsystem. */
   
   PWMTalonSRX climbPivot = new PWMTalonSRX(Constants.PWM_CLIMB_PIVOT);
+  DigitalInput leftClimbForwardLimit;
+  DigitalInput leftClimbBackLimit;
+  DigitalInput rightClimbBackLimit;
+  DigitalInput rightClimbForwardLimit;
   
   
   public ClimbPivotSubsystem() {
-
+    leftClimbForwardLimit = new DigitalInput(5);
+    leftClimbBackLimit = new DigitalInput(6);
+    rightClimbBackLimit = new DigitalInput(7);
+    rightClimbForwardLimit = new DigitalInput(8);
+    
   }
 
   public void pivotClimb(double speed){
       climbPivot.set(speed);
+  }
+
+  public void autoPivotClimb(double speed){
+
+      if(speed > 0.0 && (leftClimbForwardLimit.get() && rightClimbForwardLimit.get())){
+          climbPivot.set(0);
+      }
+      else if(speed < 0.0 && leftClimbBackLimit.get() && !rightClimbBackLimit.get()){
+          climbPivot.set(-.10);
+      }
+      else{
+        climbPivot.set(speed);
+      }
+
   }
 
   public void stopMotor(){
@@ -28,6 +52,12 @@ public class ClimbPivotSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
-    // This method will be called once per scheduler run
+    /*
+    SmartDashboard.putBoolean("left Forward", leftClimbForwardLimit.get());
+    SmartDashboard.putBoolean("left Backward", leftClimbBackLimit.get());
+    SmartDashboard.putBoolean("Right Forward", rightClimbForwardLimit.get());
+    SmartDashboard.putBoolean("Right Backward", !rightClimbBackLimit.get());
+    */
+
   }
 }
