@@ -119,9 +119,6 @@ public class ShooterSubsystem extends SubsystemBase {
         rpmSetPoint = percentOfMaxRPM * Constants.SHOOTER_MAX_RPM;
         shooterPIDController.setReference(rpmSetPoint, CANSparkMax.ControlType.kVelocity);
     
-    if(getEncoderValue() < 10){
-        LEDSubsystem.setState("altYellow", 6);
-    }
   }
 
   public double getEncoderValue(){

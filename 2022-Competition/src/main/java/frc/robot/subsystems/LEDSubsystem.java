@@ -224,7 +224,7 @@ public class LEDSubsystem extends SubsystemBase {
           setalternate(0, 0, 255);
           break;
       case "AltYellow":
-          setalternate(0, 255, 255);
+          setalternate(255, 255, 0);
           break;
 
       default:

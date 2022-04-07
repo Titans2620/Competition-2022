@@ -83,6 +83,7 @@ public final class Constants {
     public static final double LIMELIGHT_LENSE_FLOOR_HEIGHT = 26.75;
     //CONSTANT LIMELIGHT STOP//
     public static final String LIMELIGHT_STOP = "STOP";
+    public static final double LIMELIGHT_X_OFFSET = -4;
 
     public static final int SHOOTER_MAX_RPM = 5100;
     public static final double SHOOTER_MIN_SPEED_PERCENT = 0.680;
