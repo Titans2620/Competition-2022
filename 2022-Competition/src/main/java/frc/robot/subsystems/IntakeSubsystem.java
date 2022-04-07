@@ -73,7 +73,7 @@ public class IntakeSubsystem extends SubsystemBase {
     }
   }
   public void setAutoFeedWheelShoot(double speed){
-    double variance = (m_ShooterSubsystem.getTargetRPM()) - m_ShooterSubsystem.getEncoderValue();
+    double variance = (m_ShooterSubsystem.getEncoderValue() - m_ShooterSubsystem.getTargetRPM());
     if((m_ColorSensor.getColorState() == "neither") || (m_ShooterSubsystem.getLimelight().getLimelightState() == Constants.LIMELIGHT_STOP && Math.abs(variance) < 100)){
       if(m_ShooterSubsystem.getLimelight().getLimelightState() == Constants.LIMELIGHT_STOP){
           LEDSubsystem.setState("SolidGreen", 4);
@@ -83,7 +83,7 @@ public class IntakeSubsystem extends SubsystemBase {
     else{
       feedWheel.set(0);
      }
-     setIntakeRoller(Constants.INTAKESPEED);
+    setIntakeRoller(Constants.INTAKESPEED);
   }
 
   public void setFeedWheel(double speed){

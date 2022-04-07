@@ -7,6 +7,9 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+
+import edu.wpi.first.wpilibj.Timer;
+
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 
 import frc.robot.Constants;
@@ -17,6 +20,7 @@ public class ArmSubsystem extends SubsystemBase {
   WPI_VictorSPX intakeRotate = new WPI_VictorSPX(Constants.INTAKE_ROTATE);
   DigitalInput lowerLimit;
   DigitalInput upperlimit;
+  public Timer timer = new Timer();
 
   public ArmSubsystem() {
     lowerLimit = new DigitalInput(Constants.INTAKE_LOWER_ROTATE_LIMIT);
@@ -33,6 +37,15 @@ public class ArmSubsystem extends SubsystemBase {
     }
     else{
       intakeRotate.set(0);
+    }
+  }
+
+  public void defaultArm(){
+    if(timer.get() > 3 && !upperlimit.get()){
+      rotateArm(Constants.INTAKEROTATEUPSPEED);
+    }
+    else{
+      rotateArm(0);
     }
   }
 

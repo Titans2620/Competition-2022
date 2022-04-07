@@ -104,9 +104,9 @@ public class LimelightSubsystem extends SubsystemBase {
                 state = "FASTLEFT";
             else if(tx > 4.0)
                 state = "FASTRIGHT";
-            else if(tx < - 0.5 && tx > -4.0)
+            else if(tx < - 0.3 && tx > -4.0)
                 state = "SLOWLEFT";
-            else if(tx > 0.5 && tx < -4.0)
+            else if(tx > 0.3 && tx < -4.0)
                 state = "SLOWRIGHT";
             else
                 state = Constants.LIMELIGHT_STOP;

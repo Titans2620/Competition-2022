@@ -15,7 +15,6 @@ public class ArmRotateDefaultCommand extends CommandBase {
   /** Creates a new ArmRotateDefaultCommand. */
   ArmSubsystem m_ArmSubsystem;
   IntakeSubsystem m_IntakeSubsystem;
-  Timer timer = new Timer();
   
   public ArmRotateDefaultCommand(ArmSubsystem m_ArmSubsystem, IntakeSubsystem m_IntakeSubsystem){
     // Use addRequirements() here to declare subsystem dependencies.
@@ -27,28 +26,20 @@ public class ArmRotateDefaultCommand extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    timer.start();
-    timer.reset();
+    m_ArmSubsystem.timer.start();
+    m_ArmSubsystem.timer.reset();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if(m_IntakeSubsystem.isLineSensorObstructed()){
-      timer.reset();
-    }
-    if(timer.get() > 3.0){
-      m_ArmSubsystem.autoRotateArm(Constants.INTAKEROTATEUPSPEED);
-    }
-    else{
-      m_ArmSubsystem.stopMotor();
-    }
+    m_ArmSubsystem.defaultArm();
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    timer.stop();
+    m_ArmSubsystem.timer.stop();
   }
 
   // Returns true when the command should end.

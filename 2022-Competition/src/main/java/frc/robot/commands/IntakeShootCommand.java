@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
+import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ColorSensorSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.LimelightSubsystem;
@@ -20,14 +21,16 @@ public class IntakeShootCommand extends CommandBase {
   IntakeSubsystem m_IntakeSubsystem;
   ShooterSubsystem m_ShooterSubsystem;
   ColorSensorSubsystem m_ColorSensorSubsystem;
+  ArmSubsystem m_armSubsystem;
   String alliance;
   DoubleSupplier overrideTrigger;
 
-  public IntakeShootCommand(IntakeSubsystem m_IntakeSubsystem, ShooterSubsystem m_ShooterSubsystem, ColorSensorSubsystem m_ColorSensorSubsystem, String alliance, DoubleSupplier overrideTrigger) {
+  public IntakeShootCommand(IntakeSubsystem m_IntakeSubsystem, ShooterSubsystem m_ShooterSubsystem, ColorSensorSubsystem m_ColorSensorSubsystem, String alliance, DoubleSupplier overrideTrigger, ArmSubsystem m_armSubsystem) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.m_IntakeSubsystem = m_IntakeSubsystem;
     this.m_ShooterSubsystem = m_ShooterSubsystem;
     this.m_ColorSensorSubsystem = m_ColorSensorSubsystem;
+    this.m_armSubsystem = m_armSubsystem;
     this.alliance = alliance;
     this.overrideTrigger = overrideTrigger;
     addRequirements(m_IntakeSubsystem);
@@ -40,7 +43,7 @@ public class IntakeShootCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-
+    m_armSubsystem.timer.reset();
     if(overrideTrigger.getAsDouble() > 0.90)
         m_IntakeSubsystem.setFeedWheel(Constants.FEEDSPEED);
     else{

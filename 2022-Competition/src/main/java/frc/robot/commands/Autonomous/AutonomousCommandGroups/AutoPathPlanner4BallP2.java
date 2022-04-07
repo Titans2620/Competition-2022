@@ -43,9 +43,9 @@ public class AutoPathPlanner4BallP2 extends SequentialCommandGroup {
   
       ProfiledPIDController thetaController = new ProfiledPIDController(AutoConstants.kPThetaController, 0, 0, AutoConstants.kThetaControllerConstraints);
 
-      PathPlannerTrajectory red4BallP2S1 = PathPlanner.loadPath("Four Ball P2 Stage 1", 2, 2);
-      PathPlannerTrajectory red4BallP2S2 = PathPlanner.loadPath("Four Ball P2 Stage 2", 4, 2);
-      PathPlannerTrajectory red4BallP2S3 = PathPlanner.loadPath("Four Ball P2 Stage 3", 4, 2);
+      PathPlannerTrajectory red4BallP2S1 = PathPlanner.loadPath("Four Ball P2 Stage 1", 1.75, 2);
+      PathPlannerTrajectory red4BallP2S2 = PathPlanner.loadPath("Four Ball P2 Stage 2", 6, 3);
+      PathPlannerTrajectory red4BallP2S3 = PathPlanner.loadPath("Four Ball P2 Stage 3", 6, 3);
 
       PPSwerveControllerCommand red4BallP2S1Command = new PPSwerveControllerCommand(
         red4BallP2S1,
@@ -82,11 +82,11 @@ public class AutoPathPlanner4BallP2 extends SequentialCommandGroup {
 
     addCommands(
       new InstantCommand(() -> this.m_driveSubsystem.setStartingPose(9.81, 5.61, 28.50)), //Intialize 
-      new ParallelCommandGroup(red4BallP2S1Command, new AutonomousIntakeUntilTimeCommand(m_IntakeSubsystem, m_ArmSubsystem, 4)),
-      new AutonomousShootUntilTimeCommand(m_driveSubsystem, m_IntakeSubsystem, m_ShooterSubsystem, 3, alliance),
-      red4BallP2S2Command,
-      new AutonomousIntakeUntilTimeCommand(m_IntakeSubsystem, m_ArmSubsystem, 2),
-      red4BallP2S3Command,
+      new ParallelCommandGroup(red4BallP2S1Command, new AutonomousIntakeUntilTimeCommand(m_IntakeSubsystem, m_ArmSubsystem, 4.5)),
+      new AutonomousShootUntilTimeCommand(m_driveSubsystem, m_IntakeSubsystem, m_ShooterSubsystem, 2.5, alliance),
+      new ParallelCommandGroup(red4BallP2S2Command, new AutonomousIntakeUntilTimeCommand(m_IntakeSubsystem, m_ArmSubsystem, 2)),
+      new AutonomousIntakeUntilTimeCommand(m_IntakeSubsystem, m_ArmSubsystem, 1.5),
+      new ParallelCommandGroup(red4BallP2S3Command, new AutonomousIntakeUntilTimeCommand(m_IntakeSubsystem, m_ArmSubsystem, 1.5)),
       new AutonomousShootUntilTimeCommand(m_driveSubsystem, m_IntakeSubsystem, m_ShooterSubsystem, 3, alliance),
       new InstantCommand(() -> this.m_driveSubsystem.stopModules())
     );
