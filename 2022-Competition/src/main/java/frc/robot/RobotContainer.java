@@ -254,7 +254,7 @@ public class RobotContainer {
   //Smartdashboard Code//
   public void putSmartdashboard(){
     SmartDashboard.putString("Alliance", getAlliance());
-    SmartDashboard.putData("Choose Autonomous Mode", m_chooser);
+    SmartDashboard.putData("Auto", m_chooser);
     SmartDashboard.putData("Manual", m_manualChooser);
   }
 
