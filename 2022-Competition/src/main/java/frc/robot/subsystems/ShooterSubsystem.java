@@ -119,7 +119,6 @@ public class ShooterSubsystem extends SubsystemBase {
         rpmSetPoint = percentOfMaxRPM * Constants.SHOOTER_MAX_RPM;
         shooterPIDController.setReference(rpmSetPoint, CANSparkMax.ControlType.kVelocity);
     
-    SmartDashboard.putNumber("Target RPM", rpmSetPoint);
   }
 
   public double getEncoderValue(){
@@ -138,5 +137,6 @@ public class ShooterSubsystem extends SubsystemBase {
     // This method will be called once per scheduler run
     //SmartDashboard.putNumber("Shooter Encoder", encoder.getVelocity());
     SmartDashboard.putNumber("Variance", encoder.getVelocity() - rpmSetPoint);
+    SmartDashboard.putNumber("Target RPM", rpmSetPoint);
   }
 }

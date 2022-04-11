@@ -100,13 +100,13 @@ public class LimelightSubsystem extends SubsystemBase {
             if(m_ColorSensorSubsystem.getColorState() == alliance){
                 //m_LedSubsystem.setSolidColor(0, 255, 0);
             }
-            if(tx < -4.0)
+            if(tx < -4.0 + Constants.LIMELIGHT_X_OFFSET)
                 state = "FASTLEFT";
-            else if(tx > 4.0)
+            else if(tx > 4.0  + Constants.LIMELIGHT_X_OFFSET)
                 state = "FASTRIGHT";
-            else if(tx < - 0.3 && tx > -4.0)
+            else if(tx < - 0.3 + Constants.LIMELIGHT_X_OFFSET && tx > -4.0 + Constants.LIMELIGHT_X_OFFSET)
                 state = "SLOWLEFT";
-            else if(tx > 0.3 && tx < -4.0)
+            else if(tx > 0.3 + Constants.LIMELIGHT_X_OFFSET && tx < -4.0 + Constants.LIMELIGHT_X_OFFSET)
                 state = "SLOWRIGHT";
             else
                 state = Constants.LIMELIGHT_STOP;

@@ -67,7 +67,7 @@ public final class Constants {
     //OPERATOR SPEEDS//
     public static final double INTAKESPEED = -1.0;
     public static final double INTAKEROTATEUPSPEED = .5;
-    public static final double INTAKEROTATEDOWNSPEED = -.25;
+    public static final double INTAKEROTATEDOWNSPEED = -.5;
     public static final double FEEDSPEED = .25; //Originally .25
     public static final double OUTFEEDSPEED = -.5;
     public static final double SHOOTERSPEED = .72;
@@ -81,8 +81,10 @@ public final class Constants {
     public static final double LIMELIGHT_MOUNT_ANGLE_DEGREES = 7.0;
     public static final double LIMELIGHT_TARGET_HEIGHT_INCHES = 102.0; //8'6"
     public static final double LIMELIGHT_LENSE_FLOOR_HEIGHT = 26.75;
+
     //CONSTANT LIMELIGHT STOP//
     public static final String LIMELIGHT_STOP = "STOP";
+    public static final double LIMELIGHT_X_OFFSET = -2;
 
     public static final int SHOOTER_MAX_RPM = 5100;
     public static final double SHOOTER_MIN_SPEED_PERCENT = 0.680;

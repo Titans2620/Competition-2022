@@ -83,10 +83,11 @@ public class AutoPathPlanner4BallP2 extends SequentialCommandGroup {
     addCommands(
       new InstantCommand(() -> this.m_driveSubsystem.setStartingPose(9.81, 5.61, 28.50)), //Intialize 
       new ParallelCommandGroup(red4BallP2S1Command, new AutonomousIntakeUntilTimeCommand(m_IntakeSubsystem, m_ArmSubsystem, 4.5)),
-      new AutonomousShootUntilTimeCommand(m_driveSubsystem, m_IntakeSubsystem, m_ShooterSubsystem, 2.5, alliance),
+      new AutonomousShootUntilTimeCommand(m_driveSubsystem, m_IntakeSubsystem, m_ShooterSubsystem, 3.5, alliance),
       new ParallelCommandGroup(red4BallP2S2Command, new AutonomousIntakeUntilTimeCommand(m_IntakeSubsystem, m_ArmSubsystem, 2)),
-      new AutonomousIntakeUntilTimeCommand(m_IntakeSubsystem, m_ArmSubsystem, 1.5),
+      new AutonomousIntakeUntilTimeCommand(m_IntakeSubsystem, m_ArmSubsystem, .75),
       new ParallelCommandGroup(red4BallP2S3Command, new AutonomousIntakeUntilTimeCommand(m_IntakeSubsystem, m_ArmSubsystem, 1.5)),
+
       new AutonomousShootUntilTimeCommand(m_driveSubsystem, m_IntakeSubsystem, m_ShooterSubsystem, 3, alliance),
       new InstantCommand(() -> this.m_driveSubsystem.stopModules())
     );

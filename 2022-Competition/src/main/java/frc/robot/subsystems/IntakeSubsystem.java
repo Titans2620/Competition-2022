@@ -77,6 +77,9 @@ public class IntakeSubsystem extends SubsystemBase {
     if((m_ColorSensor.getColorState() == "neither") || (m_ShooterSubsystem.getLimelight().getLimelightState() == Constants.LIMELIGHT_STOP && Math.abs(variance) < 100)){
       if(m_ShooterSubsystem.getLimelight().getLimelightState() == Constants.LIMELIGHT_STOP){
           LEDSubsystem.setState("SolidGreen", 4);
+          if(m_ShooterSubsystem.getEncoderValue() < 10){
+              LEDSubsystem.setState("AltYellow", 6);
+          }
       }
       feedWheel.set(speed);
     }

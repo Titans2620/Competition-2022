@@ -36,7 +36,7 @@ public class ShooterLowShootCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if(timer.get() < 2){
+    if(timer.get() < 1){
       m_ShooterSubsystem.setShooterLow(Constants.LOWGOALSHOOTERSPEED);
     }
     else{

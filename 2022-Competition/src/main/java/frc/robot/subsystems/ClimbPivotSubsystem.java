@@ -40,12 +40,14 @@ public class ClimbPivotSubsystem extends SubsystemBase {
       else if(speed < 0.0 && leftClimbBackLimit.get() && !rightClimbBackLimit.get()){
           climbPivot.set(-.15);
       }
+      /*
       else if((speed > 0.0 && (leftClimbForwardLimit.get())) || (speed > 0.0 && (rightClimbForwardLimit.get()))){
           climbPivot.set(.25);
       }
       else if((speed < 0.0 && (leftClimbBackLimit.get())) || (speed > 0.0 && (!rightClimbBackLimit.get()))){
         climbPivot.set(-.25);
       }
+      */                                                                                      
       else{
         climbPivot.set(speed);
       }
