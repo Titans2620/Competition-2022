@@ -16,6 +16,7 @@ public final class Constants {
      */
     public static final double DRIVETRAIN_WHEELBASE_METERS = 0.6604;
 
+    public static final int PDP_ID = 0;
     //FRONT LEFT MODULE//
     public static final int FRONT_LEFT_MODULE_DRIVE_MOTOR = 1;
     public static final int FRONT_LEFT_MODULE_STEER_ENCODER = 2;
