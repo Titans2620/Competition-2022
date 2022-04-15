@@ -8,7 +8,10 @@ import com.ctre.phoenix.sensors.Pigeon2;
 import com.ctre.phoenix.sensors.PigeonIMU;
 import com.pathplanner.lib.PathPlannerTrajectory.PathPlannerState;
 import com.swervedrivespecialties.swervelib.Mk3SwerveModuleHelper;
+import com.swervedrivespecialties.swervelib.Mk4ModuleConfiguration;
+import com.swervedrivespecialties.swervelib.Mk4SwerveModuleBuilder;
 import com.swervedrivespecialties.swervelib.Mk4SwerveModuleHelper;
+import com.swervedrivespecialties.swervelib.MotorType;
 import com.swervedrivespecialties.swervelib.SdsModuleConfigurations;
 import com.swervedrivespecialties.swervelib.SwerveModule;
 
@@ -52,7 +55,7 @@ public class DriveSubsystem extends SubsystemBase {
    * <p>
    * This is a measure of how fast the robot should be able to drive in a straight line.
    */
-  public static final double MAX_VELOCITY_METERS_PER_SECOND = 6380.0 / 60.0 * SdsModuleConfigurations.MK4_L1.getDriveReduction() * SdsModuleConfigurations.MK4_L1.getWheelDiameter() * Math.PI;
+  public static final double MAX_VELOCITY_METERS_PER_SECOND = 6380.0 / 60.0 * SdsModuleConfigurations.MK4_L2.getDriveReduction() * SdsModuleConfigurations.MK4_L2.getWheelDiameter() * Math.PI;
 
   // Here we calculate the theoretical maximum angular velocity. You can also replace this with a measured amount.
   public static final double MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND = MAX_VELOCITY_METERS_PER_SECOND /
@@ -91,9 +94,18 @@ public class DriveSubsystem extends SubsystemBase {
   private LimelightSubsystem m_LimeLightSubsystem;
   private ColorSensorSubsystem m_ColorSensorSubsystem;
 
-  public DriveSubsystem(LimelightSubsystem m_LimeLightSubsystem, ColorSensorSubsystem m_ColorSensorSubsystem) {
-        ShuffleboardTab tab = Shuffleboard.getTab("Drivetrain");
+  double swerveRotateDelay = .25;
+  double swerveDriveDelay = 0;
 
+  public DriveSubsystem(LimelightSubsystem m_LimeLightSubsystem, ColorSensorSubsystem m_ColorSensorSubsystem) {
+
+        Mk4ModuleConfiguration moduleConfig = new Mk4ModuleConfiguration();
+        moduleConfig.setSteerCurrentLimit(30.0);
+        moduleConfig.setDriveCurrentLimit(40.0);
+
+        ShuffleboardTab tab = Shuffleboard.getTab("Drivetrain");
+        
+        /*
         m_frontLeftModule = Mk3SwerveModuleHelper.createFalcon500(tab.getLayout("Front Left Module", BuiltInLayouts.kList).withSize(2, 4).withPosition(0, 0), Mk3SwerveModuleHelper.GearRatio.STANDARD, FRONT_LEFT_MODULE_DRIVE_MOTOR, FRONT_LEFT_MODULE_STEER_MOTOR, FRONT_LEFT_MODULE_STEER_ENCODER, FRONT_LEFT_MODULE_STEER_OFFSET);
 
         m_frontRightModule = Mk3SwerveModuleHelper.createFalcon500(tab.getLayout("Front Right Module", BuiltInLayouts.kList).withSize(2, 4).withPosition(2, 0),Mk3SwerveModuleHelper.GearRatio.STANDARD, FRONT_RIGHT_MODULE_DRIVE_MOTOR, FRONT_RIGHT_MODULE_STEER_MOTOR, FRONT_RIGHT_MODULE_STEER_ENCODER, FRONT_RIGHT_MODULE_STEER_OFFSET);
@@ -101,7 +113,54 @@ public class DriveSubsystem extends SubsystemBase {
         m_backLeftModule = Mk3SwerveModuleHelper.createFalcon500(tab.getLayout("Back Left Module", BuiltInLayouts.kList).withSize(2, 4).withPosition(4, 0),Mk3SwerveModuleHelper.GearRatio.STANDARD, BACK_LEFT_MODULE_DRIVE_MOTOR, BACK_LEFT_MODULE_STEER_MOTOR, BACK_LEFT_MODULE_STEER_ENCODER, BACK_LEFT_MODULE_STEER_OFFSET);
 
         m_backRightModule = Mk3SwerveModuleHelper.createFalcon500(tab.getLayout("Back Right Module", BuiltInLayouts.kList).withSize(2, 4).withPosition(6, 0),Mk3SwerveModuleHelper.GearRatio.STANDARD, BACK_RIGHT_MODULE_DRIVE_MOTOR, BACK_RIGHT_MODULE_STEER_MOTOR, BACK_RIGHT_MODULE_STEER_ENCODER, BACK_RIGHT_MODULE_STEER_OFFSET);
-        
+        */
+
+        m_frontLeftModule = new Mk4SwerveModuleBuilder(moduleConfig)
+                .withGearRatio(Mk4SwerveModuleBuilder.GearRatio.L2)
+                .withDriveMotor(MotorType.FALCON, FRONT_LEFT_MODULE_DRIVE_MOTOR)
+                .withSteerMotor(MotorType.FALCON, FRONT_LEFT_MODULE_STEER_MOTOR)
+                .withSteerEncoderPort(FRONT_LEFT_MODULE_STEER_ENCODER)
+                .withSteerOffset(FRONT_LEFT_MODULE_STEER_OFFSET)
+                .build();
+
+        m_frontRightModule = new Mk4SwerveModuleBuilder(moduleConfig)
+                .withGearRatio(Mk4SwerveModuleBuilder.GearRatio.L2)
+                .withDriveMotor(MotorType.FALCON, FRONT_RIGHT_MODULE_DRIVE_MOTOR)
+                .withSteerMotor(MotorType.FALCON, FRONT_RIGHT_MODULE_STEER_MOTOR)
+                .withSteerEncoderPort(FRONT_RIGHT_MODULE_STEER_ENCODER)
+                .withSteerOffset(FRONT_RIGHT_MODULE_STEER_OFFSET)
+                .build();
+
+        m_backLeftModule = new Mk4SwerveModuleBuilder(moduleConfig)
+                .withGearRatio(Mk4SwerveModuleBuilder.GearRatio.L2)
+                .withDriveMotor(MotorType.FALCON, BACK_LEFT_MODULE_DRIVE_MOTOR)
+                .withSteerMotor(MotorType.FALCON, BACK_LEFT_MODULE_STEER_MOTOR)
+                .withSteerEncoderPort(BACK_LEFT_MODULE_STEER_ENCODER)
+                .withSteerOffset(BACK_LEFT_MODULE_STEER_OFFSET)
+                .build();
+
+        m_backRightModule = new Mk4SwerveModuleBuilder(moduleConfig)
+                .withGearRatio(Mk4SwerveModuleBuilder.GearRatio.L2)
+                .withDriveMotor(MotorType.FALCON, BACK_RIGHT_MODULE_DRIVE_MOTOR)
+                .withSteerMotor(MotorType.FALCON, BACK_RIGHT_MODULE_STEER_MOTOR)
+                .withSteerEncoderPort(BACK_RIGHT_MODULE_STEER_ENCODER)
+                .withSteerOffset(BACK_RIGHT_MODULE_STEER_OFFSET)
+                .build();
+
+        ((WPI_TalonFX) m_frontLeftModule.getSteerMotor()).configOpenloopRamp(swerveRotateDelay); 
+        ((WPI_TalonFX) m_frontRightModule.getSteerMotor()).configOpenloopRamp(swerveRotateDelay);
+        ((WPI_TalonFX) m_backLeftModule.getSteerMotor()).configOpenloopRamp(swerveRotateDelay);
+        ((WPI_TalonFX) m_backRightModule.getSteerMotor()).configOpenloopRamp(swerveRotateDelay);
+
+        ((WPI_TalonFX) m_frontLeftModule.getDriveMotor()).configOpenloopRamp(swerveDriveDelay); 
+        ((WPI_TalonFX) m_frontRightModule.getDriveMotor()).configOpenloopRamp(swerveDriveDelay);
+        ((WPI_TalonFX) m_backLeftModule.getDriveMotor()).configOpenloopRamp(swerveDriveDelay);
+        ((WPI_TalonFX) m_backRightModule.getDriveMotor()).configOpenloopRamp(swerveDriveDelay);
+
+        SmartDashboard.putNumber("swerveDriveDelay", swerveDriveDelay);
+        SmartDashboard.putNumber("swerveRotateDelay", swerveRotateDelay);
+
+
         m_pigeon.setYaw(0);
         resetOdometry(new Pose2d());
 
@@ -232,6 +291,9 @@ public class DriveSubsystem extends SubsystemBase {
                 odometer.update(getRotation2d(), states);
                 setModuleStates(states);
                 SmartDashboard.putString("Pose", getPose().toString());
-    
+
+                swerveRotateDelay = SmartDashboard.getNumber("swerveRotateDelay", swerveRotateDelay);
+                swerveDriveDelay = SmartDashboard.getNumber("swerveDriveDelay", swerveDriveDelay);
+                
         }
 }

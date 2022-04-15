@@ -7,6 +7,7 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class PowerDistributionSubsystem extends SubsystemBase {
@@ -55,22 +56,23 @@ public class PowerDistributionSubsystem extends SubsystemBase {
 
       if(pdp.getCurrent(BACK_RIGHT_STEER_PDP_PORT) > maxBackRightSteer)
           maxBackRightSteer = pdp.getCurrent(BACK_RIGHT_STEER_PDP_PORT);
-   
-      Shuffleboard.getTab("Current Draws").add("Front Left Drive", pdp.getCurrent(FRONT_LEFT_DRIVE_PDP_PORT));
-      Shuffleboard.getTab("Current Draws").add("Front Left Drive Max", maxFrontLeftDrive);
-      Shuffleboard.getTab("Current Draws").add("Front Left Steer", pdp.getCurrent(FRONT_LEFT_STEER_PDP_PORT));
-      Shuffleboard.getTab("Current Draws").add("Front Left Steer Max", maxFrontLeftSteer);
-      Shuffleboard.getTab("Current Draws").add("Front Right Drive", pdp.getCurrent(FRONT_RIGHT_DRIVE_PDP_PORT));
-      Shuffleboard.getTab("Current Draws").add("Front Right Drive Max", maxFrontRightDrive);
-      Shuffleboard.getTab("Current Draws").add("Front Right Steer", pdp.getCurrent(FRONT_RIGHT_STEER_PDP_PORT));
-      Shuffleboard.getTab("Current Draws").add("Front Right Steer Max", maxFrontRightSteer);
-      Shuffleboard.getTab("Current Draws").add("Back Left Drive", pdp.getCurrent(BACK_LEFT_DRIVE_PDP_PORT));
-      Shuffleboard.getTab("Current Draws").add("Back Left Drive Max", maxBackLeftDrive);
-      Shuffleboard.getTab("Current Draws").add("Back Left Steer", pdp.getCurrent(BACK_LEFT_STEER_PDP_PORT));
-      Shuffleboard.getTab("Current Draws").add("Back Left Steer Max", maxBackLeftSteer);
-      Shuffleboard.getTab("Current Draws").add("Back Right Drive", pdp.getCurrent(BACK_RIGHT_DRIVE_PDP_PORT));
-      Shuffleboard.getTab("Current Draws").add("Back Right Drive Max", maxBackRightDrive);
-      Shuffleboard.getTab("Current Draws").add("Back Right Steer", pdp.getCurrent(BACK_RIGHT_STEER_PDP_PORT));
-      Shuffleboard.getTab("Current Draws").add("Back Right Steer Max", maxBackRightSteer);
+    /*
+        SmartDashboard.putNumber("Front Left Drive", pdp.getCurrent(FRONT_LEFT_DRIVE_PDP_PORT));
+        SmartDashboard.putNumber("Front Left Drive Max", maxFrontLeftDrive);
+        SmartDashboard.putNumber("Front Left Steer", pdp.getCurrent(FRONT_LEFT_STEER_PDP_PORT));
+        SmartDashboard.putNumber("Front Left Steer Max", maxFrontLeftSteer);
+        SmartDashboard.putNumber("Front Right Drive", pdp.getCurrent(FRONT_RIGHT_DRIVE_PDP_PORT));
+        SmartDashboard.putNumber("Front Right Drive Max", maxFrontRightDrive);
+        SmartDashboard.putNumber("Front Right Steer", pdp.getCurrent(FRONT_RIGHT_STEER_PDP_PORT));
+        SmartDashboard.putNumber("Front Right Steer Max", maxFrontRightSteer);
+        SmartDashboard.putNumber("Back Left Drive", pdp.getCurrent(BACK_LEFT_DRIVE_PDP_PORT));
+        SmartDashboard.putNumber("Back Left Drive Max", maxBackLeftDrive);
+        SmartDashboard.putNumber("Back Left Steer", pdp.getCurrent(BACK_LEFT_STEER_PDP_PORT));
+        SmartDashboard.putNumber("Back Left Steer Max", maxBackLeftSteer);
+        SmartDashboard.putNumber("Back Right Drive", pdp.getCurrent(BACK_RIGHT_DRIVE_PDP_PORT));
+        SmartDashboard.putNumber("Back Right Drive Max", maxBackRightDrive);
+        SmartDashboard.putNumber("Back Right Steer", pdp.getCurrent(BACK_RIGHT_STEER_PDP_PORT));
+        SmartDashboard.putNumber("Back Right Steer Max", maxBackRightSteer);
+    */ 
   }
 }
