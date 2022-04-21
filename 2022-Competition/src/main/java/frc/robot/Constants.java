@@ -16,6 +16,7 @@ public final class Constants {
      */
     public static final double DRIVETRAIN_WHEELBASE_METERS = 0.6604;
 
+    public static final int PDP_ID = 0;
     //FRONT LEFT MODULE//
     public static final int FRONT_LEFT_MODULE_DRIVE_MOTOR = 1;
     public static final int FRONT_LEFT_MODULE_STEER_ENCODER = 2;
@@ -65,7 +66,7 @@ public final class Constants {
     public static final int LEDLENGTH = 32;
 
     //OPERATOR SPEEDS//
-    public static final double INTAKESPEED = -1.0;
+    public static final double INTAKESPEED = -0.95;
     public static final double INTAKEROTATEUPSPEED = .5;
     public static final double INTAKEROTATEDOWNSPEED = -.5;
     public static final double FEEDSPEED = .25; //Originally .25
@@ -87,8 +88,8 @@ public final class Constants {
     public static final double LIMELIGHT_X_OFFSET = -2;
 
     public static final int SHOOTER_MAX_RPM = 5100;
-    public static final double SHOOTER_MIN_SPEED_PERCENT = 0.680;
-    public static final double SHOOTER_MAX_SPEED_PERCENT = 0.830;
+    public static final double SHOOTER_MIN_SPEED_PERCENT = 0.685; //+.25
+    public static final double SHOOTER_MAX_SPEED_PERCENT = 0.835; //+.25
     public static final int SHOOTER_MIN_DISTANCE_INCHES = 120;
     public static final int SHOOTER_MAX_DISTANCE_INCHES = 250;
     //CLIMB SPEEDS//

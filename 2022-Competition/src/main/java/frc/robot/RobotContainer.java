@@ -11,7 +11,10 @@ import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -55,6 +58,7 @@ import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.LEDSubsystem;
 import frc.robot.subsystems.LimelightSubsystem;
+import frc.robot.subsystems.PowerDistributionSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ClimbExtendSubsystem;
@@ -80,6 +84,8 @@ public class RobotContainer {
   private final ShooterSubsystem m_ShooterSubsystem = new ShooterSubsystem(m_limelightSubsystem);
   private final IntakeSubsystem m_IntakeSubsystem = new IntakeSubsystem(m_ColorSensorSubsystem, getAlliance(), m_ShooterSubsystem);
   private final ArmSubsystem m_ArmSubsystem = new ArmSubsystem(); 
+  private final PowerDistributionSubsystem m_PowerDistributionSubsystem = new PowerDistributionSubsystem();
+
   private final XboxController m_driveController = new XboxController(0);
   private final XboxController m_operatorController = new XboxController(1);
 
